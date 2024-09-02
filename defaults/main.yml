@@ -1,0 +1,14 @@
+---
+onionspray_build_lock_file: "{{ onionspray_repo_download_path }}/onionspray-already-built.lock"
+onionspray_project_custom_settings: ""
+onionspray_project_name: myproject
+onionspray_repo_download_path: "{{ onionspray_user_homedir }}/onionspray"
+onionspray_repo_url: https://gitlab.torproject.org/tpo/onion-services/onionspray/
+onionspray_selfsigned_cert_country: AQ
+onionspray_selfsigned_cert_lifetime_days: 30
+onionspray_selfsigned_cert_locality: Onion Space
+onionspray_selfsigned_cert_organization: The SSL Onion Space
+onionspray_selfsigned_cert_organizational_unit: Self Signed Certificates
+onionspray_selfsigned_cert_state_or_province: The Internet
+onionspray_user: onionspray
+onionspray_user_homedir: "/home/{{ onionspray_user }}"

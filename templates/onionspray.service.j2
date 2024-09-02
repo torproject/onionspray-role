@@ -1,0 +1,11 @@
+[Unit]
+Description=Onionspray
+
+[Service]
+Type=oneshot
+ExecStart={{ onionspray_repo_download_path }}/onionspray-init.sh start
+ExecStop={{ onionspray_repo_download_path }}/onionspray-init.sh stop
+RemainAfterExit=true
+
+[Install]
+WantedBy=multi-user.target

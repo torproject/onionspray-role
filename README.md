@@ -1,93 +1,153 @@
-# onionspray-ansible-role
+# Onionspray
 
+This role clones the [Onionspray](https://community.torproject.org/onion-services/ecosystem/apps/web/onionspray/) repo and builds from source the necessary software (OpenResty with the Nginx [http_substitutions_filter](https://github.com/yaoweibin/ngx_http_substitutions_filter_module) module, OnionBalance, Tor).
 
+The role first generates the configuration files needed to serve a website. The build is then done by the `opt/build-DISTRO.sh` script inside the Onionspray repo, executed by this role, depending on the distribution of your server and if supported.
 
-## Getting started
+## Requirements
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+The remote host should have `git` installed prior to running the role. The other necessary packages are installed by the build process of Onionspray.
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+## Quick-start
 
-## Add your files
-
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+Assuming you have a host named `myhost` on which you can run `ansible-playbook`, and you cloned this role in a `roles` directory, this is an example of a basic playbook:
 
 ```
-cd existing_repo
-git remote add origin https://gitlab.torproject.org/zoug/onionspray-ansible-role.git
-git branch -M main
-git push -uf origin main
+- name: Onionspray Tor proxy
+  hosts: myhost
+  roles:
+    - onionspray
 ```
 
-## Integrate with your tools
+You need at least the required `onionspray_proxied_domain` variable, and may want to redefine others: see below for a list of variables and their usage.
 
-- [ ] [Set up project integrations](https://gitlab.torproject.org/zoug/onionspray-ansible-role/-/settings/integrations)
+So you could have in `host_vars/myhost.yml`:
 
-## Collaborate with your team
+```
+onionspray_repo_git_revision: a0e43045fe135e1b3f5b96e075ed519e4359ab7f
+onionspray_project_custom_settings: |
+  # two reasons to use a local resolver
+  # - performance
+  # - being able to hardcode IPs for a given DNS name
+  set nginx_resolver 127.0.0.1 ipv6=off
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+  # block access to "forbidden" subdomain
+  set block_err This subdomain is forbidden.
+  set block_host_re ^forbidden\.
 
-## Test and Deploy
+  ## rate-limiting
+  ## c.f. https://community.torproject.org/onion-services/ecosystem/apps/web/onionspray/guides/dos/
+  # max number of connections through this proxy
+  set tor_max_streams 1000
+  # setting these two options expose a header named "X-Onion-CircuitID" with a unique ID per Tor user
+  # that header can be used for rate-limiting
+  set tor_export_circuit_id haproxy
+  set nginx_x_onion_circuit_id 1
+onionspray_proxied_domain: "example.com"
+```
 
-Use the built-in continuous integration in GitLab.
+## Self-signed certificate
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+This role uses the Onionspray's default certificate, which is a generated self-signed certificate. The role provides variables to change the fields, documented below.
 
-***
+In Tor, all requests are encrypted by the protocol. The URL itself is the guarentee that you are connecting to the right server. It is hence not strictly necessary to generate a valid HTTPS certificate, [more info here](https://community.torproject.org/onion-services/advanced/https/).
 
-# Editing this README
+However, it is still better to use a valid HTTPS certificate, to avoid HTTPS warnings on browsers such as Brave for example. The Tor Browser does not display HTTPS warnings if using a self-signed certificate with an Onion service, though this may change in the future.
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+Should you want to get a valid HTTPS certificate, both [HARICA](https://blog.torproject.org/tls-certificate-for-onion-site) (normal certificate, $10/year) and [Digicert](https://www.digicert.com/blog/onion-officially-recognized-special-use-domain/) (expensive, EV certificate) provide them. Let's Encrypt and other providers using the ACME protocol (i.e. automation possible through `certbot` for example) still do not support these certificates. Using these valid certificates is hence a manual operation, as long as [this standard](https://acmeforonions.org/) is not implemented.
 
-## Suggestions for a good README
+## Variables
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+### `onionspray_build_lock_file`
 
-## Name
-Choose a self-explaining name for your project.
+File indicating whether Onionspray has already been built or not. If the file exists, the build process is skipped. Defaults to `{{ onionspray_repo_download_path }}/onionspray-already-built.lock`.
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+### `onionspray_build_script_name`
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+The script from the Onionspray repo to use when building it. If not specified, the role will try to find a script from the host's distribution and release. You can use this variable to specify which script to use, the list [is available in the Onionspray repo](https://gitlab.torproject.org/tpo/onion-services/onionspray/-/tree/main/opt?ref_type=heads). For example, `build-centos-8.2.2004.sh`.
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+### `onionspray_project_name`
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+The name of your Onionspray project, used to set the configuration and settings filenames. Defaults to `myproject`.
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+### `onionspray_project_custom_settings`
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+If additional settings are needed, you can put them in this variable and they will be appended to the `settings.conf.j2` settings template. Defaults to an empty string.
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+### `onionspray_proxied_domain`
+
+The clearnet domain name to which Onionspray will proxy requests. No default value, this variable is required.
+
+### `onionspray_public_key_base64`
+
+The Onion v3 public key to use, encoded in Base64. If not defined, a random one will be generated.
+
+### `onionspray_repo_url`
+
+The URL of the Onionspray repo to clone, defaults to [the official Onionspray repo](https://gitlab.torproject.org/tpo/onion-services/onionspray/).
+
+### `onionspray_repo_download_path`
+
+Where to put the cloned Onionspray repo, defaults to `{{ onionspray_user_homedir }}/onionspray`.
+
+### `onionspray_repo_git_revision`
+
+The revision of the repository to checkout. No default value: if not defined, the role uses the latest revision of the main branch.
+
+### `onionspray_secret_key_base64`
+
+The Onion v3 secret key to use, encoded in Base64. If not defined, a random one will be generated.
+
+### `onionspray_selfsigned_cert_country`
+
+Self-signed certificate country name. Defaults to `AQ` (Antartica).
+
+### `onionspray_selfsigned_cert_lifetime_days`
+
+Lifetime of the self-signed certificate generated for the .onion website, defaults to 30 days (`30`).
+
+### `onionspray_selfsigned_cert_locality`
+
+Self-signed certificate locality. Defaults to `Onion Space`.
+
+### `onionspray_selfsigned_cert_organization`
+
+Self-signed certificate organization. Defaults to `The SSL Onion Space`.
+
+### `onionspray_selfsigned_cert_organizational_unit`
+
+Self-signed certificate organizational unit. Defaults to `Self Signed Certificates`.
+
+### `onionspray_selfsigned_cert_state_or_province`
+
+Self-signed certificate state or provice name. Defaults to `The Internet`.
+
+### `onionspray_tor_address`
+
+The custom `.onion` v3 address to use, dependent on the public/secret keys used. If it is defined, this means we are using a custom public/secret key, provided by the `onionspray_public_key_base64` and  `onionspray_secret_key_base64` variables. If not provided, a random key will be generated and its address will be used.
+
+### `onionspray_user`
+
+System user that runs Onionspray, will be created. A group of the same name is automatically created. Defaults to `onionspray`.
+
+### `onionspray_user_homedir`
+
+The home directory of the user running Onionspray. Defaults to `/home/{{ onionspray_user }}`.
 
 ## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+All contributions are very welcome. Feel free to send your enhancements and patches as PRs, or open issues.
 
 ## License
-For open source projects, say how it is licensed.
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+This project is licensed with the Affero GPLv3. See [LICENSE](LICENSE) for the full license, or [this page](https://choosealicense.com/licenses/agpl-3.0/) for a quick recap. In general, if you use a modified version of this role, you must make the source code public to comply with the AGPL.
+
+## Acknowledgements
+
+Many thanks to [Mediapart](https://www.mediapart.fr) for which this role has been created, for allowing it to be open sourced. You can visit their website over Tor at [https://www.mediapartrvj4bsgolbxixw57ru7fh4jqckparke4vs365guu6ho64yd.onion/](https://www.mediapartrvj4bsgolbxixw57ru7fh4jqckparke4vs365guu6ho64yd.onion/).
+
+## References
+
+* The Onionspray documentation: [quickstart guide](https://community.torproject.org/onion-services/ecosystem/apps/web/onionspray/tutorial/), [troubleshooting](https://community.torproject.org/onion-services/ecosystem/apps/web/onionspray/guides/troubleshooting/) sections mainly.
+* Great blogpost: [A Complete Guide to EOTK](https://shen.hong.io/making-websites-on-tor-using-eotk/)
+* Another great blogpost: [ProPublica's experience with EOTK](https://www.propublica.org/nerds/a-more-secure-and-anonymous-propublica-using-tor-hidden-services)

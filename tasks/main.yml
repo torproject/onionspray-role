@@ -1,0 +1,168 @@
+---
+- name: Add Onionspray user
+  ansible.builtin.user:
+    name: "{{ onionspray_user }}"
+    comment: Onionspray user
+    home: "{{ onionspray_user_homedir }}"
+    system: true
+    shell: /usr/sbin/nologin
+
+- name: Check if Onionspray repo has already been cloned
+  ansible.builtin.stat:
+    dest: "{{ onionspray_repo_download_path }}"
+  register: _onionspray_local_repo
+
+- name: Get local Onionspray repo revision if a custom revision is specified
+  ansible.builtin.command:
+    cmd: "git rev-parse HEAD"
+    chdir: "{{ onionspray_repo_download_path }}"
+  become: true
+  become_user: "{{ onionspray_user }}"
+  register: _onionspray_get_repo_revision
+  changed_when: false
+  when:
+    - _onionspray_local_repo.stat.exists
+    - onionspray_repo_git_revision is defined
+
+- name: Force cloning the Onionspray repo if it doesn't exist or if we change the wanted version
+  ansible.builtin.git:
+    repo: "{{ onionspray_repo_url }}"
+    dest: "{{ onionspray_repo_download_path }}"
+    version: "{{ onionspray_repo_git_revision | default('HEAD') }}"
+    force: true
+  become: true
+  become_user: "{{ onionspray_user }}"
+  when: not _onionspray_local_repo.stat.exists or _onionspray_get_repo_revision.stdout | default('') != onionspray_repo_git_revision | default('')
+
+- name: Create secrets directory
+  ansible.builtin.file:
+    path: "{{ onionspray_repo_download_path }}/secrets/"
+    state: directory
+    owner: "{{ onionspray_user }}"
+    group: "{{ onionspray_user }}"
+    mode: "700"
+
+- name: Copy Onion v3 public key
+  ansible.builtin.copy:
+    content: "{{ onionspray_public_key_base64 | b64decode }}"
+    dest: "{{ onionspray_repo_download_path }}/secrets/{{ onionspray_tor_address }}.v3pub.key"
+    owner: "{{ onionspray_user }}"
+    group: "{{ onionspray_user }}"
+    mode: "600"
+  when:
+    - onionspray_secret_key_base64 is defined
+    - onionspray_public_key_base64 is defined
+    - onionspray_tor_address is defined
+
+- name: Copy Onion v3 secret key
+  ansible.builtin.copy:
+    content: "{{ onionspray_secret_key_base64 | b64decode }}"
+    dest: "{{ onionspray_repo_download_path }}/secrets/{{ onionspray_tor_address }}.v3sec.key"
+    owner: "{{ onionspray_user }}"
+    group: "{{ onionspray_user }}"
+    mode: "600"
+  no_log: true
+  when:
+    - onionspray_secret_key_base64 is defined
+    - onionspray_public_key_base64 is defined
+    - onionspray_tor_address is defined
+
+- name: Generate self-signed certificate script
+  ansible.builtin.template:
+    src: make-selfsigned-wildcard-ssl-cert.sh.j2
+    dest: "{{ onionspray_repo_download_path }}/lib/make-selfsigned-wildcard-ssl-cert.sh"
+    owner: "{{ onionspray_user }}"
+    group: "{{ onionspray_user }}"
+    mode: "700"
+  notify:
+    - Remove Onionspray generated configs
+    - Generate Onionspray configs
+    - Restart Onionspray
+
+- name: Generate project settings
+  ansible.builtin.template:
+    src: settings.tconf.j2
+    dest: "{{ onionspray_repo_download_path }}/{{ onionspray_project_name }}.tconf"
+    owner: "{{ onionspray_user }}"
+    group: "{{ onionspray_user }}"
+    mode: "600"
+  notify:
+    - Remove Onionspray generated configs
+    - Generate Onionspray configs
+    - Restart Onionspray
+
+- name: Check if Onionspray has already been built
+  ansible.builtin.stat:
+    dest: "{{ onionspray_build_lock_file }}"
+  register: _onionspray_check_has_been_built
+
+- name: Add temporary sudoers file without password for Onionspray user
+  ansible.builtin.copy:
+    content: "onionspray ALL=(ALL) NOPASSWD: ALL"
+    dest: /etc/sudoers.d/onionspray
+    owner: root
+    group: root
+    mode: "600"
+  when: not _onionspray_check_has_been_built.stat.exists
+
+- name: Determine which build script to use depending on host's distro and version
+  ansible.builtin.set_fact:
+    # yamllint disable-line rule:line-length
+    _onionspray_build_script_name: "{{ onionspray_build_script_name | default('build-{{ ansible_distribution | lower }}-{{ ansible_distribution_release | lower }}.sh') }}"
+  when:
+    - not _onionspray_check_has_been_built.stat.exists
+
+- name: Build Onionspray
+  ansible.builtin.command:
+    # yamllint disable-line rule:line-length
+    cmd: "{{ onionspray_repo_download_path }}/opt/{{ _onionspray_build_script_name }} | tee {{ onionspray_repo_download_path }}/log/build-{{ ansible_date_time.epoch }}.log"
+  become: true
+  become_user: "{{ onionspray_user }}"
+  changed_when: true
+  when: not _onionspray_check_has_been_built.stat.exists
+
+- name: Remove temporary Onionspray sudoers file
+  ansible.builtin.file:
+    path: /etc/sudoers.d/onionspray
+    state: absent
+
+- name: Create file to indicate that Onionspray has been built
+  ansible.builtin.copy:
+    content: "Onionspray is already built. Remove this file to prompt rebuild at next Ansible run."
+    dest: "{{ onionspray_build_lock_file }}"
+    owner: "{{ onionspray_user }}"
+    group: "{{ onionspray_user }}"
+    mode: "600"
+
+- name: Check if Onionspray init script exists
+  ansible.builtin.stat:
+    dest: "{{ onionspray_repo_download_path }}/onionspray-init.sh"
+  register: _onionspray_init_script
+
+- name: Generate Onionspray scripts (init wrapper, and housekeeping i.e. log rotation)
+  ansible.builtin.command:
+    cmd: "{{ onionspray_repo_download_path }}/onionspray script"
+  become: true
+  become_user: "{{ onionspray_user }}"
+  changed_when: true
+  when: not _onionspray_init_script.stat.exists
+
+- name: Create Onionspray systemd service
+  ansible.builtin.template:
+    src: onionspray.service.j2
+    dest: /etc/systemd/system/onionspray.service
+    owner: root
+    group: root
+    mode: "644"
+  notify:
+    - Reload systemctl daemon
+    - Restart Onionspray
+
+- name: Flush handlers to generate Onionspray configs if needed
+  ansible.builtin.meta: flush_handlers
+
+- name: Ensure Onionspray systemd service is enabled and started
+  ansible.builtin.service:
+    name: onionspray.service
+    state: started
+    enabled: true

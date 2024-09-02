@@ -1,0 +1,10 @@
+# make sure to test upstream HTTPS certificates
+set nginx_proxy_ssl_trusted_certificate /etc/ssl/certs/ca-certificates.crt
+
+# disable cache
+set nginx_cache_seconds 0
+
+set project {{ onionspray_project_name }}
+hardmap {{ onionspray_tor_address | default('%NEW_V3_ONION%') }} {{ onionspray_proxied_domain }}
+
+{{ onionspray_project_custom_settings }}
