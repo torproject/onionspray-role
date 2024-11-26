@@ -166,3 +166,4 @@
     name: onionspray.service
     state: started
     enabled: true
+  when: onionspray_use_systemd
