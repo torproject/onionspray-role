@@ -1,6 +1,6 @@
 # Onionspray
 
-This role clones the [Onionspray](https://community.torproject.org/onion-services/ecosystem/apps/web/onionspray/) repo and builds from source the necessary software (OpenResty with the Nginx [http_substitutions_filter](https://github.com/yaoweibin/ngx_http_substitutions_filter_module) module, OnionBalance, Tor).
+This role clones the [Onionspray](https://onionservices.torproject.org/apps/web/onionspray/) repo and builds from source the necessary software (OpenResty with the Nginx [http_substitutions_filter](https://github.com/yaoweibin/ngx_http_substitutions_filter_module) module, OnionBalance, Tor).
 
 The role first generates the configuration files needed to serve a website. The build is then done by the `opt/build-DISTRO.sh` script inside the Onionspray repo, executed by this role, depending on the distribution of your server and if supported.
 
@@ -36,7 +36,7 @@ onionspray_project_custom_settings: |
   set block_host_re ^forbidden\.
 
   ## rate-limiting
-  ## c.f. https://community.torproject.org/onion-services/ecosystem/apps/web/onionspray/guides/dos/
+  ## c.f. https://onionservices.torproject.org/apps/web/onionspray/guides/dos/
   # max number of connections through this proxy
   set tor_max_streams 1000
   # setting these two options expose a header named "X-Onion-CircuitID" with a unique ID per Tor user
@@ -148,6 +148,6 @@ Many thanks to [Mediapart](https://www.mediapart.fr) for which this role has bee
 
 ## References
 
-* The Onionspray documentation: [quickstart guide](https://community.torproject.org/onion-services/ecosystem/apps/web/onionspray/tutorial/), [troubleshooting](https://community.torproject.org/onion-services/ecosystem/apps/web/onionspray/guides/troubleshooting/) sections mainly.
+* The Onionspray documentation: [quickstart guide](https://onionservices.torproject.org/apps/web/onionspray/tutorial/), [troubleshooting](https://onionservices.torproject.org/apps/web/onionspray/guides/troubleshooting/) sections mainly.
 * Great blogpost: [A Complete Guide to EOTK](https://shen.hong.io/making-websites-on-tor-using-eotk/)
 * Another great blogpost: [ProPublica's experience with EOTK](https://www.propublica.org/nerds/a-more-secure-and-anonymous-propublica-using-tor-hidden-services)
