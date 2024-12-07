@@ -1,0 +1,26 @@
+---
+#
+# Onionspray Ansible role test playbook
+#
+# Copyright (C) 2024 The Tor Project, Inc.
+# SPDX-License-Identifier: AGPL-3.0-or-later
+#
+
+- name: Converge
+  hosts: all
+
+  # Gathering facts requires a container with Python installed
+  gather_facts: true
+
+  vars:
+    onionspray_proxied_domain: 'example.org'
+
+    # Do not enable the service, since the image is not started with systemd as PID 1
+    onionspray_use_systemd: false
+
+  pre_tasks:
+    - name: Run pre-tasks
+      ansible.builtin.include_tasks: tasks/deps.yml
+
+  roles:
+    - onionspray
