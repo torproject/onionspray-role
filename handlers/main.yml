@@ -17,9 +17,11 @@
 - name: Reload systemctl daemon
   ansible.builtin.systemd:
     daemon_reload: true
+  when: onionspray_use_systemd
 
 - name: Restart Onionspray
   ansible.builtin.service:
     name: onionspray.service
     state: restarted
     enabled: true
+  when: onionspray_use_systemd
