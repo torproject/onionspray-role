@@ -126,6 +126,10 @@ Self-signed certificate state or provice name. Defaults to `The Internet`.
 
 The custom `.onion` v3 address to use, dependent on the public/secret keys used. If it is defined, this means we are using a custom public/secret key, provided by the `onionspray_public_key_base64` and  `onionspray_secret_key_base64` variables. If not provided, a random key will be generated and its address will be used.
 
+### `onionspray_use_systemd`
+
+Controls whether systemd is used: set to `false` e.g. when running CI jobs in environments without systemd. Defaults to `true`.
+
 ### `onionspray_user`
 
 System user that runs Onionspray, will be created. A group of the same name is automatically created. Defaults to `onionspray`.
