@@ -1,0 +1,19 @@
+---
+#
+# Certificate handling
+#
+# Copyright (C) 2024 The Tor Project, Inc.
+# SPDX-License-Identifier: AGPL-3.0-or-later
+#
+
+- name: certs | Generate self-signed certificate script
+  ansible.builtin.template:
+    src: make-selfsigned-wildcard-ssl-cert.sh.j2
+    dest: "{{ onionspray_repo_download_path }}/lib/make-selfsigned-wildcard-ssl-cert.sh"
+    owner: "{{ onionspray_user }}"
+    group: "{{ onionspray_user }}"
+    mode: "700"
+  notify:
+    - Remove Onionspray generated configs
+    - Generate Onionspray configs
+    - Restart Onionspray

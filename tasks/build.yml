@@ -1,0 +1,50 @@
+---
+#
+# Builds Onionspray
+#
+# Copyright (C) 2024 The Tor Project, Inc.
+# SPDX-License-Identifier: AGPL-3.0-or-later
+#
+
+- name: build | Check if Onionspray has already been built
+  ansible.builtin.stat:
+    dest: "{{ onionspray_build_lock_file }}"
+  register: _onionspray_check_has_been_built
+
+- name: build | Add temporary sudoers file without password for Onionspray user
+  ansible.builtin.copy:
+    content: "onionspray ALL=(ALL) NOPASSWD: ALL"
+    dest: /etc/sudoers.d/onionspray
+    owner: root
+    group: root
+    mode: "600"
+  when: not _onionspray_check_has_been_built.stat.exists
+
+- name: build | Determine which build script to use depending on host's distro and version
+  ansible.builtin.set_fact:
+    # yamllint disable-line rule:line-length
+    _onionspray_build_script_name: "{{ onionspray_build_script_name | default('build-{{ ansible_distribution | lower }}-{{ ansible_distribution_release | lower }}.sh') }}"
+  when:
+    - not _onionspray_check_has_been_built.stat.exists
+
+- name: build | Build Onionspray
+  ansible.builtin.command:
+    # yamllint disable-line rule:line-length
+    cmd: "{{ onionspray_repo_download_path }}/opt/{{ _onionspray_build_script_name }} | tee {{ onionspray_repo_download_path }}/log/build-{{ ansible_date_time.epoch }}.log"
+  become: true
+  become_user: "{{ onionspray_user }}"
+  changed_when: true
+  when: not _onionspray_check_has_been_built.stat.exists
+
+- name: build | Remove temporary Onionspray sudoers file
+  ansible.builtin.file:
+    path: /etc/sudoers.d/onionspray
+    state: absent
+
+- name: build | Create file to indicate that Onionspray has been built
+  ansible.builtin.copy:
+    content: "Onionspray is already built. Remove this file to prompt rebuild at next Ansible run."
+    dest: "{{ onionspray_build_lock_file }}"
+    owner: "{{ onionspray_user }}"
+    group: "{{ onionspray_user }}"
+    mode: "600"
