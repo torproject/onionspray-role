@@ -1,0 +1,34 @@
+---
+#
+# Repository management
+#
+# Copyright (C) 2024 The Tor Project, Inc.
+# SPDX-License-Identifier: AGPL-3.0-or-later
+#
+
+- name: repo | Check if Onionspray repo has already been cloned
+  ansible.builtin.stat:
+    dest: "{{ onionspray_repo_download_path }}"
+  register: _onionspray_local_repo
+
+- name: repo | Get local Onionspray repo revision if a custom revision is specified
+  ansible.builtin.command:
+    cmd: "git rev-parse HEAD"
+    chdir: "{{ onionspray_repo_download_path }}"
+  become: true
+  become_user: "{{ onionspray_user }}"
+  register: _onionspray_get_repo_revision
+  changed_when: false
+  when:
+    - _onionspray_local_repo.stat.exists
+    - onionspray_repo_git_revision is defined
+
+- name: repo | Force cloning the Onionspray repo if it doesn't exist or if we change the wanted version
+  ansible.builtin.git:
+    repo: "{{ onionspray_repo_url }}"
+    dest: "{{ onionspray_repo_download_path }}"
+    version: "{{ onionspray_repo_git_revision | default('HEAD') }}"
+    force: true
+  become: true
+  become_user: "{{ onionspray_user }}"
+  when: not _onionspray_local_repo.stat.exists or _onionspray_get_repo_revision.stdout | default('') != onionspray_repo_git_revision | default('')

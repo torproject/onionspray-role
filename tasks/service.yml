@@ -1,0 +1,41 @@
+---
+#
+# Service management
+#
+# Copyright (C) 2024 The Tor Project, Inc.
+# SPDX-License-Identifier: AGPL-3.0-or-later
+#
+
+- name: service | Check if Onionspray init script exists
+  ansible.builtin.stat:
+    dest: "{{ onionspray_repo_download_path }}/onionspray-init.sh"
+  register: _onionspray_init_script
+
+- name: service | Generate Onionspray scripts (init wrapper, and housekeeping i.e. log rotation)
+  ansible.builtin.command:
+    cmd: "{{ onionspray_repo_download_path }}/onionspray script"
+  become: true
+  become_user: "{{ onionspray_user }}"
+  changed_when: true
+  when: not _onionspray_init_script.stat.exists
+
+- name: service | Create Onionspray systemd service
+  ansible.builtin.template:
+    src: onionspray.service.j2
+    dest: /etc/systemd/system/onionspray.service
+    owner: root
+    group: root
+    mode: "644"
+  notify:
+    - Reload systemctl daemon
+    - Restart Onionspray
+
+- name: service | Flush handlers to generate Onionspray configs if needed
+  ansible.builtin.meta: flush_handlers
+
+- name: service | Ensure Onionspray systemd service is enabled and started
+  ansible.builtin.service:
+    name: onionspray.service
+    state: started
+    enabled: true
+  when: onionspray_use_systemd

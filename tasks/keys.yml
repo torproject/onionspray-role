@@ -1,0 +1,40 @@
+---
+#
+# Key handling
+#
+# Copyright (C) 2024 The Tor Project, Inc.
+# SPDX-License-Identifier: AGPL-3.0-or-later
+#
+
+- name: keys | Create secrets directory
+  ansible.builtin.file:
+    path: "{{ onionspray_repo_download_path }}/secrets/"
+    state: directory
+    owner: "{{ onionspray_user }}"
+    group: "{{ onionspray_user }}"
+    mode: "700"
+
+- name: keys | Copy Onion v3 public key
+  ansible.builtin.copy:
+    content: "{{ onionspray_public_key_base64 | b64decode }}"
+    dest: "{{ onionspray_repo_download_path }}/secrets/{{ onionspray_tor_address }}.v3pub.key"
+    owner: "{{ onionspray_user }}"
+    group: "{{ onionspray_user }}"
+    mode: "600"
+  when:
+    - onionspray_secret_key_base64 is defined
+    - onionspray_public_key_base64 is defined
+    - onionspray_tor_address is defined
+
+- name: keys | Copy Onion v3 secret key
+  ansible.builtin.copy:
+    content: "{{ onionspray_secret_key_base64 | b64decode }}"
+    dest: "{{ onionspray_repo_download_path }}/secrets/{{ onionspray_tor_address }}.v3sec.key"
+    owner: "{{ onionspray_user }}"
+    group: "{{ onionspray_user }}"
+    mode: "600"
+  no_log: true
+  when:
+    - onionspray_secret_key_base64 is defined
+    - onionspray_public_key_base64 is defined
+    - onionspray_tor_address is defined

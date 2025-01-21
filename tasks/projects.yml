@@ -1,0 +1,19 @@
+---
+#
+# Projects configuration
+#
+# Copyright (C) 2024 The Tor Project, Inc.
+# SPDX-License-Identifier: AGPL-3.0-or-later
+#
+
+- name: projects | Generate project settings
+  ansible.builtin.template:
+    src: settings.tconf.j2
+    dest: "{{ onionspray_repo_download_path }}/{{ onionspray_project_name }}.tconf"
+    owner: "{{ onionspray_user }}"
+    group: "{{ onionspray_user }}"
+    mode: "600"
+  notify:
+    - Remove Onionspray generated configs
+    - Generate Onionspray configs
+    - Restart Onionspray

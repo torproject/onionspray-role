@@ -1,0 +1,15 @@
+---
+#
+# User handling
+#
+# Copyright (C) 2024 The Tor Project, Inc.
+# SPDX-License-Identifier: AGPL-3.0-or-later
+#
+
+- name: user | Add Onionspray user
+  ansible.builtin.user:
+    name: "{{ onionspray_user }}"
+    comment: Onionspray user
+    home: "{{ onionspray_user_homedir }}"
+    system: true
+    shell: /usr/sbin/nologin
