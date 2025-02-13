@@ -1,4 +1,11 @@
 ---
+#
+# Onionspray Ansible molecule test
+#
+# Copyright (C) 2024 The Tor Project, Inc.
+# SPDX-License-Identifier: AGPL-3.0-or-later
+#
+
 # Runs the test on localhost
 # https://ansible.readthedocs.io/projects/molecule/configuration/#molecule.driver.delegated.Delegated
 driver:
