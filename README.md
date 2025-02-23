@@ -8,6 +8,13 @@ The role first generates the configuration files needed to serve a website. The 
 
 The remote host should have `git` installed prior to running the role. The other necessary packages are installed by the build process of Onionspray.
 
+Your Ansible controller should use pipelining. In your `ansible.cfg`:
+
+```
+[connection]
+pipelining=True
+```
+
 ## Quick-start
 
 Assuming you have a host named `myhost` on which you can run `ansible-playbook`, and you cloned this role in a `roles` directory, this is an example of a basic playbook:
