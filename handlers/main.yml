@@ -1,20 +1,23 @@
 ---
-- name: Remove Onionspray generated configs
+- name: Remove Onionspray generated settings config files
   ansible.builtin.file:
-    path: "{{ onionspray_generated_config }}"
+    path: "{{ onionspray_repo_download_path }}/{{ item.project_name }}.conf"
     state: absent
-  loop:
-    - "{{ onionspray_repo_download_path }}/{{ onionspray_project_name }}.conf"
-    - "{{ onionspray_repo_download_path }}/projects/{{ onionspray_project_name }}/"
-  loop_control:
-    loop_var: onionspray_generated_config
+  loop: "{{ onionspray_project_settings }}"
+
+- name: Remove Onionspray generated project directories
+  ansible.builtin.file:
+    path: "{{ onionspray_repo_download_path }}/projects/{{ item.project_name }}/"
+    state: absent
+  loop: "{{ onionspray_project_settings }}"
 
 - name: Generate Onionspray configs
   ansible.builtin.command:
-    cmd: "{{ onionspray_repo_download_path }}/onionspray config {{ onionspray_repo_download_path }}/{{ onionspray_project_name }}.tconf"
+    cmd: "{{ onionspray_repo_download_path }}/onionspray config {{ onionspray_repo_download_path }}/{{ item.project_name }}.tconf"
   become: true
   become_user: "{{ onionspray_user }}"
   changed_when: true
+  loop: "{{ onionspray_project_settings }}"
 
 - name: Reload systemctl daemon
   ansible.builtin.systemd:
