@@ -26,31 +26,45 @@ Assuming you have a host named `myhost` on which you can run `ansible-playbook`,
     - onionspray
 ```
 
-You need at least the required `onionspray_proxied_domain` variable, and may want to redefine others: see below for a list of variables and their usage.
+You can configure your project(s), i.e. the website(s) that Onionspray will handle, using the `onionspray_project_settings` variable, a list of dictionaries. You may also want to (re)define other values: see below for a complete list of variables and their usage.
 
-So you could have in `host_vars/myhost.yml`:
+As an example, you could have in `host_vars/myhost.yml`:
 
 ```
 onionspray_repo_git_revision: a0e43045fe135e1b3f5b96e075ed519e4359ab7f
-onionspray_project_custom_settings: |
-  # two reasons to use a local resolver
-  # - performance
-  # - being able to hardcode IPs for a given DNS name
-  set nginx_resolver 127.0.0.1 ipv6=off
 
-  # block access to "forbidden" subdomain
-  set block_err This subdomain is forbidden.
-  set block_host_re ^forbidden\.
+onionspray_project_settings:
+  - project_name: "example1"
+    softmaps:
+      - proxied_domain: example.com
+      - proxied_domain: example.org
+  - project_name: "example2"
+    hardmaps:
+      - tor_address: yetkvkuqlr23sdzkf2mynt7aixfjzq6pjys2ffurr3hzpyfxrc7swpqd
+        proxied_domain: example.net
+    project_custom_settings: |
+      # two reasons to use a local resolver
+      # - performance
+      # - being able to hardcode IPs for a given DNS name
+      set nginx_resolver 127.0.0.1 ipv6=off
 
-  ## rate-limiting
-  ## c.f. https://onionservices.torproject.org/apps/web/onionspray/guides/dos/
-  # max number of connections through this proxy
-  set tor_max_streams 1000
-  # setting these two options expose a header named "X-Onion-CircuitID" with a unique ID per Tor user
-  # that header can be used for rate-limiting
-  set tor_export_circuit_id haproxy
-  set nginx_x_onion_circuit_id 1
-onionspray_proxied_domain: "example.com"
+      # block access to "forbidden" subdomain
+      set block_err This subdomain is forbidden.
+      set block_host_re ^forbidden\.
+
+      ## rate-limiting
+      ## c.f. https://onionservices.torproject.org/apps/web/onionspray/guides/dos/
+      # max number of connections through this proxy
+      set tor_max_streams 1000
+      # setting these two options expose a header named "X-Onion-CircuitID" with a unique ID per Tor user
+      # that header can be used for rate-limiting
+      set tor_export_circuit_id haproxy
+      set nginx_x_onion_circuit_id 1
+
+onionspray_keys:
+  - public_key_base64: PT0...REDACTED...==
+    secret_key_base64: PT0...REDACTED...
+    tor_address: yetkvkuqlr23sdzkf2mynt7aixfjzq6pjys2ffurr3hzpyfxrc7swpqd
 ```
 
 ## Self-signed certificate
@@ -73,21 +87,61 @@ File indicating whether Onionspray has already been built or not. If the file ex
 
 The script from the Onionspray repo to use when building it. If not specified, the role will try to find a script from the host's distribution and release. You can use this variable to specify which script to use, the list [is available in the Onionspray repo](https://gitlab.torproject.org/tpo/onion-services/onionspray/-/tree/main/opt?ref_type=heads). For example, `build-centos-8.2.2004.sh`.
 
-### `onionspray_project_name`
+### `onionspray_ca_file`
 
-The name of your Onionspray project, used to set the configuration and settings filenames. Defaults to `myproject`.
+The path of a file containing one or more certificate authorities (CAs), that will be used by Onionspray to validate the TLS certificates of the proxied domains. By default, contains the path of the CA file managed by the Debian `ca-certificates` package (`/etc/ssl/certs/ca-certificates.crt`).
 
-### `onionspray_project_custom_settings`
+The role will abort if this file does not exist. If you wish to skip this verification (not recommended, as you expose your Onionspray host to Man-In-The-Middle attacks if you do so), you can redefine the `onionspray_check_cert_with_ca_file` variable.
 
-If additional settings are needed, you can put them in this variable and they will be appended to the `settings.conf.j2` settings template. Defaults to an empty string.
+### `onionspray_check_cert_with_ca_file`
 
-### `onionspray_proxied_domain`
+A variable controlling whether or not to check the TLS certificate of the domain your Onionspray host is proxying, against a certificate authority defined in the `onionspray_ca_file`. Defaults to `true`.
 
-The clearnet domain name to which Onionspray will proxy requests. No default value, this variable is required.
+### `onionspray_keys`
 
-### `onionspray_public_key_base64`
+A list of public/secret keypairs, and their corresponding `.onion` v3 address. Defining these keys is necessary to persist a given `.onion` address, and use it in hardmaps or softmaps (see the `onionspray_project_settings` variable for more information).
 
-The Onion v3 public key to use, encoded in Base64. If not defined, a random one will be generated.
+Each list item should define the three following fields. All of them are mandatory.
+
+#### `public_key_base64`
+
+The Onion v3 public key to use, encoded in Base64.
+
+#### `secret_key_base64`
+
+The Onion v3 secret key to use, encoded in Base64.
+
+#### `tor_address`
+
+The corresponding `.onion` v3 address to the defined public and secret keys.
+
+### `onionspray_project_settings`
+
+A list of dictionaries, each dictionary representing a project (i.e. a clearnet website that Onionspray will proxy). The supported fields per dictionary are listed below.
+
+#### `project_name`
+
+REQUIRED: the name of your Onionspray project, used to set the configuration and settings filenames.
+
+#### `project_custom_settings`
+
+If additional settings are needed, you can put them in this variable and they will be appended to the generated `PROJECT_NAME.conf` configuration file. Defaults to an empty string.
+
+#### `hardmaps` and `softmaps`
+
+These two fields are used to define the hardmaps or softmaps used by Onionspray. You can find more information on these concepts in the [Onionspray documentation](https://onionservices.torproject.org/apps/web/onionspray/guides/balance/).
+
+They support the same fields.
+
+##### `proxied_domain`
+
+REQUIRED: the clearnet domain name to which Onionspray will proxy requests.
+
+##### `tor_address`
+
+The custom `.onion` v3 address to use, dependent on the public/secret keys used. The corresponding public/secret keys, using the same `tor_address` value, should be defined in the `onionspray_keys` variable to use this field.
+
+If this field and the public/secret keys in the `onionspray_keys` variable are not defined, a new keypair will be generated. Keep in mind that if you modify the project configuration without defining this field, a new keypair will be generated in the next Ansible run, and so the `.onion` address used by Onionspray will change.
 
 ### `onionspray_repo_url`
 
@@ -100,10 +154,6 @@ Where to put the cloned Onionspray repo, defaults to `{{ onionspray_user_homedir
 ### `onionspray_repo_git_revision`
 
 The revision of the repository to checkout. No default value: if not defined, the role uses the latest revision of the main branch.
-
-### `onionspray_secret_key_base64`
-
-The Onion v3 secret key to use, encoded in Base64. If not defined, a random one will be generated.
 
 ### `onionspray_selfsigned_cert_country`
 
@@ -128,10 +178,6 @@ Self-signed certificate organizational unit. Defaults to `Self Signed Certificat
 ### `onionspray_selfsigned_cert_state_or_province`
 
 Self-signed certificate state or provice name. Defaults to `The Internet`.
-
-### `onionspray_tor_address`
-
-The custom `.onion` v3 address to use, dependent on the public/secret keys used. If it is defined, this means we are using a custom public/secret key, provided by the `onionspray_public_key_base64` and  `onionspray_secret_key_base64` variables. If not provided, a random key will be generated and its address will be used.
 
 ### `onionspray_use_systemd`
 
