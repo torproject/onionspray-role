@@ -1,6 +1,7 @@
-# make sure to test upstream HTTPS certificates
-set nginx_proxy_ssl_trusted_certificate /etc/ssl/certs/ca-certificates.crt
+{% if onionspray_check_cert_with_ca_file %}
+set nginx_proxy_ssl_trusted_certificate {{ onionspray_ca_cert_file }}
 
+{% endif %}
 # disable cache
 set nginx_cache_seconds 0
 
