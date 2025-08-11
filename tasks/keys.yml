@@ -14,27 +14,30 @@
     group: "{{ onionspray_user }}"
     mode: "700"
 
-- name: keys | Copy Onion v3 public key
+- name: keys | Copy Onion v3 public key(s)
   ansible.builtin.copy:
-    content: "{{ onionspray_public_key_base64 | b64decode }}"
-    dest: "{{ onionspray_repo_download_path }}/secrets/{{ onionspray_tor_address }}.v3pub.key"
-    owner: "{{ onionspray_user }}"
-    group: "{{ onionspray_user }}"
-    mode: "600"
-  when:
-    - onionspray_secret_key_base64 is defined
-    - onionspray_public_key_base64 is defined
-    - onionspray_tor_address is defined
-
-- name: keys | Copy Onion v3 secret key
-  ansible.builtin.copy:
-    content: "{{ onionspray_secret_key_base64 | b64decode }}"
-    dest: "{{ onionspray_repo_download_path }}/secrets/{{ onionspray_tor_address }}.v3sec.key"
+    content: "{{ item.public_key_base64 | b64decode }}"
+    dest: "{{ onionspray_repo_download_path }}/secrets/{{ item.tor_address }}.v3pub.key"
     owner: "{{ onionspray_user }}"
     group: "{{ onionspray_user }}"
     mode: "600"
   no_log: true
+  loop: "{{ onionspray_keys }}"
   when:
-    - onionspray_secret_key_base64 is defined
-    - onionspray_public_key_base64 is defined
-    - onionspray_tor_address is defined
+    - item.public_key_base64 is defined
+    - item.secret_key_base64 is defined
+    - item.tor_address is defined
+
+- name: keys | Copy Onion v3 secret key(s)
+  ansible.builtin.copy:
+    content: "{{ item.secret_key_base64 | b64decode }}"
+    dest: "{{ onionspray_repo_download_path }}/secrets/{{ item.tor_address }}.v3sec.key"
+    owner: "{{ onionspray_user }}"
+    group: "{{ onionspray_user }}"
+    mode: "600"
+  no_log: true
+  loop: "{{ onionspray_keys }}"
+  when:
+    - item.public_key_base64 is defined
+    - item.secret_key_base64 is defined
+    - item.tor_address is defined

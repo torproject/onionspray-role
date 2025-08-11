@@ -1,7 +1,9 @@
 ---
 onionspray_build_lock_file: "{{ onionspray_repo_download_path }}/onionspray-already-built.lock"
-onionspray_project_custom_settings: ""
-onionspray_project_name: myproject
+onionspray_ca_file: /etc/ssl/certs/ca-certificates.crt
+onionspray_check_cert_with_ca_file: true
+onionspray_keys: []
+onionspray_project_settings: []
 onionspray_repo_download_path: "{{ onionspray_user_homedir }}/onionspray"
 onionspray_repo_url: https://gitlab.torproject.org/tpo/onion-services/onionspray/
 onionspray_selfsigned_cert_country: AQ
