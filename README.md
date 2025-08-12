@@ -1,10 +1,12 @@
 # Onionspray
 
-This role clones the
-[Onionspray](https://onionservices.torproject.org/apps/web/onionspray/) repo
-and builds from source the necessary software (OpenResty with the Nginx
-[http_substitutions_filter](https://github.com/yaoweibin/ngx_http_substitutions_filter_module)
-module, OnionBalance, Tor).
+This role clones the [Onionspray][] repo and builds from source the necessary
+software (OpenResty with the Nginx [http_substitutions_filter][] module,
+[Onionbalance][], Tor).
+
+[Onionspray]: https://onionservices.torproject.org/apps/web/onionspray/
+[Onionbalance]: https://onionservices.torproject.org/apps/base/onionbalance/
+[http_substitutions_filter]: https://github.com/yaoweibin/ngx_http_substitutions_filter_module
 
 The role first generates the configuration files needed to serve a website. The
 build is then done by the `opt/build-DISTRO.sh` script inside the Onionspray
@@ -55,24 +57,32 @@ onionspray_project_settings:
     hardmaps:
       - tor_address: yetkvkuqlr23sdzkf2mynt7aixfjzq6pjys2ffurr3hzpyfxrc7swpqd
         proxied_domain: example.net
+    foreingmaps:
+      - tor_address: exaymhwjhgdopeebkv5p3lmb5vu2mmvcc7krpgwx6ngf4uvob2whkcqd.onion
+        proxied_domain: example.info
+    log_separate                 : '1'
+    nginx_resolver               : '127.0.0.53 ipv6=off'
+    nginx_cache_seconds          : '60'
+    nginx_cache_size             : '64m'
+    nginx_tmpfile_size           : '8m'
+    x_from_onion_value           : '1'
+    tor_export_circuit_id        : 'haproxy'
+    tor_intros_per_daemon        : '6'
+    tor_single_onion             : '1'
+    tor_pow_enabled              : '1'
+    tor_max_streams              : '5000'
+    tor_max_streams_close_circuit: '1'
+    tor_intro_dos_defense        : '1'
+    tor_intro_dos_burst_per_sec  : '20000'
+    tor_intro_dos_rate_per_sec   : '20000'
     project_custom_settings: |
-      # two reasons to use a local resolver
-      # - performance
-      # - being able to hardcode IPs for a given DNS name
-      set nginx_resolver 127.0.0.1 ipv6=off
-
       # block access to "forbidden" subdomain
       set block_err This subdomain is forbidden.
       set block_host_re ^forbidden\.
-
-      ## rate-limiting
-      ## c.f. https://onionservices.torproject.org/apps/web/onionspray/guides/dos/
-      # max number of connections through this proxy
-      set tor_max_streams 1000
-      # setting these two options expose a header named "X-Onion-CircuitID" with a unique ID per Tor user
-      # that header can be used for rate-limiting
-      set tor_export_circuit_id haproxy
-      set nginx_x_onion_circuit_id 1
+    project_custom_settings: |
+      # block access to "forbidden" subdomain
+      set block_err This subdomain is forbidden.
+      set block_host_re ^forbidden\.
 
 onionspray_keys:
   - public_key_base64: BASE64_ENCODED_PUBLIC_KEY
@@ -188,12 +198,6 @@ listed below.
 REQUIRED: the name of your Onionspray project, used to set the configuration
 and settings filenames.
 
-#### `project_custom_settings`
-
-If additional settings are needed, you can put them in this variable and they
-will be appended to the generated `PROJECT_NAME.conf` configuration file.
-Defaults to an empty string.
-
 #### `hardmaps` and `softmaps`
 
 These two fields are used to define the hardmaps or softmaps used by
@@ -217,6 +221,58 @@ not defined, a new keypair will be generated. Keep in mind that if you modify
 the project configuration without defining this field, a new keypair will be
 generated in the next Ansible run, and so the `.onion` address used by
 Onionspray will change.
+
+#### `foreignmaps`
+
+The `foreignmaps` variable is used to store onion-to-site mappings that exist
+outside of this particular configuration file, eg: for some other sites.
+
+Each entry should use the following fields.
+
+##### `proxied_domain`
+
+The clearnet domain name to which Onionspray will proxy requests.
+
+##### `tor_address`
+
+The Onion Service address for the foreign map.
+
+#### `nginx_*` and other proxy settings
+
+This role supports the following proxy-related settings from [Onionspray][]:
+
+* `x_from_onion_value`.
+* `inject_headers_upstream`.
+* `log_separate`.
+* `nginx_resolver`.
+* `nginx_tmpfile_size`.
+* `nginx_cache_seconds`.
+* `nginx_cache_size`.
+* `nginx_x_onion_circuit_id`.
+
+#### `tor_*` settings
+
+The `tor` daemon used for each project can be customized using [Onionspray][]
+settings:
+
+* `tor_export_circuit_id`.
+* `tor_intros_per_daemon`.
+* `tor_single_onion`.
+* `tor_pow_enabled`.
+* `tor_pow_queue_rate`.
+* `tor_pow_queue_burst`.
+* `tor_intro_dos_defense`.
+* `tor_intro_dos_burst_per_sec`.
+* `tor_intro_dos_rate_per_sec`.
+* `tor_max_streams`.
+* `tor_max_streams_close_circuit`.
+
+#### `project_custom_settings`
+
+If additional settings are neded (those not explicitly supported by this role),
+you can put them in this variable and they will be appended to the generated
+`PROJECT_NAME.conf` configuration file.
+Defaults to an empty string.
 
 ### `onionspray_repo_url`
 
