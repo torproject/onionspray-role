@@ -49,3 +49,42 @@
         state   : directory
         mode    : '0700'
         recurse : false
+
+- name: certs | Copy Onion Service certificates
+  tags:
+    - certificates
+  when: "settings.certificates | length != 0"
+  block:
+    - name: certs | Copy Onion TLS certificate
+      ansible.builtin.copy:
+        content: "{{ tls.public_key }}"
+        dest: "{{ onionspray_repo_download_path }}/projects/{{ settings.project_name }}/ssl/{ tls.tor_addr | truncate(20, True, '')-v3.cert"
+        owner: "{{ onionspray_user }}"
+        group: "{{ onionspray_user }}"
+        mode: "600"
+      no_log: true
+      loop: "{{ settings.certificates }}"
+      loop_control:
+        loop_var: tls
+        label: tls.tor_address
+      when:
+        - tls.certificate is defined
+        - tls.secret_key is defined
+        - tls.tor_address is defined
+
+    - name: certs | Copy Onion TLS secret key
+      ansible.builtin.copy:
+        content: "{{ tls.secret_key }}"
+        dest: "{{ onionspray_repo_download_path }}/projects/{{ settings.project_name }}/ssl/{ tls.tor_addr | truncate(20, True, '')-v3.pem"
+        owner: "{{ onionspray_user }}"
+        group: "{{ onionspray_user }}"
+        mode: "600"
+      no_log: true
+      loop: "{{ settings.certificates }}"
+      loop_control:
+        loop_var: tls
+        label: tls.tor_address
+      when:
+        - tls.certificate is defined
+        - tls.secret_key is defined
+        - tls.tor_address is defined
