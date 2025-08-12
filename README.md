@@ -46,8 +46,6 @@ As an example, you could have in `host_vars/myhost.yml`:
 ```
 onionspray_repo_git_revision: a0e43045fe135e1b3f5b96e075ed519e4359ab7f
 
-onionspray_ca_cert_file: /etc/ssl/certs/ca-certificates.crt
-
 onionspray_project_settings:
   - project_name: "example1"
     softmaps:

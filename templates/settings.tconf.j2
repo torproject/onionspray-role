@@ -1,5 +1,5 @@
 {% if onionspray_check_cert_with_ca_file %}
-set nginx_proxy_ssl_trusted_certificate {{ onionspray_ca_cert_file }}
+set nginx_proxy_ssl_trusted_certificate {{ onionspray_ca_file }}
 
 {% endif %}
 # disable cache
