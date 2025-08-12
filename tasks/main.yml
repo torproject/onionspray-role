@@ -18,10 +18,16 @@
 - name: Certificate handling
   ansible.builtin.include_tasks: certs.yml
   loop: "{{ onionspray_project_settings }}"
+  loop_control:
+    loop_var: settings
+    label: settings.project_name
 
 - name: Projects configuration
   ansible.builtin.include_tasks: projects.yml
   loop: "{{ onionspray_project_settings }}"
+  loop_control:
+    loop_var: settings
+    label: settings.project_name
 
 - name: Build
   ansible.builtin.include_tasks: build.yml

@@ -16,28 +16,28 @@
 
 - name: keys | Copy Onion v3 public key(s)
   ansible.builtin.copy:
-    content: "{{ item.public_key_base64 | b64decode }}"
-    dest: "{{ onionspray_repo_download_path }}/secrets/{{ item.tor_address }}.v3pub.key"
+    content: "{{ settings.public_key_base64 | b64decode }}"
+    dest: "{{ onionspray_repo_download_path }}/secrets/{{ settings.tor_address }}.v3pub.key"
     owner: "{{ onionspray_user }}"
     group: "{{ onionspray_user }}"
     mode: "600"
   no_log: true
   loop: "{{ onionspray_keys }}"
   when:
-    - item.public_key_base64 is defined
-    - item.secret_key_base64 is defined
-    - item.tor_address is defined
+    - settings.public_key_base64 is defined
+    - settings.secret_key_base64 is defined
+    - settings.tor_address is defined
 
 - name: keys | Copy Onion v3 secret key(s)
   ansible.builtin.copy:
-    content: "{{ item.secret_key_base64 | b64decode }}"
-    dest: "{{ onionspray_repo_download_path }}/secrets/{{ item.tor_address }}.v3sec.key"
+    content: "{{ settings.secret_key_base64 | b64decode }}"
+    dest: "{{ onionspray_repo_download_path }}/secrets/{{ settings.tor_address }}.v3sec.key"
     owner: "{{ onionspray_user }}"
     group: "{{ onionspray_user }}"
     mode: "600"
   no_log: true
   loop: "{{ onionspray_keys }}"
   when:
-    - item.public_key_base64 is defined
-    - item.secret_key_base64 is defined
-    - item.tor_address is defined
+    - settings.public_key_base64 is defined
+    - settings.secret_key_base64 is defined
+    - settings.tor_address is defined
