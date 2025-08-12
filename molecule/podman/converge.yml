@@ -13,8 +13,6 @@
   gather_facts: true
 
   vars:
-    onionspray_ca_cert_file: /etc/ssl/certs/ca-certificates.crt
-
     onionspray_project_settings:
       - project_name: "example1"
         softmaps:
