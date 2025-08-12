@@ -45,7 +45,7 @@ onionspray_repo_download_path: "{{ onionspray_user_homedir }}/onionspray"
 #onionspray_repo_git_revision:
 
 # Lifetime of the self-signed certificate generated for the .onion website, in days
-onionspray_selfsigned_cert_lifetime_days: 30
+onionspray_selfsigned_cert_lifetime_days: 365
 
 # Self-signed certificate country name
 onionspray_selfsigned_cert_country: AQ
