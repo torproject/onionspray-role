@@ -38,7 +38,7 @@ example of a basic playbook:
 
 You can configure your project(s), i.e. the website(s) that Onionspray will
 handle, using the `onionspray_project_settings` variable, a list of
-dictionaries. You may also want to (re)define other values: see below for a
+dictionaries. You may also want to (re)define other values: check below for a
 complete list of variables and their usage.
 
 As an example, you could have in `host_vars/myhost.yml`:
@@ -145,7 +145,7 @@ defined in the `onionspray_ca_file`. Defaults to `true`.
 
 A list of public/secret keypairs, and their corresponding `.onion` v3 address.
 Defining these keys is necessary to persist a given `.onion` address, and use
-it in hardmaps or softmaps (see the `onionspray_project_settings` variable for
+it in hardmaps or softmaps (check the `onionspray_project_settings` variable for
 more information).
 
 Each list item should define the three following fields. All of them are
@@ -225,7 +225,7 @@ repo](https://gitlab.torproject.org/tpo/onion-services/onionspray/).
 
 ### `onionspray_repo_download_path`
 
-Where to put the cloned Onionspray repo, defaults to `{{
+Where to put the cloned Onionspray repository, defaults to `{{
 onionspray_user_homedir }}/onionspray`.
 
 ### `onionspray_repo_git_revision`
@@ -233,14 +233,14 @@ onionspray_user_homedir }}/onionspray`.
 The revision of the repository to checkout. No default value: if not defined,
 the role uses the latest revision of the main branch.
 
-### `onionspray_selfsigned_cert_country`
-
-Self-signed certificate country name. Defaults to `AQ` (Antartica).
-
 ### `onionspray_selfsigned_cert_lifetime_days`
 
 Lifetime of the self-signed certificate generated for the .onion website,
-defaults to 30 days (`30`).
+defaults to 365 days (`365`).
+
+### `onionspray_selfsigned_cert_country`
+
+Self-signed certificate country name. Defaults to `AQ` (Antartica).
 
 ### `onionspray_selfsigned_cert_locality`
 
@@ -297,7 +297,7 @@ A [Makefile](Makefile) exists to help local testing, which relies on
 
 ## License
 
-This project is licensed with the Affero GPLv3. See [LICENSE](LICENSE) for the
+This project is licensed with the Affero GPLv3. Check [LICENSE](LICENSE) for the
 full license, or [this page](https://choosealicense.com/licenses/agpl-3.0/) for
 a quick recap. In general, if you use a modified version of this role, you must
 make the source code public to comply with the AGPL.
