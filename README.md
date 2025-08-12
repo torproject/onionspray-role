@@ -265,6 +265,22 @@ onionspray_user }}`.
 All contributions are very welcome. Feel free to send your enhancements and
 patches as PRs, or open issues.
 
+## Development
+
+This role has [molecule tests](molecule):
+
+* The `podman` scenario is a generic one and is well suited for testing both
+  locally and through CI.
+* The `local` scenario actually applies the configuration into the running
+  node, so be careful were to run it.
+
+A [Makefile](Makefile) exists to help local testing, which relies on
+[AnCIble][] to be available somewhere. Details in how to use it are given
+[here][].
+
+[AnCIble]: https://gitlab.torproject.org/tpo/onion-services/ansible/ancible/
+[here]: https://gitlab.torproject.org/tpo/onion-services/ansible/ancible/-/blob/main/README.md#development
+
 ## License
 
 This project is licensed with the Affero GPLv3. See [LICENSE](LICENSE) for the
