@@ -46,6 +46,8 @@ As an example, you could have in `host_vars/myhost.yml`:
 ```
 onionspray_repo_git_revision: a0e43045fe135e1b3f5b96e075ed519e4359ab7f
 
+onionspray_ca_cert_file: /etc/ssl/certs/ca-certificates.crt
+
 onionspray_project_settings:
   - project_name: "example1"
     softmaps:
@@ -75,8 +77,8 @@ onionspray_project_settings:
       set nginx_x_onion_circuit_id 1
 
 onionspray_keys:
-  - public_key_base64: PT0...REDACTED...==
-    secret_key_base64: PT0...REDACTED...
+  - public_key_base64: BASE64_ENCODED_PUBLIC_KEY
+    secret_key_base64: BASE64_ENCODED_SECRET_KEY
     tor_address: yetkvkuqlr23sdzkf2mynt7aixfjzq6pjys2ffurr3hzpyfxrc7swpqd
 ```
 
@@ -155,9 +157,23 @@ mandatory.
 
 The Onion v3 public key to use, encoded in Base64.
 
+The Base64-encoded key can be produced directly from a generate public key,
+with
+
+    cat hs_ed25519_public_key | base64
+
 #### `secret_key_base64`
 
 The Onion v3 secret key to use, encoded in Base64.
+
+It's recommended that this variable to be also encrypted using [Ansible Vault][].
+
+[Ansible Vault]: https://docs.ansible.com/ansible/latest/vault_guide/vault.html
+
+The Base64-encoded and then encrypted key can be produced directly from a
+generate public key, with
+
+    cat hs_ed25519_secret_key | base64 | ansible-vault encrypt_string
 
 #### `tor_address`
 
