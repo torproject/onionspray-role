@@ -13,7 +13,41 @@
   gather_facts: true
 
   vars:
-    onionspray_proxied_domain: 'example.org'
+    onionspray_ca_cert_file: /etc/ssl/certs/ca-certificates.crt
+
+    onionspray_project_settings:
+      - project_name: "example1"
+        softmaps:
+          - proxied_domain: example.com
+          - proxied_domain: example.org
+      - project_name: "example2"
+        hardmaps:
+          - tor_address: yetkvkuqlr23sdzkf2mynt7aixfjzq6pjys2ffurr3hzpyfxrc7swpqd
+            proxied_domain: example.net
+        project_custom_settings: |
+          # two reasons to use a local resolver
+          # - performance
+          # - being able to hardcode IPs for a given DNS name
+          set nginx_resolver 127.0.0.1 ipv6=off
+
+          # block access to "forbidden" subdomain
+          set block_err This subdomain is forbidden.
+          set block_host_re ^forbidden\.
+
+          ## rate-limiting
+          ## c.f. https://onionservices.torproject.org/apps/web/onionspray/guides/dos/
+          # max number of connections through this proxy
+          set tor_max_streams 1000
+          # setting these two options expose a header named "X-Onion-CircuitID" with a unique ID per Tor user
+          # that header can be used for rate-limiting
+          set tor_export_circuit_id haproxy
+          set nginx_x_onion_circuit_id 1
+
+    onionspray_keys:
+      # Bogus data for testing purposes
+      - public_key_base64: Ym9ndXMgZGF0YSBmb3IgdGVzdGluZyBwdXJwb3Nlcwo=
+        secret_key_base64: Ym9ndXMgZGF0YSBmb3IgdGVzdGluZyBwdXJwb3Nlcwo=
+        tor_address: yetkvkuqlr23sdzkf2mynt7aixfjzq6pjys2ffurr3hzpyfxrc7swpqd
 
     # Do not enable the service, since the image is not started with systemd as PID 1
     onionspray_use_systemd: false
