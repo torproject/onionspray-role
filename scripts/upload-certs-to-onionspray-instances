@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+#
+# Upload Onion Service certs into remote Onionspray instances.
+#
+
+# Parameters
+BASENAME="`basename $0`"
+DIRNAME="`dirname $0`"
+PROVIDER="${PROVIDER:-$1}"
+HOST="${HOST:-$2}"
+PROJECT="${PROJECT:-$3}"
+ONION="${ONION:-$4}"
+DOMAIN="${DOMAIN:-$5}"
+ONIONSPRAY_USER="${ONIONSPRAY_USER:-$6}"
+ONIONSPRAY_FOLDER="${ONIONSPRAY_FOLDER:-$7}"
+KEYRING="${KEYRING:-onionspray}"
+SECRETS_MANAGER="${SECRETS_MANAGER:-keyringer}"
+
+# Decrypt and upload with keyringer
+function keyringer_decrypt_upload {
+  # Process the public key
+  # This keyring currently stores everything in a single folder for each provider
+  # (i.e, not split per project).
+  echo "Decrypting and uploading ${CERT}..."
+  keyringer ${KEYRING} decrypt onionspray/${PROVIDER}/ssl/${CERT}.asc 2> /dev/null | \
+    ${SSH} "cd $ONIONSPRAY_FOLDER/projects/${PROJECT}/ssl && touch ${CERT} && chown ${ONIONSPRAY_USER}: ${CERT} && chmod 600 ${CERT} && cat - > ${CERT}" || exit 1
+
+  # Process the private key
+  # This keyring currently stores everything in a single folder for each provider
+  # (i.e, not split per project).
+  echo "Decrypting and uploading ${PEM}..."
+  keyringer ${KEYRING} decrypt onionspray/${PROVIDER}/ssl/${PEM}.asc 2> /dev/null | \
+    ${SSH} "cd $ONIONSPRAY_FOLDER/projects/${PROJECT}/ssl && touch ${PEM} && chown ${ONIONSPRAY_USER}: ${CERT} && chmod 600 ${PEM} && cat - > ${PEM}" || exit 1
+}
+
+# Basic checks
+if [ -z "${ONIONSPRAY_FOLDER}" ]; then
+  exit 1
+fi
+
+# Be strict on errors
+set -e
+
+# Ensure we have no locale warnings
+export LC_ALL="C"
+
+# The SSH command
+SSH="ssh ${ONIONSPRAY_USER}@${HOST}"
+
+# The shortened address as used by Onionspray
+#ONION_SHORT="$(echo ${ONION} | sed -e 's|^\([a-Z0-9]\{20\}\).*$|\1|')"
+ONION_SHORT="${ONION:0:20}"
+
+# The certificate and the private key file names
+CERT="${ONION_SHORT}-v3.cert"
+PEM="${ONION_SHORT}-v3.pem"
+
+# Dispatch to the underlying implementation
+${SECRETS_MANAGER}_decrypt_upload

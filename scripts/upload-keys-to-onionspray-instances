@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+#
+# Upload Onion Service keys into remote Onionspray instances.
+#
+
+# Parameters
+BASENAME="`basename $0`"
+DIRNAME="`dirname $0`"
+PROVIDER="${PROVIDER:-$1}"
+HOST="${HOST:-$2}"
+PROJECT="${PROJECT:-$3}"
+ONION="${ONION:-$4}"
+DOMAIN="${DOMAIN:-$5}"
+ONIONSPRAY_USER="${ONIONSPRAY_USER:-$6}"
+ONIONSPRAY_FOLDER="${ONIONSPRAY_FOLDER:-$7}"
+KEYRING="${KEYRING:-onionspray}"
+SECRETS_MANAGER="${SECRETS_MANAGER:-keyringer}"
+
+# Decrypt and upload with keyringer
+function keyringer_decrypt_upload {
+  # Process the public key
+  echo "Decrypting and uploading ${PUB}..."
+  keyringer ${KEYRING} decrypt onionspray/${PROVIDER}/secrets/${PUB}.asc 2> /dev/null | \
+    ${SSH} "cd $ONIONSPRAY_FOLDER/secrets && touch ${PUB} && chown ${ONIONSPRAY_USER}: ${PUB} && chmod 600 ${PUB} && cat - > ${PUB}" || exit 1
+
+  # Process the private key
+  echo "Decrypting and uploading ${SEC}..."
+  keyringer ${KEYRING} decrypt onionspray/${PROVIDER}/secrets/${SEC}.asc 2> /dev/null | \
+    ${SSH} "cd $ONIONSPRAY_FOLDER/secrets && touch ${SEC} && chown ${ONIONSPRAY_USER}: ${SEC} && chmod 600 ${SEC} && cat - > ${SEC}" || exit 1
+}
+
+# Basic checks
+if [ -z "${ONIONSPRAY_FOLDER}" ]; then
+  exit 1
+fi
+
+# Be strict on errors
+set -e
+
+# Ensure we have no locale warnings
+export LC_ALL="C"
+
+# The SSH command
+SSH="ssh ${ONIONSPRAY_USER}@${HOST}"
+
+# The public and private key file names
+PUB="${ONION}.v3pub.key"
+SEC="${ONION}.v3sec.key"
+
+# Dispatch to the underlying implementation
+${SECRETS_MANAGER}_decrypt_upload
