@@ -17,7 +17,8 @@ onionspray_user: onionspray
 # The home directory of the user running Onionspray
 onionspray_user_homedir: "/home/{{ onionspray_user }}"
 
-# The URL of the Onionspray repo to clone
+# The URL of the Onionspray repository to clone
+# Defaults to the official Onionspray repository
 onionspray_repo_url: https://gitlab.torproject.org/tpo/onion-services/onionspray/
 
 # Where to put the cloned Onionspray repository
@@ -35,6 +36,11 @@ onionspray_build_lock_file: "{{ onionspray_repo_download_path }}/onionspray-alre
 # If not specified, the role will try to find a script from the host's
 # distribution and release. You can use this variable to specify which script
 # to use.
+#
+# The list is # available in the Onionspray repository:
+# https://gitlab.torproject.org/tpo/onion-services/onionspray/-/tree/main/opt
+#
+# Example: build-centos-8.2.2004.sh
 #onionspray_build_script_name:
 
 # Controls whether systemd is used: set to `false` e.g. when running CI jobs in
@@ -48,6 +54,15 @@ onionspray_use_systemd: true
 # The path of a file containing one or more certificate authorities (CAs), that
 # will be used by Onionspray to validate the TLS certificates of the proxied
 # domains.
+#
+# By default, contains the path of the CA file managed by the Debian
+# `ca-certificates` package (`/etc/ssl/certs/ca-certificates.crt`).
+#
+# The role will abort if this file does not exist.
+#
+# If you wish to skip this verification (not recommended, as you expose your
+# Onionspray host to Machine-In-The-Middle attacks if you do so), you can
+# redefine the `onionspray_check_cert_with_ca_file` variable.
 onionspray_ca_file: /etc/ssl/certs/ca-certificates.crt
 
 # A variable controlling whether or not to check the TLS certificate of the
@@ -77,24 +92,143 @@ onionspray_selfsigned_cert_state_or_province: The Internet
 # Provider and project settings
 #
 
-# TODO: document this variable here and also in the README
+# TODO: document
 onionspray_provider: 'onionspray'
 
-# A list of dictionaries, each dictionary representing a project
+# A list of dictionaries, each dictionary representing a project (i.e. a
+# clearnet website that Onionspray will proxy).
+#
+# The supported fields per dictionary are listed below.
+#
+# ### `onionspray_project_settings`
+#
+# A list of dictionaries, each dictionary representing a project (i.e. a clearnet
+# website that Onionspray will proxy). The supported fields per dictionary are
+# listed below.
+#
+# #### `project_name`
+#
+# REQUIRED: the name of your Onionspray project, used to set the configuration
+# and settings filenames.
+#
+# #### `hardmaps` and `softmaps`
+#
+# These two fields are used to define the hardmaps or softmaps used by
+# Onionspray. You can find more information on these concepts in the [Onionspray
+# documentation](https://onionservices.torproject.org/apps/web/onionspray/guides/balance/).
+#
+# They support the same fields.
+#
+# ##### `upstream_address`
+#
+# REQUIRED: the clearnet domain name to which Onionspray will proxy requests.
+#
+# ##### `onion_address`
+#
+# The custom `.onion` v3 address to use, dependent on the public/secret keys
+# used. The corresponding public/secret keys, using the same `onion_address` value,
+# should be defined in the `onionspray_keys` variable to use this field.
+#
+# If this field and the public/secret keys in the `onionspray_keys` variable are
+# not defined, a new keypair will be generated. Keep in mind that if you modify
+# the project configuration without defining this field, a new keypair will be
+# generated in the next Ansible run, and so the `.onion` address used by
+# Onionspray will change.
+#
+# ##### `public_key_base64`
+#
+# The Onion v3 public key to use, encoded in Base64.
+#
+# This field is not required, but defining it is necessary to persist a given
+# `.onion` address.
+#
+# The Base64-encoded key can be produced directly from a generate public key,
+# with
+#
+#     cat hs_ed25519_public_key | base64
+#
+# ##### `secret_key_base64`
+#
+# The Onion v3 secret key to use, encoded in Base64.
+#
+# This field is only required if a public key is defined through `public_key_base64`.
+#
+# It's recommended that this variable to be also encrypted using [Ansible Vault][].
+#
+# [Ansible Vault]: https://docs.ansible.com/ansible/latest/vault_guide/vault.html
+#
+# The Base64-encoded and then encrypted key can be produced directly from a
+# generate public key, with
+#
+#     cat hs_ed25519_secret_key | base64 | ansible-vault encrypt_string
+#
+# #### `foreignmaps`
+#
+# The `foreignmaps` variable is used to store onion-to-site mappings that exist
+# outside of this particular configuration file, eg: for some other sites.
+#
+# Each entry should use the following fields.
+#
+# ##### `upstream_address`
+#
+# The clearnet domain name to which Onionspray will proxy requests.
+#
+# ##### `onion_address`
+#
+# The Onion Service address for the foreign map.
+#
+# #### `nginx_*` and other proxy settings
+#
+# This role supports the following proxy-related settings from [Onionspray][]:
+#
+# * `x_from_onion_value`.
+# * `inject_headers_upstream`.
+# * `log_separate`.
+# * `nginx_resolver`.
+# * `nginx_tmpfile_size`.
+# * `nginx_cache_seconds`.
+# * `nginx_cache_size`.
+# * `nginx_x_onion_circuit_id`.
+#
+# #### `tor_*` settings
+#
+# The `tor` daemon used for each project can be customized using [Onionspray][]
+# settings:
+#
+# * `tor_export_circuit_id`.
+# * `tor_intros_per_daemon`.
+# * `tor_single_onion`.
+# * `tor_pow_enabled`.
+# * `tor_pow_queue_rate`.
+# * `tor_pow_queue_burst`.
+# * `tor_intro_dos_defense`.
+# * `tor_intro_dos_burst_per_sec`.
+# * `tor_intro_dos_rate_per_sec`.
+# * `tor_max_streams`.
+# * `tor_max_streams_close_circuit`.
+#
+# #### `project_custom_settings`
+#
+# If additional settings are neded (those not explicitly supported by this role),
+# you can put them in this variable and they will be appended to the generated
+# `PROJECT_NAME.conf` configuration file.
+#
+# Defaults to an empty string.
+#
 onionspray_project_settings: []
 
 #
 # Uploading secrets
 #
 
-# TODO: document this variable here and also in the README
+# TODO: document
 onionspray_keyring: 'onionspray'
 
-# TODO: document this variable here and also in the README
+# TODO: document
 onionspray_secrets_manager: 'keyringer'
 
-# TODO: document this variable here and also in the README
+# TODO: document
 #onionspray_key_uploader_script:
 
-# TODO: document this variable here and also in the README
+# TODO: document
 #onionspray_cert_uploader_script:
