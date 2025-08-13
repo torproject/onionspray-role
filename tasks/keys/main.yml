@@ -7,7 +7,7 @@
 #
 
 - name: keys | Base keys configuration
-  ansible.builtin.include_tasks: certs/keys.yml
+  ansible.builtin.include_tasks: keys/base.yml
 
 - name: keys | Copy Onion Service keys
   ansible.builtin.include_tasks: keys/copy.yml
