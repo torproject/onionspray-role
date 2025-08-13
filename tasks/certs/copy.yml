@@ -23,11 +23,11 @@
       loop: "{{ settings[mapping] }}"
       loop_control:
         loop_var: onionspray_site
-        label: onionspray_site.tor_address
+        label: onionspray_site.onion_address
       when:
         - onionspray_site.certificate is defined
         - onionspray_site.secret_key is defined
-        - onionspray_site.tor_address is defined
+        - onionspray_site.onion_address is defined
 
     - name: "certs | Copy Onion TLS secret key for {{ mapping }}"
       ansible.builtin.copy:
@@ -40,8 +40,8 @@
       loop: "{{ settings[mapping] }}"
       loop_control:
         loop_var: site
-        label: onionspray_site.tor_address
+        label: onionspray_site.onion_address
       when:
         - onionspray_site.certificate is defined
         - onionspray_site.secret_key is defined
-        - onionspray_site.tor_address is defined
+        - onionspray_site.onion_address is defined
