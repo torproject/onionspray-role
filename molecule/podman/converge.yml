@@ -25,9 +25,9 @@
             upstream_address: example.net
             public_key_base64: Ym9ndXMgZGF0YSBmb3IgdGVzdGluZyBwdXJwb3Nlcwo=
             secret_key_base64: Ym9ndXMgZGF0YSBmb3IgdGVzdGluZyBwdXJwb3Nlcwo=
-            certificate: |
+            tls_certificate: |
               TLS_CERTIFICATE
-            secret_key: |
+            tls_secret_key: |
               TLS_SECRET_KEY_ENCRYPTED_WITH_ANSIBLE_VAULT
         foreingmaps:
           - onion_address: exaymhwjhgdopeebkv5p3lmb5vu2mmvcc7krpgwx6ngf4uvob2whkcqd.onion

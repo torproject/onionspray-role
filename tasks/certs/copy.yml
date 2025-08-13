@@ -14,7 +14,7 @@
   block:
     - name: "certs | Copy Onion TLS certificate for {{ mapping }}"
       ansible.builtin.copy:
-        content: "{{ onionspray_site.certificate }}"
+        content: "{{ onionspray_site.tls.certificate }}"
         dest: "{{ onionspray_repo_download_path }}/projects/{{ settings.project_name }}/ssl/{ onionspray_site.tor_addr | truncate(20, True, '')-v3.cert"
         owner: "{{ onionspray_user }}"
         group: "{{ onionspray_user }}"
@@ -25,13 +25,13 @@
         loop_var: onionspray_site
         label: onionspray_site.onion_address
       when:
-        - onionspray_site.certificate is defined
-        - onionspray_site.secret_key is defined
+        - onionspray_site.tls.certificate is defined
+        - onionspray_site.tls.secret_key is defined
         - onionspray_site.onion_address is defined
 
     - name: "certs | Copy Onion TLS secret key for {{ mapping }}"
       ansible.builtin.copy:
-        content: "{{ onionspray_site.secret_key }}"
+        content: "{{ onionspray_site.tls.secret_key }}"
         dest: "{{ onionspray_repo_download_path }}/projects/{{ settings.project_name }}/ssl/{ onionspray_site.tor_addr | truncate(20, True, '')-v3.pem"
         owner: "{{ onionspray_user }}"
         group: "{{ onionspray_user }}"
@@ -42,6 +42,6 @@
         loop_var: site
         label: onionspray_site.onion_address
       when:
-        - onionspray_site.certificate is defined
-        - onionspray_site.secret_key is defined
+        - onionspray_site.tls.certificate is defined
+        - onionspray_site.tls.secret_key is defined
         - onionspray_site.onion_address is defined
