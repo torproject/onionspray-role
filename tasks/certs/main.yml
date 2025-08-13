@@ -1,0 +1,22 @@
+---
+#
+# Certificate handling
+#
+# Copyright (C) 2024 The Tor Project, Inc.
+# SPDX-License-Identifier: AGPL-3.0-or-later
+#
+
+- name: certs | Base certificate configuration
+  ansible.builtin.include_tasks: certs/base.yml
+
+- name: certs | Copy Onion Service certificates
+  ansible.builtin.include_tasks: certs/copy.yml
+  loop: [ 'hardmaps', 'softmaps' ]
+  loop_control:
+    loop_var: mapping
+
+- name: certs | Upload Onion Service certificates
+  ansible.builtin.include_tasks: certs/upload.yml
+  loop: [ 'hardmaps', 'softmaps' ]
+  loop_control:
+    loop_var: mapping

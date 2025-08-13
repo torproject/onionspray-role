@@ -1,0 +1,94 @@
+---
+#
+# Certificate upload
+#
+# Copyright (C) 2024 The Tor Project, Inc.
+# SPDX-License-Identifier: AGPL-3.0-or-later
+#
+
+- name: "certs | Upload Onion Service certificates for {{ mapping }}"
+  tags:
+    - certificates
+  when:
+    - settings[mapping] is defined
+  block:
+    #- name: certs | Debug onionspray cert uploader command line invocation
+    #  ansible.builtin.debug:
+    #    msg: >
+    #      {{ onionspray_cert_uploader_script }} {{ onionspray_provider }} {{ inventory_hostname }}
+    #      {{ settings.project_name }} {{ onionspray_site.tor_address }} {{ onionspray_site.upstream }} {{ onionspray_user }}
+    #      {{ onionspray_repo_download_path }}
+    #      {{ onionspray_keyring }}
+    #      {{ onionspray_secrets_manager }}
+    #  loop: "{{ settings.hardmaps }}"
+    #  loop_control:
+    #    loop_var : onionspray_site
+    #    label    : "{{ onionspray_site.tor_address }}"
+    #  when:
+    #    - onionspray_site.tor_address is defined
+    #    - onionspray_site.certificate_upload is defined
+    #    - onionspray_site.certificate_upload == true
+    #    - onionspray_cert_uploader_script | length != 0 and mapping in settings
+
+    #- name: certs | Ensure certificate file existence and permissions
+    #  ansible.builtin.file:
+    #    path  : "{{ onionspray_repo_download_path }}/projects/{{ settings.project_name }}/ssl/{{ onionspray_site.tor_address|truncate(20, True, '') }}-v3.cert"
+    #    owner : "{{ onionspray_user }}"
+    #    group : "{{ onionspray_user }}"
+    #    state : touch
+    #    mode  : '0600'
+    #  loop_control:
+    #    loop_var : onionspray_site
+    #    label    : "{{ onionspray_site.tor_address }}"
+    #  when:
+    #    - onionspray_site.tor_address is defined
+    #    - onionspray_site.certificate_upload is defined
+    #    - onionspray_site.certificate_upload == true
+    #    - onionspray_cert_uploader_script | length != 0 and mapping in settings
+
+    #- name: certs | Ensure the TLS private key file existence and permissions
+    #  ansible.builtin.file:
+    #    path  : "{{ onionspray_repo_download_path }}/projects/{{ settings.project_name }}/ssl/{{ site.tor_address|truncate(20, True, '') }}-v3.pem"
+    #    owner : "{{ onionspray_user }}"
+    #    group : "{{ onionspray_user }}"
+    #    state : touch
+    #    mode  : '0600'
+    #  loop_control:
+    #    loop_var : onionspray_site
+    #    label    : "{{ onionspray_site.tor_address }}"
+    #  when:
+    #    - onionspray_site.tor_address is defined
+    #    - onionspray_site.certificate_upload is defined
+    #    - onionspray_site.certificate_upload == true
+    #    - onionspray_cert_uploader_script | length != 0 and mapping in settings
+
+    - name: "certs | Upload Onion Service certs for {{ mapping }}"
+      ansible.builtin.command:
+        cmd: >
+          {{ onionspray_cert_uploader_script }} {{ onionspray_provider }} {{ inventory_hostname }}
+          {{ settings.project_name }} {{ onionspray_site.tor_address }} {{ onionspray_site.proxied_domain }} {{ onionspray_user }}
+          {{ onionspray_repo_download_path }}
+          {{ onionspray_keyring }}
+          {{ onionspray_secrets_manager }}
+      delegate_to  : localhost
+      connection   : local
+      become       : true
+      become_user  : "{{ lookup('env', 'USER') }}"
+      loop         : "{{ settings[mapping] }}"
+      loop_control :
+        loop_var : onionspray_site
+        #label    : "{{ onionspray_site.tor_address }}"
+      when:
+        - onionspray_site.tor_address is defined
+        - onionspray_site.certificate_upload is defined
+        - onionspray_site.certificate_upload == true
+        - onionspray_cert_uploader_script | length != 0 and mapping in settings
+      notify : Restart Onionspray
+
+      # This task always change something (even if only the mtime of a file)
+      changed_when: true
+
+      # Under normal circumstances, this is equivalent to "changed_when: true", with the difference
+      # that may pass idempotence tests
+      #register: onionspray_upload_certs_hardmaps
+      #changed_when: onionspray_upload_certs_harmaps.rc != 0

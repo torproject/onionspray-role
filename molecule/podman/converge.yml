@@ -20,8 +20,15 @@
           - proxied_domain: example.org
       - project_name: "example2"
         hardmaps:
+          # Bogus data for testing purposes
           - tor_address: yetkvkuqlr23sdzkf2mynt7aixfjzq6pjys2ffurr3hzpyfxrc7swpqd
             proxied_domain: example.net
+            public_key_base64: Ym9ndXMgZGF0YSBmb3IgdGVzdGluZyBwdXJwb3Nlcwo=
+            secret_key_base64: Ym9ndXMgZGF0YSBmb3IgdGVzdGluZyBwdXJwb3Nlcwo=
+            certificate: |
+              TLS_CERTIFICATE
+            secret_key: |
+              TLS_SECRET_KEY_ENCRYPTED_WITH_ANSIBLE_VAULT
         foreingmaps:
           - tor_address: exaymhwjhgdopeebkv5p3lmb5vu2mmvcc7krpgwx6ngf4uvob2whkcqd.onion
             proxied_domain: example.info
@@ -44,12 +51,6 @@
           # block access to "forbidden" subdomain
           set block_err This subdomain is forbidden.
           set block_host_re ^forbidden\.
-
-    onionspray_keys:
-      # Bogus data for testing purposes
-      - public_key_base64: Ym9ndXMgZGF0YSBmb3IgdGVzdGluZyBwdXJwb3Nlcwo=
-        secret_key_base64: Ym9ndXMgZGF0YSBmb3IgdGVzdGluZyBwdXJwb3Nlcwo=
-        tor_address: yetkvkuqlr23sdzkf2mynt7aixfjzq6pjys2ffurr3hzpyfxrc7swpqd
 
     # Do not enable the service, since the image is not started with systemd as PID 1
     onionspray_use_systemd: false

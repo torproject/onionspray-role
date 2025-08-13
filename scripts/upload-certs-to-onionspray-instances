@@ -13,8 +13,8 @@ ONION="${ONION:-$4}"
 DOMAIN="${DOMAIN:-$5}"
 ONIONSPRAY_USER="${ONIONSPRAY_USER:-$6}"
 ONIONSPRAY_FOLDER="${ONIONSPRAY_FOLDER:-$7}"
-KEYRING="${KEYRING:-onionspray}"
-SECRETS_MANAGER="${SECRETS_MANAGER:-keyringer}"
+KEYRING="${KEYRING:-$8}"
+SECRETS_MANAGER="${SECRETS_MANAGER:-$9}"
 
 # Decrypt and upload with keyringer
 function keyringer_decrypt_upload {

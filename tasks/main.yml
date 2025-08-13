@@ -13,10 +13,14 @@
   ansible.builtin.include_tasks: repo.yml
 
 - name: Key handling
-  ansible.builtin.include_tasks: keys.yml
+  ansible.builtin.include_tasks: keys/main.yml
+  loop: "{{ onionspray_project_settings }}"
+  loop_control:
+    loop_var: settings
+    label: settings.project_name
 
 - name: Certificate handling
-  ansible.builtin.include_tasks: certs.yml
+  ansible.builtin.include_tasks: certs/main.yml
   loop: "{{ onionspray_project_settings }}"
   loop_control:
     loop_var: settings

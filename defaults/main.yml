@@ -6,33 +6,16 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 #
 
-# File used to indicate whether Onionspray has already been built or not
-onionspray_build_lock_file: "{{ onionspray_repo_download_path }}/onionspray-already-built.lock"
-
-# The script from the Onionspray repo to use when building it.
 #
-# If not specified, the role will try to find a script from the host's
-# distribution and release. You can use this variable to specify which script
-# to use.
-#onionspray_build_script_name:
+# Onionspray installation
+#
 
-# The path of a file containing one or more certificate authorities (CAs), that
-# will be used by Onionspray to validate the TLS certificates of the proxied
-# domains.
-onionspray_ca_file: /etc/ssl/certs/ca-certificates.crt
+# System user that runs Onionspray, will be created. A group of the same name
+# is automatically created
+onionspray_user: onionspray
 
-# A variable controlling whether or not to check the TLS certificate of the
-# domain your Onionspray host is proxying, against a certificate authority
-# defined in the `onionspray_ca_file`.
-onionspray_check_cert_with_ca_file: true
-
-# A list of public/secret keypairs, and their corresponding `.onion` v3 address.
-# Defining these keys is necessary to persist a given `.onion` address, and use
-# it in hardmaps or softmaps
-onionspray_keys: []
-
-# A list of dictionaries, each dictionary representing a project
-onionspray_project_settings: []
+# The home directory of the user running Onionspray
+onionspray_user_homedir: "/home/{{ onionspray_user }}"
 
 # The URL of the Onionspray repo to clone
 onionspray_repo_url: https://gitlab.torproject.org/tpo/onion-services/onionspray/
@@ -43,6 +26,34 @@ onionspray_repo_download_path: "{{ onionspray_user_homedir }}/onionspray"
 # The revision of the repository to checkout. No default value: if not defined,
 # the role uses the latest revision of the main branch.
 #onionspray_repo_git_revision:
+
+# File used to indicate whether Onionspray has already been built or not
+onionspray_build_lock_file: "{{ onionspray_repo_download_path }}/onionspray-already-built.lock"
+
+# The script from the Onionspray repo to use when building it.
+#
+# If not specified, the role will try to find a script from the host's
+# distribution and release. You can use this variable to specify which script
+# to use.
+#onionspray_build_script_name:
+
+# Controls whether systemd is used: set to `false` e.g. when running CI jobs in
+# environments without systemd
+onionspray_use_systemd: true
+
+#
+# Certificate handling
+#
+
+# The path of a file containing one or more certificate authorities (CAs), that
+# will be used by Onionspray to validate the TLS certificates of the proxied
+# domains.
+onionspray_ca_file: /etc/ssl/certs/ca-certificates.crt
+
+# A variable controlling whether or not to check the TLS certificate of the
+# domain your Onionspray host is proxying, against a certificate authority
+# defined in the `onionspray_ca_file`.
+onionspray_check_cert_with_ca_file: true
 
 # Lifetime of the self-signed certificate generated for the .onion website, in days
 onionspray_selfsigned_cert_lifetime_days: 365
@@ -62,13 +73,28 @@ onionspray_selfsigned_cert_organizational_unit: Self Signed Certificates
 # Self-signed certificate state or provice name
 onionspray_selfsigned_cert_state_or_province: The Internet
 
-# Controls whether systemd is used: set to `false` e.g. when running CI jobs in
-# environments without systemd
-onionspray_use_systemd: true
+#
+# Provider and project settings
+#
 
-# System user that runs Onionspray, will be created. A group of the same name
-# is automatically created
-onionspray_user: onionspray
+# TODO: document this variable here and also in the README
+onionspray_provider: 'onionspray'
 
-# The home directory of the user running Onionspray
-onionspray_user_homedir: "/home/{{ onionspray_user }}"
+# A list of dictionaries, each dictionary representing a project
+onionspray_project_settings: []
+
+#
+# Uploading secrets
+#
+
+# TODO: document this variable here and also in the README
+onionspray_keyring: 'onionspray'
+
+# TODO: document this variable here and also in the README
+onionspray_secrets_manager: 'keyringer'
+
+# TODO: document this variable here and also in the README
+#onionspray_key_uploader_script:
+
+# TODO: document this variable here and also in the README
+#onionspray_cert_uploader_script:
