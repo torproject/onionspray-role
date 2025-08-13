@@ -75,9 +75,9 @@ onionspray_project_settings:
         upstream_address: example.net
         public_key_base64: BASE64_ENCODED_ONION_SERVICE_PUBLIC_KEY
         secret_key_base64: BASE64_ENCODED_ONION_SERVICE_SECRET_KEY_ENCRYPTED_WITH_ANSIBLE_VAULT
-        certificate: |
+        tls_certificate: |
           TLS_CERTIFICATE
-        secret_key: |
+        tls_secret_key: |
           TLS_SECRET_KEY_ENCRYPTED_WITH_ANSIBLE_VAULT
         onion_address: yetkvkuqlr23sdzkf2mynt7aixfjzq6pjys2ffurr3hzpyfxrc7swpqd
 

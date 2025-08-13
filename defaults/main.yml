@@ -92,7 +92,11 @@ onionspray_selfsigned_cert_state_or_province: The Internet
 # Provider and project settings
 #
 
-# TODO: document
+# Optional variable allowing to associate the Onionspray instance to an
+# Onion Service "provider".
+#
+# This can be used when integrating this instance to external programs,
+# such as the secrets manager.
 onionspray_provider: 'onionspray'
 
 # A list of dictionaries, each dictionary representing a project (i.e. a
@@ -177,6 +181,28 @@ onionspray_provider: 'onionspray'
 #
 # The Onion Service address for the foreign map.
 #
+# ##### `tls_certificate`
+#
+# The PEM-encoded TLS certificate for the Onion Service.
+#
+# This variable is optional. If unset, Onionspray will generate and use a
+# self-signed certificate.
+#
+# #### `tls_secret_key`
+#
+# The PEM-encoded and then Ansible Vault-encrypted secret key for the Onion
+# Service.
+#
+# Required only if `tls_certificate` is used.
+#
+# #### `certificate_upload`
+#
+# Setting this parameter to `true` makes Onionspray to upload the TLS keys
+# and certificates using an external script.
+#
+# This variable is optional. If unset, Onionspray will generate and use a
+# self-signed certificate.
+#
 # #### `nginx_*` and other proxy settings
 #
 # This role supports the following proxy-related settings from [Onionspray][]:
@@ -221,14 +247,18 @@ onionspray_project_settings: []
 # Uploading secrets
 #
 
-# TODO: document
+# Some keys/certs uploading scripts may rely on distinct "keyrings" to store
+# secrets. This variable allows that to be specified.
 onionspray_keyring: 'onionspray'
 
-# TODO: document
+# Which secrets manager to use
+# Defaults to keyringer - https://0xacab.org/rhatto/keyringer/
 onionspray_secrets_manager: 'keyringer'
 
-# TODO: document
+# The external script to upload Onion Service keys
+# A sample script is provided at scripts/upload-keys-to-onionspray-instances
 #onionspray_key_uploader_script:
 
-# TODO: document
+# The external script to upload Onion Service TLS certificates
+# A sample script is provided at scripts/upload-certs-to-onionspray-instances
 #onionspray_cert_uploader_script:
