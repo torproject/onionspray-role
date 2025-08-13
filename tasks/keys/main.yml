@@ -2,20 +2,25 @@
 #
 # Key handling
 #
-# Copyright (C) 2024 The Tor Project, Inc.
+# Copyright (C) 2025 The Tor Project, Inc.
 # SPDX-License-Identifier: AGPL-3.0-or-later
 #
 
-- name: keys | Create secrets directory
-  ansible.builtin.file:
-    path: "{{ onionspray_repo_download_path }}/secrets/"
-    state: directory
-    owner: "{{ onionspray_user }}"
-    group: "{{ onionspray_user }}"
-    mode: "700"
+- name: keys | Base keys configuration
+  ansible.builtin.include_tasks: certs/keys.yml
 
 - name: keys | Copy Onion Service keys
   ansible.builtin.include_tasks: keys/copy.yml
   loop: [ 'hardmaps', 'softmaps' ]
   loop_control:
     loop_var: mapping
+  vars:
+    settings: settings
+
+- name: keys | Upload Onion Service keys
+  ansible.builtin.include_tasks: keys/upload.yml
+  loop: [ 'hardmaps', 'softmaps' ]
+  loop_control:
+    loop_var: mapping
+  vars:
+    settings: settings

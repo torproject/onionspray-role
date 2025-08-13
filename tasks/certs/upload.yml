@@ -2,7 +2,7 @@
 #
 # Certificate upload
 #
-# Copyright (C) 2024 The Tor Project, Inc.
+# Copyright (C) 2025 The Tor Project, Inc.
 # SPDX-License-Identifier: AGPL-3.0-or-later
 #
 
@@ -20,7 +20,7 @@
     #      {{ onionspray_repo_download_path }}
     #      {{ onionspray_keyring }}
     #      {{ onionspray_secrets_manager }}
-    #  loop: "{{ settings.hardmaps }}"
+    #  loop: "{{ settings[mapping] }}"
     #  loop_control:
     #    loop_var : onionspray_site
     #    label    : "{{ onionspray_site.onion_address }}"

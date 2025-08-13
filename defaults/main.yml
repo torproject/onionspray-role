@@ -146,6 +146,8 @@ onionspray_provider: 'onionspray'
 # This field is not required, but defining it is necessary to persist a given
 # `.onion` address.
 #
+# If unset, Onionspray will generate and use a random Onion Services key pair.
+#
 # The Base64-encoded key can be produced directly from a generate public key,
 # with
 #
@@ -165,6 +167,14 @@ onionspray_provider: 'onionspray'
 # generate public key, with
 #
 #     cat hs_ed25519_secret_key | base64 | ansible-vault encrypt_string
+#
+# #### `keys_upload`
+#
+# Setting this parameter to `true` makes Onionspray to upload the Onion Service
+# keys using an external script.
+#
+# This variable is optional. If unset, Onionspray will generate and use a
+# random Onion Services key pair.
 #
 # #### `foreignmaps`
 #
