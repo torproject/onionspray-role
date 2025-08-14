@@ -1,11 +1,18 @@
-# Onionspray
+# Ansible Role for Onionspray
+
+This [Ansible][] role manages [Onionspray][], a tool to add [Onion Service][]
+capability into existing websites.
 
 This role clones the [Onionspray][] repo and builds from source the necessary
-software (OpenResty with the Nginx [http_substitutions_filter][] module,
-[Onionbalance][], Tor).
+software ([OpenResty][] with [NGINX][]'s [http_substitutions_filter][] module,
+[Onionbalance][] and [Tor][]).
 
 [Onionspray]: https://onionservices.torproject.org/apps/web/onionspray/
+[Onion Service]: https://community.torproject.org/onion-services/
+[OpenResty]: https://openresty.org/
+[NGINX]: http://nginx.org/
 [Onionbalance]: https://onionservices.torproject.org/apps/base/onionbalance/
+[Tor]: https://gitlab.torproject.org/tpo/core/tor
 [http_substitutions_filter]: https://github.com/yaoweibin/ngx_http_substitutions_filter_module
 
 The role first generates the configuration files needed to serve a website. The
