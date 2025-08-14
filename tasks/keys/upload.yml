@@ -6,7 +6,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 #
 
-- name: "keys | Upload Onion Service keys for {{ mapping }}"
+- name: "keys | upload | Upload Onion Service keys for {{ mapping }}"
   tags:
     - keys
   when:
@@ -60,7 +60,7 @@
     #    - onionspray_site.keys_upload == true
     #    - onionspray_key_uploader_script | length != 0 and mapping in settings
 
-    - name: "keys | Upload Onion Service keys for {{ mapping }}"
+    - name: "keys | upload | Upload Onion Service keys for {{ mapping }}"
       ansible.builtin.command:
         cmd: >
           {{ onionspray_key_uploader_script }} {{ onionspray_provider }} {{ inventory_hostname }}
@@ -79,7 +79,7 @@
       when:
         - onionspray_site.onion_address is defined
         - onionspray_site.keys_upload is defined
-        - onionspray_site.keys_upload == true
+        - onionspray_site.keys_upload
         - onionspray_key_uploader_script | length != 0 and mapping in settings
       notify : Restart Onionspray
 

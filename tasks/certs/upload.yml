@@ -6,13 +6,13 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 #
 
-- name: "certs | Upload Onion Service certificates for {{ mapping }}"
+- name: "certs | upload | Upload Onion Service certificates for {{ mapping }}"
   tags:
     - certificates
   when:
     - settings[mapping] is defined
   block:
-    #- name: certs | Debug onionspray cert uploader command line invocation
+    #- name: certs | upload | Debug onionspray cert uploader command line invocation
     #  ansible.builtin.debug:
     #    msg: >
     #      {{ onionspray_cert_uploader_script }} {{ onionspray_provider }} {{ inventory_hostname }}
@@ -30,7 +30,7 @@
     #    - onionspray_site.certificate_upload == true
     #    - onionspray_cert_uploader_script | length != 0 and mapping in settings
 
-    #- name: certs | Ensure certificate file existence and permissions
+    #- name: certs | upload | Ensure certificate file existence and permissions
     #  ansible.builtin.file:
     #    path  : "{{ onionspray_path }}/projects/{{ settings.project_name }}/ssl/{{ onionspray_site.onion_address|truncate(20, True, '') }}-v3.cert"
     #    owner : "{{ onionspray_user }}"
@@ -46,7 +46,7 @@
     #    - onionspray_site.certificate_upload == true
     #    - onionspray_cert_uploader_script | length != 0 and mapping in settings
 
-    #- name: certs | Ensure the TLS private key file existence and permissions
+    #- name: certs | upload | Ensure the TLS private key file existence and permissions
     #  ansible.builtin.file:
     #    path  : "{{ onionspray_path }}/projects/{{ settings.project_name }}/ssl/{{ site.onion_address|truncate(20, True, '') }}-v3.pem"
     #    owner : "{{ onionspray_user }}"
@@ -62,7 +62,7 @@
     #    - onionspray_site.certificate_upload == true
     #    - onionspray_cert_uploader_script | length != 0 and mapping in settings
 
-    - name: "certs | Upload Onion Service certs for {{ mapping }}"
+    - name: "certs | upload | Upload Onion Service certs for {{ mapping }}"
       ansible.builtin.command:
         cmd: >
           {{ onionspray_cert_uploader_script }} {{ onionspray_provider }} {{ inventory_hostname }}
@@ -81,7 +81,7 @@
       when:
         - onionspray_site.onion_address is defined
         - onionspray_site.certificate_upload is defined
-        - onionspray_site.certificate_upload == true
+        - onionspray_site.certificate_upload
         - onionspray_cert_uploader_script | length != 0 and mapping in settings
       notify : Restart Onionspray
 

@@ -6,11 +6,11 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 #
 
-- name: keys | Keys configuration
+- name: keys | base | Keys configuration
   tags:
     - certificates
   block:
-    - name: keys | Create secrets directory
+    - name: keys | base | Create secrets directory
       ansible.builtin.file:
         path: "{{ onionspray_path }}/secrets/"
         state: directory

@@ -15,7 +15,7 @@
     # This folder needs to be managed beforehand, to make sure the Onionspray
     # user can write in to it in cases it's located in systemd-wide folders
     # like /var/lib.
-    - name: Create the onionspray repository folder
+    - name: repo | Create the onionspray repository folder
       ansible.builtin.file:
         path    : "{{ onionspray_path }}"
         owner   : "{{ onionspray_user }}"

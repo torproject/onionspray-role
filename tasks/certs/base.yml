@@ -6,17 +6,17 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 #
 
-- name: certs | Certificate configuration
+- name: certs | base | Certificate configuration
   tags:
     - certificates
   block:
-    - name: certs | Check if CA certificate file exists
+    - name: certs | base | Check if CA certificate file exists
       ansible.builtin.stat:
         path: "{{ onionspray_ca_file }}"
       register: _ca_file
       when: onionspray_check_cert_with_ca_file
 
-    - name: certs | Abort if CA certificate file is absent
+    - name: certs | base | Abort if CA certificate file is absent
       ansible.builtin.fail:
         msg: |
           No file present at path '{{ onionspray_ca_file }}'.
@@ -28,7 +28,7 @@
         - onionspray_check_cert_with_ca_file
         - not _ca_file.stat.exists
 
-    - name: certs | Generate self-signed certificate script
+    - name: certs | base | Generate self-signed certificate script
       ansible.builtin.template:
         src: make-selfsigned-wildcard-ssl-cert.sh.j2
         dest: "{{ onionspray_path }}/lib/make-selfsigned-wildcard-ssl-cert.sh"
@@ -41,7 +41,7 @@
         - Generate Onionspray configs
         - Restart Onionspray
 
-    - name: certs | Create the project certs folder
+    - name: certs | base | Create the project certs folder
       ansible.builtin.file:
         path    : "{{ onionspray_path }}/projects/{{ settings.project_name }}/ssl"
         owner   : "{{ onionspray_user }}"
