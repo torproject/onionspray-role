@@ -11,14 +11,14 @@
     dest: "{{ onionspray_build_lock_file }}"
   register: _onionspray_check_has_been_built
 
-- name: build | Add temporary sudoers file without password for Onionspray user
-  ansible.builtin.copy:
-    content: "onionspray ALL=(ALL) NOPASSWD: ALL"
-    dest: /etc/sudoers.d/onionspray
-    owner: root
-    group: root
-    mode: "600"
-  when: not _onionspray_check_has_been_built.stat.exists
+#- name: build | Add temporary sudoers file without password for Onionspray user
+#  ansible.builtin.copy:
+#    content: "onionspray ALL=(ALL) NOPASSWD: ALL"
+#    dest: /etc/sudoers.d/onionspray
+#    owner: root
+#    group: root
+#    mode: "600"
+#  when: not _onionspray_check_has_been_built.stat.exists
 
 - name: build | Determine which build script to use depending on host's distro and version
   ansible.builtin.set_fact:
@@ -33,13 +33,18 @@
     cmd: "{{ onionspray_path }}/opt/{{ _onionspray_build_script_name }} | tee {{ onionspray_path }}/log/build-{{ ansible_date_time.epoch }}.log"
   become: true
   become_user: "{{ onionspray_user }}"
+  # Workaround allowing to run Git even if the shell is set to /sbin/nologin
+  # Discussed at https://stackoverflow.com/questions/50512402/can-ansible-use-sudo-su-if-the-sudo-user-is-not-allowed-to-run-arbitrary-scr
+  # Alternative: https://docs.ansible.com/ansible/latest/collections/community/general/sudosu_become.html
+  become_method: "ansible.builtin.sudo"
+  become_flags: "su -s /bin/bash - {{ onionspray_user }} /bin/bash -c"
   changed_when: true
   when: not _onionspray_check_has_been_built.stat.exists
 
-- name: build | Remove temporary Onionspray sudoers file
-  ansible.builtin.file:
-    path: /etc/sudoers.d/onionspray
-    state: absent
+#- name: build | Remove temporary Onionspray sudoers file
+#  ansible.builtin.file:
+#    path: /etc/sudoers.d/onionspray
+#    state: absent
 
 - name: build | Create file to indicate that Onionspray has been built
   ansible.builtin.copy:
