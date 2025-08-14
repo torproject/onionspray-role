@@ -55,7 +55,7 @@ As an example, you could have in `host_vars/myhost.yml`:
 ```yaml
 onionspray_provider: 'myprovider'
 
-onionspray_repo_git_revision: a0e43045fe135e1b3f5b96e075ed519e4359ab7f
+onionspray_repository_version: a0e43045fe135e1b3f5b96e075ed519e4359ab7f
 
 onionspray_key_uploader_script : '../scripts/upload-keys-to-onionspray-instances'
 onionspray_cert_uploader_script: '../scripts/upload-certs-to-onionspray-instances'

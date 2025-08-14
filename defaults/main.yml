@@ -14,6 +14,9 @@
 # is automatically created
 onionspray_user: onionspray
 
+# List of supplementary groups which the Onionspray user should also be a member of
+onionspray_groups: []
+
 # The home directory of the user running Onionspray
 onionspray_home: "/home/{{ onionspray_user }}"
 
@@ -26,7 +29,7 @@ onionspray_path: "{{ onionspray_home }}/onionspray"
 
 # The revision of the repository to checkout. No default value: if not defined,
 # the role uses the latest revision of the main branch.
-#onionspray_repo_git_revision:
+onionspray_repository_version: HEAD
 
 # File used to indicate whether Onionspray has already been built or not
 onionspray_build_lock_file: "{{ onionspray_path }}/onionspray-already-built.lock"
