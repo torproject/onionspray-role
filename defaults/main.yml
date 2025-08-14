@@ -22,14 +22,14 @@ onionspray_user_homedir: "/home/{{ onionspray_user }}"
 onionspray_repo_url: https://gitlab.torproject.org/tpo/onion-services/onionspray/
 
 # Where to put the cloned Onionspray repository
-onionspray_repo_download_path: "{{ onionspray_user_homedir }}/onionspray"
+onionspray_path: "{{ onionspray_user_homedir }}/onionspray"
 
 # The revision of the repository to checkout. No default value: if not defined,
 # the role uses the latest revision of the main branch.
 #onionspray_repo_git_revision:
 
 # File used to indicate whether Onionspray has already been built or not
-onionspray_build_lock_file: "{{ onionspray_repo_download_path }}/onionspray-already-built.lock"
+onionspray_build_lock_file: "{{ onionspray_path }}/onionspray-already-built.lock"
 
 # The script from the Onionspray repo to use when building it.
 #

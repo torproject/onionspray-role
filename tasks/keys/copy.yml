@@ -15,7 +15,7 @@
     - name: "keys | Copy Onion v3 public key for {{ mapping }}"
       ansible.builtin.copy:
         content: "{{ onionspray_site.public_key_base64 | b64decode }}"
-        dest: "{{ onionspray_repo_download_path }}/secrets/{{ onionspray_site.onion_address }}.v3pub.key"
+        dest: "{{ onionspray_path }}/secrets/{{ onionspray_site.onion_address }}.v3pub.key"
         owner: "{{ onionspray_user }}"
         group: "{{ onionspray_user }}"
         mode: "600"
@@ -32,7 +32,7 @@
     - name: "keys | Copy Onion v3 secret key for {{ mapping }}"
       ansible.builtin.copy:
         content: "{{ onionspray_site.secret_key_base64 | b64decode }}"
-        dest: "{{ onionspray_repo_download_path }}/secrets/{{ onionspray_site.onion_address }}.v3sec.key"
+        dest: "{{ onionspray_path }}/secrets/{{ onionspray_site.onion_address }}.v3sec.key"
         owner: "{{ onionspray_user }}"
         group: "{{ onionspray_user }}"
         mode: "600"

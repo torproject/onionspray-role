@@ -12,7 +12,7 @@
   block:
     - name: keys | Create secrets directory
       ansible.builtin.file:
-        path: "{{ onionspray_repo_download_path }}/secrets/"
+        path: "{{ onionspray_path }}/secrets/"
         state: directory
         owner: "{{ onionspray_user }}"
         group: "{{ onionspray_user }}"

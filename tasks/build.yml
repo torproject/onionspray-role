@@ -30,7 +30,7 @@
 - name: build | Build Onionspray
   ansible.builtin.command:
     # yamllint disable-line rule:line-length
-    cmd: "{{ onionspray_repo_download_path }}/opt/{{ _onionspray_build_script_name }} | tee {{ onionspray_repo_download_path }}/log/build-{{ ansible_date_time.epoch }}.log"
+    cmd: "{{ onionspray_path }}/opt/{{ _onionspray_build_script_name }} | tee {{ onionspray_path }}/log/build-{{ ansible_date_time.epoch }}.log"
   become: true
   become_user: "{{ onionspray_user }}"
   changed_when: true

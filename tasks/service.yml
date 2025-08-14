@@ -8,12 +8,12 @@
 
 - name: service | Check if Onionspray init script exists
   ansible.builtin.stat:
-    dest: "{{ onionspray_repo_download_path }}/onionspray-init.sh"
+    dest: "{{ onionspray_path }}/onionspray-init.sh"
   register: _onionspray_init_script
 
 - name: service | Generate Onionspray scripts (init wrapper, and housekeeping i.e. log rotation)
   ansible.builtin.command:
-    cmd: "{{ onionspray_repo_download_path }}/onionspray script"
+    cmd: "{{ onionspray_path }}/onionspray script"
   become: true
   become_user: "{{ onionspray_user }}"
   changed_when: true
