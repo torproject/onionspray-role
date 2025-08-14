@@ -19,7 +19,7 @@ onionspray_home: "/home/{{ onionspray_user }}"
 
 # The URL of the Onionspray repository to clone
 # Defaults to the official Onionspray repository
-onionspray_repo_url: https://gitlab.torproject.org/tpo/onion-services/onionspray/
+onionspray_repo: https://gitlab.torproject.org/tpo/onion-services/onionspray/
 
 # Where to put the cloned Onionspray repository
 onionspray_path: "{{ onionspray_home }}/onionspray"

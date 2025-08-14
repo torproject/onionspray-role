@@ -25,7 +25,7 @@
 
 - name: repo | Force cloning the Onionspray repo if it doesn't exist or if we change the wanted version
   ansible.builtin.git:
-    repo: "{{ onionspray_repo_url }}"
+    repo: "{{ onionspray_repo }}"
     dest: "{{ onionspray_path }}"
     version: "{{ onionspray_repo_git_revision | default('HEAD') }}"
     force: true
