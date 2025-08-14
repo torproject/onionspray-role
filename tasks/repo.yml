@@ -49,4 +49,5 @@
         force: true
       become: true
       become_user: "{{ onionspray_user }}"
+      become_flags: '-s /bin/sh'
       #when: not _onionspray_local_repo.stat.exists or _onionspray_get_repo_revision.stdout | default('') != onionspray_repository_version | default('')

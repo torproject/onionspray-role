@@ -17,6 +17,14 @@ onionspray_user: onionspray
 # List of supplementary groups which the Onionspray user should also be a member of
 onionspray_groups: []
 
+# The login shell for the Onionspray user
+#
+# Change this to allow the Onionspray user to login, useful when one wants to be able
+# to issue commands directly to Onionspray.
+#
+# By default, no login is allowed
+onionspray_shell: "/sbin/nologin"
+
 # The home directory of the user running Onionspray
 onionspray_home: "/home/{{ onionspray_user }}"
 

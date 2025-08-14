@@ -23,7 +23,7 @@
         password_lock : true
         system        : true
         comment       : Onionspray user
-        shell         : /usr/sbin/nologin
+        shell         : "{{ onionspray_shell }}"
 
     - name: user | Create the onionspray home folder
       ansible.builtin.file:
