@@ -15,14 +15,14 @@
 onionspray_user: onionspray
 
 # The home directory of the user running Onionspray
-onionspray_user_homedir: "/home/{{ onionspray_user }}"
+onionspray_home: "/home/{{ onionspray_user }}"
 
 # The URL of the Onionspray repository to clone
 # Defaults to the official Onionspray repository
 onionspray_repo_url: https://gitlab.torproject.org/tpo/onion-services/onionspray/
 
 # Where to put the cloned Onionspray repository
-onionspray_path: "{{ onionspray_user_homedir }}/onionspray"
+onionspray_path: "{{ onionspray_home }}/onionspray"
 
 # The revision of the repository to checkout. No default value: if not defined,
 # the role uses the latest revision of the main branch.

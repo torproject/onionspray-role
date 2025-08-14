@@ -10,6 +10,6 @@
   ansible.builtin.user:
     name: "{{ onionspray_user }}"
     comment: Onionspray user
-    home: "{{ onionspray_user_homedir }}"
+    home: "{{ onionspray_home }}"
     system: true
     shell: /usr/sbin/nologin
