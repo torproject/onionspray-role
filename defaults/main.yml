@@ -42,17 +42,29 @@ onionspray_repository_version: HEAD
 # File used to indicate whether Onionspray has already been built or not
 onionspray_build_lock_file: "{{ onionspray_path }}/onionspray-already-built.lock"
 
-# The script from the Onionspray repo to use when building it.
+# The script from the Onionspray repo to use when installing compilation dependencies.
 #
 # If not specified, the role will try to find a script from the host's
 # distribution and release. You can use this variable to specify which script
 # to use.
 #
-# The list is # available in the Onionspray repository:
+# The list is available in the Onionspray repository:
 # https://gitlab.torproject.org/tpo/onion-services/onionspray/-/tree/main/opt
 #
-# Example: build-centos-8.2.2004.sh
-#onionspray_build_script_name:
+# Example: deps-centos-8.2.2004.sh
+#onionspray_deps_script_name:
+
+# The script from the Onionspray repo to use when compiling it.
+#
+# If not specified, the role will try to find a script from the host's
+# distribution and release. You can use this variable to specify which script
+# to use.
+#
+# The list is available in the Onionspray repository:
+# https://gitlab.torproject.org/tpo/onion-services/onionspray/-/tree/main/opt
+#
+# Example: compile-centos-8.2.2004.sh
+#onionspray_compile_script_name:
 
 # Controls whether systemd is used: set to `false` e.g. when running CI jobs in
 # environments without systemd
