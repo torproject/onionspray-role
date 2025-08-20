@@ -14,13 +14,9 @@
   loop: ['hardmaps', 'softmaps']
   loop_control:
     loop_var: mapping
-  vars:
-    settings: settings
 
 - name: certs | main | Upload Onion Service certificates
   ansible.builtin.include_tasks: certs/upload.yml
   loop: ['hardmaps', 'softmaps']
   loop_control:
     loop_var: mapping
-  vars:
-    settings: settings

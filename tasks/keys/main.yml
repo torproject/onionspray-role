@@ -14,13 +14,9 @@
   loop: ['hardmaps', 'softmaps']
   loop_control:
     loop_var: mapping
-  vars:
-    settings: settings
 
 - name: keys | main | Upload Onion Service keys
   ansible.builtin.include_tasks: keys/upload.yml
   loop: ['hardmaps', 'softmaps']
   loop_control:
     loop_var: mapping
-  vars:
-    settings: settings
