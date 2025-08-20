@@ -46,7 +46,6 @@
         repo: "{{ onionspray_repo }}"
         dest: "{{ onionspray_path }}"
         version: "{{ onionspray_repository_version }}"
-        force: true
       become: true
       become_user: "{{ onionspray_user }}"
       # Workaround allowing to run Git even if the shell is set to /sbin/nologin
