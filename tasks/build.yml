@@ -16,7 +16,7 @@
 - name: build | Handle Onionspray dependencies
   block:
     - name: build | Install Onionspray build dependencies
-      ansible.builtin.command:
+      ansible.builtin.shell:
         cmd: "{{ onionspray_path }}/opt/{{ onionspray_deps_script }} | tee {{ onionspray_path }}/log/deps-{{ ansible_date_time.epoch }}.log"
       become: true
       changed_when: true
@@ -34,7 +34,7 @@
         state: absent
 
     - name: build | Build Onionspray
-      ansible.builtin.command:
+      ansible.builtin.shell:
         cmd: "{{ onionspray_path }}/opt/{{ onionspray_compile_script }} | tee {{ onionspray_path }}/log/compile-{{ ansible_date_time.epoch }}.log"
       become: true
       become_user: "{{ onionspray_user }}"
