@@ -81,6 +81,10 @@ onionspray_compile_script: "compile-{{ onionspray_platform }}.sh"
 # environments without systemd
 onionspray_use_systemd: true
 
+# Controls whether cron is used to manage the service, as an alternative to
+# systemd
+onionspray_use_crond: false
+
 #
 # Certificate handling
 #
