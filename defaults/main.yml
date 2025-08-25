@@ -85,6 +85,19 @@ onionspray_use_systemd: true
 # systemd
 onionspray_use_crond: false
 
+# Setting this variable to true will trigger aperiodic restarts on all
+# Onionspray projects.
+#
+# This might be useful for two reasons:
+#
+# 1. Handling any existing issues in C Tor with long-lived Onion Services.
+#
+# 2. Improving load balancing for hardmaps by ensuring multiple instances
+#    are restarted at random times, although the descriptor republish
+#    algorithm already works by using random times. Details at
+#    https://onionservices.torproject.org/apps/web/onionspray/guides/balance/hardmaps/#effectiveness
+onionspray_aperiodic_restarts: false
+
 #
 # Certificate handling
 #

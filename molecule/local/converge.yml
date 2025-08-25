@@ -56,6 +56,9 @@
           set block_err This subdomain is forbidden.
           set block_host_re ^forbidden\.
 
+    # Deploy logic for aperiodic restarts
+    onionspray_aperiodic_restarts: true
+
   pre_tasks:
     # Install the ACL package
     # https://stackoverflow.com/questions/46352173/ansible-failed-to-set-permissions-on-the-temporary#56379678

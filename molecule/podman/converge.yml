@@ -55,6 +55,9 @@
     # Do not enable the service, since the image is not started with systemd as PID 1
     onionspray_use_systemd: false
 
+    # Deploy logic for aperiodic restarts
+    onionspray_aperiodic_restarts: true
+
   pre_tasks:
     - name: Run pre-tasks
       ansible.builtin.include_tasks: tasks/deps.yml
