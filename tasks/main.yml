@@ -37,4 +37,4 @@
   ansible.builtin.include_tasks: build.yml
 
 - name: Service setup
-  ansible.builtin.include_tasks: service.yml
+  ansible.builtin.include_tasks: service/main.yml

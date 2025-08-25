@@ -1,0 +1,10 @@
+#
+# Crontab acting as Onionspray's service initialization
+#
+# Copyright (C) 2025 The Tor Project, Inc.
+# SPDX-License-Identifier: AGPL-3.0-or-later
+#
+# Adapted from https://gitlab.com/guardianproject-ops/terraform-aws-onionspray/-/blob/main/templates/cron
+
+# Start Onionspray on system reboot
+@reboot {{ onionspray_user }} (cd {{ onionspray_path }} ; ./onionspray clean -a ; ./onionspray bounce -a) &>/dev/null
