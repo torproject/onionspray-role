@@ -8,7 +8,7 @@
 
 - name: projects | Generate project settings
   ansible.builtin.template:
-    src: settings.tconf.j2
+    src: projects/project.tconf.j2
     dest: "{{ onionspray_path }}/{{ settings.project_name }}.tconf"
     owner: "{{ onionspray_user }}"
     group: "{{ onionspray_user }}"
