@@ -8,7 +8,7 @@
 # Inspired by  https://gitlab.com/guardianproject-ops/terraform-aws-onionspray/
 #
 
-- name: logs | rotation | Configure Onionspray initialization cronjob
+- name: service | cron | Configure Onionspray initialization cronjob
   ansible.builtin.template:
     src   : "logs/cron.j2"
     dest  : "/etc/cron.d/onionspray-service"

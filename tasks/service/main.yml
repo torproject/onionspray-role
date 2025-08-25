@@ -6,12 +6,12 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 #
 
-- name: service | Systemd
+- name: service | main | Systemd
   ansible.builtin.include_tasks: service/systemd.yml
   when:
     - onionspray_use_systemd
 
-- name: service | Cron
+- name: service | main | Cron
   ansible.builtin.include_tasks: service/cron.yml
   when:
     - onionspray_use_crond
