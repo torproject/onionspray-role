@@ -30,7 +30,7 @@
 
     - name: certs | base | Generate self-signed certificate configuration
       ansible.builtin.template:
-        src: onionspray-certs.conf.j2
+        src: certs/onionspray-certs.conf.j2
         dest: "{{ onionspray_path }}/onionspray-certs.conf"
         owner: "{{ onionspray_user }}"
         group: "{{ onionspray_user }}"
