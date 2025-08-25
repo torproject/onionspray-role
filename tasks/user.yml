@@ -6,10 +6,31 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 #
 
-- name: user | Add Onionspray user
-  ansible.builtin.user:
-    name: "{{ onionspray_user }}"
-    comment: Onionspray user
-    home: "{{ onionspray_user_homedir }}"
-    system: true
-    shell: /usr/sbin/nologin
+- name: user | Create group, user and home folder
+  block:
+    - name: user | Create the group
+      ansible.builtin.group:
+        name: "{{ onionspray_user }}"
+
+    - name: user | Create the user
+      ansible.builtin.user:
+        name          : "{{ onionspray_user }}"
+        append        : true
+        group         : "{{ onionspray_user }}"
+        groups        : "{{ onionspray_groups }}"
+        create_home   : false
+        home          : "{{ onionspray_home }}"
+        password_lock : true
+        system        : true
+        comment       : Onionspray user
+        shell         : "{{ onionspray_shell }}"
+
+    - name: user | Create the onionspray home folder
+      ansible.builtin.file:
+        path    : "{{ onionspray_home }}"
+        owner   : "{{ onionspray_user }}"
+        group   : "{{ onionspray_user }}"
+        state   : directory
+        mode    : '0750'
+        recurse : false
+      when: onionspray_home != onionspray_path

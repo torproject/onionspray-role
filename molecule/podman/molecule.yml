@@ -22,7 +22,7 @@ driver:
 platforms:
   - name: all
     # Use a container with Python pre-installed
-    image           : docker.io/python:bookworm
+    image           : docker.io/python:trixie
     pre_build_image : true
     privileged      : true
 

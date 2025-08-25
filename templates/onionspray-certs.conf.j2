@@ -1,0 +1,22 @@
+#
+# Certificate configuration for Onionspray.
+#
+# This file is sourced by Onionspray's make-selfsigned-wildcard-ssl-cert.sh
+
+# Certificate lifetime
+ONIONSPRAY_CERT_DAYS="{{ onionspray_selfsigned_cert_lifetime_days }}"
+
+# CountryName
+ONIONSPRAY_CERT_COUNTRY_NAME="{{ onionspray_selfsigned_cert_country }}"
+
+# StateOrProvinceName
+ONIONSPRAY_CERT_STATE_PROVINCE_NAME="{{ onionspray_selfsigned_cert_state_or_province }}"
+
+# LocalityName
+ONIONSPRAY_CERT_LOCALITY_NAME="{{ onionspray_selfsigned_cert_locality }}"
+
+# OrganizationName
+ONIONSPRAY_CERT_ORGANIZATION_NAME="{{ onionspray_selfsigned_cert_organization }}"
+
+# OrganizationalUnitName
+ONIONSPRAY_CERT_ORGANIZATION_UNIT_NAME="{{ onionspray_selfsigned_cert_organizational_unit }}"

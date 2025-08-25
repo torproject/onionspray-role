@@ -1,21 +1,33 @@
 ---
+#
+# Handlers
+#
+# Copyright (C) 2025 The Tor Project, Inc.
+# SPDX-License-Identifier: AGPL-3.0-or-later
+#
+
 - name: Remove Onionspray generated settings config files
   ansible.builtin.file:
-    path: "{{ onionspray_repo_download_path }}/{{ item.project_name }}.conf"
+    path: "{{ onionspray_path }}/{{ item.project_name }}.conf"
     state: absent
   loop: "{{ onionspray_project_settings }}"
 
 - name: Remove Onionspray generated project directories
   ansible.builtin.file:
-    path: "{{ onionspray_repo_download_path }}/projects/{{ item.project_name }}/"
+    path: "{{ onionspray_path }}/projects/{{ item.project_name }}/"
     state: absent
   loop: "{{ onionspray_project_settings }}"
 
 - name: Generate Onionspray configs
   ansible.builtin.command:
-    cmd: "{{ onionspray_repo_download_path }}/onionspray config {{ onionspray_repo_download_path }}/{{ item.project_name }}.tconf"
+    cmd: "{{ onionspray_path }}/onionspray config {{ onionspray_path }}/{{ item.project_name }}.tconf"
   become: true
   become_user: "{{ onionspray_user }}"
+  # Workaround allowing to run Git even if the shell is set to /sbin/nologin
+  # Discussed at https://stackoverflow.com/questions/50512402/can-ansible-use-sudo-su-if-the-sudo-user-is-not-allowed-to-run-arbitrary-scr
+  # Alternative: https://docs.ansible.com/ansible/latest/collections/community/general/sudosu_become.html
+  become_method: "ansible.builtin.sudo"
+  become_flags: "su -s /bin/bash - {{ onionspray_user }} /bin/bash -c"
   changed_when: true
   loop: "{{ onionspray_project_settings }}"
 

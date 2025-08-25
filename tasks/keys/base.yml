@@ -1,0 +1,19 @@
+---
+#
+# Keys handling, base procedures
+#
+# Copyright (C) 2025 The Tor Project, Inc.
+# SPDX-License-Identifier: AGPL-3.0-or-later
+#
+
+- name: keys | base | Keys configuration
+  tags:
+    - certificates
+  block:
+    - name: keys | base | Create secrets directory
+      ansible.builtin.file:
+        path: "{{ onionspray_path }}/secrets/"
+        state: directory
+        owner: "{{ onionspray_user }}"
+        group: "{{ onionspray_user }}"
+        mode: "700"

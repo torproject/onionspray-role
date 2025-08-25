@@ -1,0 +1,47 @@
+---
+#
+# Certificate copy
+#
+# Copyright (C) 2025 The Tor Project, Inc.
+# SPDX-License-Identifier: AGPL-3.0-or-later
+#
+
+- name: "certs | copy | Copy Onion Service certificates for {{ mapping }}"
+  tags:
+    - certificates
+  when:
+    - settings[mapping] is defined
+  block:
+    - name: "certs | copy | Copy Onion TLS certificate for {{ mapping }}"
+      ansible.builtin.copy:
+        content: "{{ onionspray_site.tls.certificate }}"
+        dest: "{{ onionspray_path }}/projects/{{ settings.project_name }}/ssl/{ onionspray_site.tor_addr | truncate(20, True, '')-v3.cert"
+        owner: "{{ onionspray_user }}"
+        group: "{{ onionspray_user }}"
+        mode: "600"
+      no_log: true
+      loop: "{{ settings[mapping] }}"
+      loop_control:
+        loop_var: onionspray_site
+        label: onionspray_site.onion_address
+      when:
+        - onionspray_site.tls.certificate is defined
+        - onionspray_site.tls.secret_key is defined
+        - onionspray_site.onion_address is defined
+
+    - name: "certs | copy | Copy Onion TLS secret key for {{ mapping }}"
+      ansible.builtin.copy:
+        content: "{{ onionspray_site.tls.secret_key }}"
+        dest: "{{ onionspray_path }}/projects/{{ settings.project_name }}/ssl/{ onionspray_site.tor_addr | truncate(20, True, '')-v3.pem"
+        owner: "{{ onionspray_user }}"
+        group: "{{ onionspray_user }}"
+        mode: "600"
+      no_log: true
+      loop: "{{ settings[mapping] }}"
+      loop_control:
+        loop_var: site
+        label: onionspray_site.onion_address
+      when:
+        - onionspray_site.tls.certificate is defined
+        - onionspray_site.tls.secret_key is defined
+        - onionspray_site.onion_address is defined

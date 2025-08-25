@@ -1,0 +1,22 @@
+---
+#
+# Key handling
+#
+# Copyright (C) 2025 The Tor Project, Inc.
+# SPDX-License-Identifier: AGPL-3.0-or-later
+#
+
+- name: keys | main | Base keys configuration
+  ansible.builtin.include_tasks: keys/base.yml
+
+- name: keys | main | Copy Onion Service keys
+  ansible.builtin.include_tasks: keys/copy.yml
+  loop: ['hardmaps', 'softmaps']
+  loop_control:
+    loop_var: mapping
+
+- name: keys | main | Upload Onion Service keys
+  ansible.builtin.include_tasks: keys/upload.yml
+  loop: ['hardmaps', 'softmaps']
+  loop_control:
+    loop_var: mapping
