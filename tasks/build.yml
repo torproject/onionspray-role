@@ -27,6 +27,7 @@
       ansible.builtin.command:
         cmd: "{{ onionspray_path }}/opt/{{ onionspray_deps_script }} | tee {{ onionspray_path }}/log/deps-{{ ansible_date_time.epoch }}.log"
       become: true
+      changed_when: true
       when:
         - not onionspray_check_has_been_built.stat.exists
 
