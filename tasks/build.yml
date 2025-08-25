@@ -13,10 +13,6 @@
         dest: "{{ onionspray_path }}/.onionspray-build-info/{{ onionspray_platform }}"
       register: onionspray_check_has_been_built
 
-    - name: build | Debug onionspray_check_has_been_built
-      ansible.builtin.debug:
-        msg: "{{ onionspray_path }}/.onionspray-build-info/{{ onionspray_platform }}"
-
 - name: build | Handle Onionspray dependencies
   block:
     - name: build | Install Onionspray build dependencies
