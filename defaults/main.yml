@@ -39,6 +39,20 @@ onionspray_path: "{{ onionspray_home }}/onionspray"
 # the role uses the latest revision of the main branch.
 onionspray_repository_version: HEAD
 
+# The system platform to build Onionspray for.
+#
+# This is used to determine which dependency resolution and installation
+# scripts to use.
+#
+# By default, this role tries to use the distribution and release names, but
+# may not work in all cases.
+#
+# The list of plataforms is available at the Onionspray repository:
+# https://gitlab.torproject.org/tpo/onion-services/onionspray/-/tree/main/opt
+#
+# Example: centos-8.2.2004
+onionspray_platform: "{{ ansible_distribution | lower }}-{{ ansible_distribution_release | lower }}"
+
 # The script from the Onionspray repo to use when installing compilation dependencies.
 #
 # If not specified, the role will try to find a script from the host's
