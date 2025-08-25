@@ -44,8 +44,8 @@ onionspray_repository_version: HEAD
 # This is used to determine which dependency resolution and installation
 # scripts to use.
 #
-# By default, this role tries to use the distribution and release names, but
-# may not work in all cases.
+# By default, this role tries to use the distribution and release names,
+# such as "debian-trixie", but may not work in all cases.
 #
 # The list of plataforms is available at the Onionspray repository:
 # https://gitlab.torproject.org/tpo/onion-services/onionspray/-/tree/main/opt
@@ -63,7 +63,7 @@ onionspray_platform: "{{ ansible_distribution | lower }}-{{ ansible_distribution
 # https://gitlab.torproject.org/tpo/onion-services/onionspray/-/tree/main/opt
 #
 # Example: deps-centos-8.2.2004.sh
-onionspray_deps_script: "deps-{{ onionspray_platform }}.sh') }}"
+onionspray_deps_script: "deps-{{ onionspray_platform }}.sh"
 
 # The script from the Onionspray repo to use when compiling it.
 #
