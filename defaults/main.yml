@@ -63,7 +63,7 @@ onionspray_platform: "{{ ansible_distribution | lower }}-{{ ansible_distribution
 # https://gitlab.torproject.org/tpo/onion-services/onionspray/-/tree/main/opt
 #
 # Example: deps-centos-8.2.2004.sh
-#onionspray_deps_script:
+onionspray_deps_script: "deps-{{ onionspray_platform }}.sh') }}"
 
 # The script from the Onionspray repo to use when compiling it.
 #
@@ -75,7 +75,7 @@ onionspray_platform: "{{ ansible_distribution | lower }}-{{ ansible_distribution
 # https://gitlab.torproject.org/tpo/onion-services/onionspray/-/tree/main/opt
 #
 # Example: compile-centos-8.2.2004.sh
-#onionspray_compile_script:
+onionspray_compile_script: "compile-{{ onionspray_platform }}.sh"
 
 # Controls whether systemd is used: set to `false` e.g. when running CI jobs in
 # environments without systemd

@@ -19,10 +19,6 @@
 
 - name: build | Handle Onionspray dependencies
   block:
-    - name: build | Determine which dependency resolution script to use depending on host's distro and version
-      ansible.builtin.set_fact:
-        onionspray_deps_script: "{{ onionspray_deps_script | default('deps-{{ onionspray_platform }}.sh') }}"
-
     - name: build | Install Onionspray build dependencies
       ansible.builtin.command:
         cmd: "{{ onionspray_path }}/opt/{{ onionspray_deps_script }} | tee {{ onionspray_path }}/log/deps-{{ ansible_date_time.epoch }}.log"
@@ -38,14 +34,8 @@
     # https://gitlab.torproject.org/tpo/onion-services/onionspray/-/merge_requests/114
     - name: build | Remove the legacy build lock file
       ansible.builtin.file:
-        path: "{{ onionspray_path }}/onionspray-already-built.lock"
+        path: "{{ onionspray_build_lock_file | default('{{ onionspray_path }}/onionspray-already-built.lock') }}"
         state: absent
-
-    - name: build | Determine which build script to use depending on host's distro and version
-      ansible.builtin.set_fact:
-        onionspray_compile_script: "{{ onionspray_compile_script | default('compile-{{ onionspray_platform }}.sh') }}"
-      when:
-        - not onionspray_check_has_been_built.stat.exists
 
     - name: build | Build Onionspray
       ansible.builtin.command:
