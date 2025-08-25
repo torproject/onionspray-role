@@ -1,0 +1,23 @@
+#
+# Crontab for restarting Onionspray aperiodically
+#
+# Copyright (C) 2025 The Tor Project, Inc.
+# SPDX-License-Identifier: AGPL-3.0-or-later
+#
+# Adapted from https://gitlab.com/guardianproject-ops/terraform-aws-onionspray/-/blob/main/templates/cron
+
+# Use bash to run commands
+SHELL=/bin/bash
+
+# Restart the Onionspray instance regularly at random times
+#
+# This may avoid some issues with long-lived Onion Services.
+#
+# Can also be a way to improve load balancing by having multiple instances
+# being restarted at random times, although the descriptor republish algorithm
+# already works by using random times). Details at
+# https://onionservices.torproject.org/apps/web/onionspray/guides/balance/hardmaps/#effectiveness
+#
+# Implementation logic detailed at
+# https://unix.stackexchange.com/questions/146584/schedule-job-at-irregular-intervals
+0 0 * * 1 {{ onionspray_user }} (/usr/bin/at now +$((($RANDOM % 10)+2)) hours -f {{ onionspray_path }}/onionspray bounce -a) &>/dev/null

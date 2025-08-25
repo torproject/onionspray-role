@@ -38,3 +38,8 @@
 
 - name: Service setup
   ansible.builtin.include_tasks: service/main.yml
+
+- name: Aperiodic restarts
+  ansible.builtin.include_tasks: restarts.yml
+  when:
+    - onionspray_aperiodic_restarts

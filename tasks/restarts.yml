@@ -1,0 +1,24 @@
+#
+# Onionspray's aperiodic restarts
+#
+# Copyright (C) 2025 The Tor Project, Inc.
+# SPDX-License-Identifier: AGPL-3.0-or-later
+#
+# Adapted from https://gitlab.com/guardianproject-ops/terraform-aws-onionspray/-/blob/main/templates/cron
+
+- name: restarts | Configure aperiodic restarts
+  block:
+    # This is used to schedule random Onionspray restarts
+    # Check the cron template for details
+    - name: restarts | Install at
+      ansible.builtin.package:
+        name: at
+
+    - name: restarts | Configure cronjob for aperiodic restarts
+      ansible.builtin.template:
+        src   : "restarts/cron.j2"
+        dest  : "/etc/cron.d/onionspray-restarts"
+        owner : "root"
+        group : "root"
+        mode  : '0644'
+        force : true
