@@ -1,0 +1,13 @@
+#
+# Crontab for Onionspray's log rotation
+#
+# Copyright (C) 2025 The Tor Project, Inc.
+# SPDX-License-Identifier: AGPL-3.0-or-later
+#
+# Adapted from https://gitlab.com/guardianproject-ops/terraform-aws-onionspray/-/blob/main/templates/cron
+
+# Use bash to run commands
+SHELL=/bin/bash
+
+# Trigger logrotate for each Onionspray project every hour
+0 * * * * root /usr/sbin/logrotate {{ onionspray_path }}/onionspray-logs.conf &>/dev/null

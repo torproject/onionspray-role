@@ -43,3 +43,6 @@
   ansible.builtin.include_tasks: restarts.yml
   when:
     - onionspray_aperiodic_restarts
+
+- name: Log handling
+  ansible.builtin.include_tasks: logs/main.yml

@@ -1,0 +1,58 @@
+#
+# Onionspray log rotation config
+#
+# Copyright (C) 2025 The Tor Project, Inc.
+# SPDX-License-Identifier: AGPL-3.0-or-later
+#
+# Adapted from https://gitlab.com/guardianproject-ops/terraform-aws-onionspray/-/blob/main/templates/cron
+
+# Main logs
+{{ onionspray_path }}/log/*.log {
+  su {{ onionspray_user }} {{ onionspray_user }}
+  create 644 {{ onionspray_user }} {{ onionspray_user }}
+  {{ onionspray_main_log_rotation_frequency }}
+  dateext
+  rotate {{ onionspray_main_log_rotation_rotations }}
+  missingok
+  ifempty
+  compress
+}
+
+# Onionbalance logs
+{{ onionspray_path }}/onionbalance/*.log {
+  su {{ onionspray_user }} {{ onionspray_user }}
+  create 644 {{ onionspray_user }} {{ onionspray_user }}
+  {{ onionspray_main_log_rotation_frequency }}
+  dateext
+  rotate {{ onionspray_main_log_rotation_rotations }}
+  missingok
+  ifempty
+  compress
+  lastaction
+    {{ onionspray_path }}/onionspray ob-reload -a
+  endscript
+}
+
+{% for project in onionspray_project_settings -%}
+{% if project.log_rotation | default(true) -%}
+# Project logs for {{ project.project_name }}
+{{ onionspray_path }}/projects/{{ project.project_name }}/log/*.log {
+  su {{ onionspray_user }} {{ onionspray_user }}
+  create 644 {{ onionspray_user }} {{ onionspray_user }}
+  {{ project.log_rotation_frequency | default('hourly') }}
+  dateext
+  rotate {{ project.log_rotations | default('1344') }}
+
+  missingok
+  ifempty
+  compress
+  lastaction
+    # Reload Onionspray
+    #{{ onionspray_path }}/onionspray --local nxreload -a
+    #{{ onionspray_path }}/onionspray --local torreload -a
+    {{ onionspray_path }}/onionspray --local nxreload {{ project.project_name }}
+    {{ onionspray_path }}/onionspray --local torreload {{ project.project_name }}
+  endscript
+}
+{% endif -%}
+{% endfor -%}

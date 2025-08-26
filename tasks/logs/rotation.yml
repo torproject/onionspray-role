@@ -1,0 +1,33 @@
+---
+#
+# Log rotation
+#
+# Copyright (C) 2025 The Tor Project, Inc.
+# SPDX-License-Identifier: AGPL-3.0-or-later
+#
+# Inspired by  https://gitlab.com/guardianproject-ops/terraform-aws-onionspray/
+#
+
+- name: logs | rotation | Configure log main rotation
+  block:
+    - name: logs | rotation | Install logrotate
+      ansible.builtin.package:
+        name: logrotate
+
+    - name: logs | rotation | Configure cronjobs
+      ansible.builtin.template:
+        src   : "logs/cron.j2"
+        dest  : "/etc/cron.d/onionspray-logs"
+        owner : "root"
+        group : "root"
+        mode  : '0644'
+        force : true
+
+    - name: logs | rotation | Configure log rotation
+      ansible.builtin.template:
+        src   : "logs/logrotate.j2"
+        dest  : "{{ onionspray_path }}/onionspray-logs.conf"
+        owner : "root"
+        group : "root"
+        mode  : '0644'
+        force : true
