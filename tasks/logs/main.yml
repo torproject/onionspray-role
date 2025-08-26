@@ -8,3 +8,6 @@
 
 - name: logs | main | Log rotation
   ansible.builtin.include_tasks: logs/rotation.yml
+
+- name: logs | main | S3 buckets
+  ansible.builtin.include_tasks: logs/s3.yml

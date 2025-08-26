@@ -52,11 +52,25 @@
           set block_err This subdomain is forbidden.
           set block_host_re ^forbidden\.
 
+        # Test S3 log upload to the test MinIO instance
+        #
+        # Don't use these values in production systems!
+        #
+        # Details at
+        # https://docs.min.io/community/minio-object-store/integrations/aws-cli-with-minio.html
+        log_s3_upload                : true
+        log_s3_upload_api_endpoint   : 'https://play.min.io:9000'
+        log_s3_access_key_id         : 'Q3AM3UQ867SPQQA43P2F'
+        log_s3_access_key            : 'zuf+tfteSlswRu7BJ86wekitnifILbZam1KYY3TG'
+
     # Do not enable the service, since the image is not started with systemd as PID 1
     onionspray_use_systemd: false
 
     # Deploy logic for aperiodic restarts
     onionspray_aperiodic_restarts: true
+
+    # Test installing aws-cli from snap
+    onionspray_aws_cli_from_snap: false
 
   pre_tasks:
     - name: Run pre-tasks

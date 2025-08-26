@@ -32,9 +32,9 @@
     {{ onionspray_path }}/onionspray ob-reload -a
   endscript
 }
+{% for project in onionspray_project_settings %}
+{% if project.log_rotation | default(true) %}
 
-{% for project in onionspray_project_settings -%}
-{% if project.log_rotation | default(true) -%}
 # Project logs for {{ project.project_name }}
 {{ onionspray_path }}/projects/{{ project.project_name }}/log/*.log {
   su {{ onionspray_user }} {{ onionspray_user }}
@@ -47,6 +47,47 @@
   ifempty
   compress
   lastaction
+    {% if project.log_s3_upload is defined and project.log_s3_upload -%}
+    {% set ec2_endpoint = project.log_s3_upload_ec2_api | default('http://169.254.169.254/latest/') -%}
+    {% set s3_endpoint = project.log_s3_endpoint | default('https://s3.amazonaws.com') -%}
+    {% set s3_uri = project.log_s3_uri | default('s3://$BUCKET_NAME/{{ ansible_facts.nodename }}/') -%}
+    # Run once after all files are rotated
+    ROTATED_DIR="$(dirname "$1")"
+    INCLUDE_PATTERN="nginx-access*.log-*.gz"
+    BUCKET_NAME="{{ project.log_s3_bucket_name | default('') }}"
+    DATE="$(date -u '+%Y-%m-%dT%H:%mZ')"
+    SYNC_LOG="{{ onionspray_path }}/log/s3-sync.log"
+
+    # AWS CLI configuration
+    export AWS_ENDPOINT_URL="{{ s3_endpoint }}"
+    export AWS_ACCESS_KEY_ID="{{ project.log_s3_access_key_id | default('') }}"
+    export AWS_SECRET_ACCESS_KEY="{{ project.log_s3_access_key | default('') }}"
+    export AWS_REGION="{{ project.log_s3_region | default('us-east-1') }}"
+
+    {%- if project.log_s3_ec2 | default(false) -%}
+    # Fetch S3 params from AWS EC2 API
+    # https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instancedata-data-retrieval.html
+    export TOKEN=`/usr/bin/curl --silent --request PUT "{{ ec2_endpoint }}/api/token" --header "X-aws-ec2-metadata-token-ttl-seconds: 60"`
+    export AWS_REGION=`/usr/bin/curl --silent --header "X-aws-ec2-metadata-token: $TOKEN" "{{ ec2_endpoint }}/dynamic/instance-identity/document" | grep region | cut -d\" -f4`
+    export INSTANCE_ID=`/usr/bin/curl --silent --header "X-aws-ec2-metadata-token: $TOKEN" "{{ ec2_endpoint }}/dynamic/instance-identity/document" | grep instanceId | cut -d\" -f4`
+    {%- endif -%}
+
+    # Ensure the S3 sync log exists
+    touch $SYNC_LOG
+    chown {{ onionspray_user }}: $SYNC_LOG
+
+    {% if onionspray_aws_cli_from_snap -%}
+    # Sync logs to S3 bucket using the official Snap package
+    /snap/bin/aws s3 sync "$ROTATED_DIR/" "{{ s3_uri }}" --exclude "*" --include "$INCLUDE_PATTERN" >> $SYNC_LOG
+    {%+ else -%}
+    # Sync logs to S3 bucket
+    #/usr/bin/aws s3 sync "$ROTATED_DIR/" "s3://$BUCKET_NAME/$INSTANCE_ID/" --exclude "*" --include "$INCLUDE_PATTERN" >> $SYNC_LOG
+
+    # Sync logs to S3 bucket, silent version
+    /usr/bin/aws s3 sync "$ROTATED_DIR/" "{{ s3_uri }}" --exclude "*" --include "$INCLUDE_PATTERN" --quiet
+    {% endif -%}
+    {%- endif %}
+
     # Reload Onionspray
     #{{ onionspray_path }}/onionspray --local nxreload -a
     #{{ onionspray_path }}/onionspray --local torreload -a
@@ -54,5 +95,5 @@
     {{ onionspray_path }}/onionspray --local torreload {{ project.project_name }}
   endscript
 }
-{% endif -%}
-{% endfor -%}
+{% endif %}
+{% endfor %}
