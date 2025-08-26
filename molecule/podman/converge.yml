@@ -33,7 +33,6 @@
           - onion_address: exaymhwjhgdopeebkv5p3lmb5vu2mmvcc7krpgwx6ngf4uvob2whkcqd.onion
             upstream_address: example.info
         log_separate                 : '1'
-        log_s3_upload_api_endpoint   : 'http://example.org/latest/'
         nginx_resolver               : '127.0.0.53 ipv6=off'
         nginx_cache_seconds          : '60'
         nginx_cache_size             : '64m'
