@@ -264,13 +264,31 @@ onionspray_provider: 'onionspray'
 # This variable is optional. If unset, Onionspray will generate and use a
 # self-signed certificate.
 #
+# #### `log_separate`
+#
+# Se to true in order to have per-domain NGINX log files.
+#
+# #### `log_rotation`
+#
+# Set to true in order to enable log rotation for this project using
+# logrotate(8).
+#
+# Defaults to true.
+#
+# #### `log_rotation_frequency`
+#
+# Log rotation frequency, as per logrotate(8).
+#
+# #### `log_rotations`
+#
+# The number of log rotations, as per logrotate(8).
+#
 # #### `nginx_*` and other proxy settings
 #
 # This role supports the following proxy-related settings from [Onionspray][]:
 #
 # * `x_from_onion_value`.
 # * `inject_headers_upstream`.
-# * `log_separate`.
 # * `nginx_resolver`.
 # * `nginx_tmpfile_size`.
 # * `nginx_cache_seconds`.
@@ -323,3 +341,22 @@ onionspray_secrets_manager: 'keyringer'
 # The external script to upload Onion Service TLS certificates
 # A sample script is provided at scripts/upload-certs-to-onionspray-instances
 #onionspray_cert_uploader_script:
+
+#
+# Main log handling
+#
+# The following settings applies to the main Onionspray logs, and not to
+# per-project logs.
+#
+
+# Wether to enable log rotation using logrotate(8)
+onionspray_main_log_rotation: true
+
+# Log rotation frequency as per logrotate(8)
+onionspray_main_log_rotation_frequency: 'weekly'
+
+# Total number of log rotations as per logrotate(8)
+#
+# Default: keep for 1 year if rotation frequency is weekly:
+# 1 rotation per week = 52 rotations per year.
+onionspray_main_log_rotation_rotations: 52
