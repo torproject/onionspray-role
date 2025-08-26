@@ -66,6 +66,9 @@
     # Do not enable the service, since the image is not started with systemd as PID 1
     onionspray_use_systemd: false
 
+    # Deploy logic for managing the service through cron
+    onionspray_use_crond: true
+
     # Deploy logic for aperiodic restarts
     onionspray_aperiodic_restarts: true
 
