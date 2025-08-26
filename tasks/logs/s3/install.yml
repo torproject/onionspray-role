@@ -1,14 +1,14 @@
 ---
 #
-# S3 log configuration
+# S3 tooling
 #
 # Copyright (C) 2025 The Tor Project, Inc.
 # SPDX-License-Identifier: AGPL-3.0-or-later
 #
 
-- name: logs | s3 | Install aws-cli and dependencies
+- name: s3 | install | Install aws-cli and dependencies
   block:
-    - name: logs | s3 | Install aws-cli from the distribution package
+    - name: s3 | install | Install aws-cli from the distribution package
       ansible.builtin.package:
         name: 'awscli'
       when:
@@ -16,7 +16,7 @@
 
     # Needed in order to install aws-cli
     # https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
-    - name: logs | s3 | Install snapd
+    - name: s3 | install | Install snapd
       ansible.builtin.package:
         name: snapd
       when:
@@ -32,7 +32,7 @@
     #   https://snapcraft.io/docs/managing-updates
     #   https://snapcraft.io/blog/how-to-manage-snap-updates
     #
-    - name: logs | s3 | Install aws-cli from the snap package
+    - name: s3 | install | Install aws-cli from the snap package
       ansible.builtin.command:
         cmd     : "snap install aws-cli --classic"
         creates : "/snap/bin/aws"
