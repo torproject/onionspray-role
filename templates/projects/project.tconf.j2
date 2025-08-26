@@ -1,97 +1,97 @@
-{% if settings.project_name is defined %}
+{% if settings.project_name is defined -%}
 set project {{ settings.project_name }}
-{% endif %}
+{%- endif %}
 
-{% if settings.x_from_onion_value is defined %}
+{% if settings.x_from_onion_value is defined -%}
 set x_from_onion_value {{ settings.x_from_onion_value }}
-{% endif %}
+{%- endif %}
 
-{% if settings.inject_headers_upstream is defined %}
+{% if settings.inject_headers_upstream is defined -%}
 set inject_headers_upstream {{ settings.inject_headers_upstream }}
-{% endif %}
+{%- endif %}
 
-{% if settings.log_separate is defined %}
+{% if settings.log_separate is defined -%}
 set log_separate {{ settings.log_separate }}
-{% endif %}
+{%- endif %}
 
-{% if settings.nginx_resolver is defined %}
+{% if settings.nginx_resolver is defined -%}
 set nginx_resolver {{ settings.nginx_resolver }}
-{% endif %}
+{%- endif %}
 
-{% if settings.nginx_tmpfile_size is defined %}
+{% if settings.nginx_tmpfile_size is defined -%}
 set nginx_tmpfile_size {{ settings.nginx_tmpfile_size }}
-{% endif %}
+{%- endif %}
 
-{% if settings.nginx_cache_seconds is defined %}
+{% if settings.nginx_cache_seconds is defined -%}
 set nginx_cache_seconds {{ settings.nginx_cache_seconds }}
-{% endif %}
+{%- endif %}
 
-{% if settings.nginx_cache_size is defined %}
+{% if settings.nginx_cache_size is defined -%}
 set nginx_cache_size {{ settings.nginx_cache_size }}
-{% endif %}
+{%- endif %}
 
-{% if settings.nginx_x_onion_circuit_id is defined %}
+{% if settings.nginx_x_onion_circuit_id is defined -%}
 set nginx_x_onion_circuit_id {{ settings.nginx_x_onion_circuit_id }}
-{% endif %}
+{%- endif %}
 
-{% if onionspray_check_cert_with_ca_file %}
+{% if onionspray_check_cert_with_ca_file -%}
 set nginx_proxy_ssl_trusted_certificate {{ onionspray_ca_file }}
-{% endif %}
+{%- endif %}
 
-{% if settings.tor_export_circuit_id is defined %}
+{% if settings.tor_export_circuit_id is defined -%}
 set tor_export_circuit_id {{ settings.tor_export_circuit_id }}
-{% endif %}
+{%- endif %}
 
-{% if settings.tor_intros_per_daemon is defined %}
+{% if settings.tor_intros_per_daemon is defined -%}
 set tor_intros_per_daemon {{ settings.tor_intros_per_daemon }}
-{% endif %}
+{%- endif %}
 
-{% if settings.tor_single_onion is defined %}
+{% if settings.tor_single_onion is defined -%}
 set tor_single_onion {{ settings.tor_single_onion }}
-{% endif %}
+{%- endif %}
 
-{% if settings.tor_pow_enabled is defined %}
+{% if settings.tor_pow_enabled is defined -%}
 set tor_pow_enabled {{ settings.tor_pow_enabled }}
-{% endif %}
+{%- endif %}
 
-{% if settings.tor_pow_queue_rate is defined %}
+{% if settings.tor_pow_queue_rate is defined -%}
 set tor_pow_queue_rate {{ settings.tor_pow_queue_rate }}
-{% endif %}
+{%- endif %}
 
-{% if settings.tor_pow_queue_burst is defined %}
+{% if settings.tor_pow_queue_burst is defined -%}
 set tor_pow_queue_burst {{ settings.tor_pow_queue_burst }}
-{% endif %}
+{%- endif %}
 
-{% if settings.tor_intro_dos_defense is defined %}
+{% if settings.tor_intro_dos_defense is defined -%}
 set tor_intro_dos_defense {{ settings.tor_intro_dos_defense }}
-{% endif %}
+{%- endif %}
 
-{% if settings.tor_intro_dos_burst_per_sec is defined %}
+{% if settings.tor_intro_dos_burst_per_sec is defined -%}
 set tor_intro_dos_burst_per_sec {{ settings.tor_intro_dos_burst_per_sec }}
-{% endif %}
+{%- endif %}
 
-{% if settings.tor_intro_dos_rate_per_sec is defined %}
+{% if settings.tor_intro_dos_rate_per_sec is defined -%}
 set tor_intro_dos_rate_per_sec {{ settings.tor_intro_dos_rate_per_sec }}
-{% endif %}
+{%- endif %}
 
-{% if settings.tor_max_streams is defined %}
+{% if settings.tor_max_streams is defined -%}
 set tor_max_streams {{ settings.tor_max_streams }}
-{% endif %}
+{%- endif %}
 
-{% if settings.tor_max_streams_close_circuit is defined %}
+{% if settings.tor_max_streams_close_circuit is defined -%}
 set tor_max_streams_close_circuit {{ settings.tor_max_streams_close_circuit }}
-{% endif %}
+{%- endif %}
 
-{% for foreignmap in settings.foreignmaps | default([]) %}
+{% for foreignmap in settings.foreignmaps | default([]) -%}
 foreignmap {{ foreignmap.onion_address }} {{ foreignmap.upstream_address }}
-{% endfor %}
+{% endfor -%}
 
-{% for hardmap in settings.hardmaps | default([]) %}
+{% for hardmap in settings.hardmaps | default([]) -%}
 hardmap {{ hardmap.onion_address | default('%NEW_V3_ONION%') }} {{ hardmap.upstream_address }}
-{% endfor %}
+{% endfor -%}
 
-{% for softmap in settings.softmaps | default([]) %}
+{% for softmap in settings.softmaps | default([]) -%}
 softmap {{ softmap.onion_address | default('%NEW_V3_ONION%') }} {{ softmap.upstream_address }}
-{% endfor %}
+{% endfor -%}
 
 {{ settings.custom_settings | default('') }}
