@@ -56,7 +56,7 @@
     INCLUDE_PATTERN="nginx-access*.log-*.gz"
     BUCKET_NAME="{{ project.log_s3_bucket_name | default('') }}"
     DATE="$(date -u '+%Y-%m-%dT%H:%mZ')"
-    SYNC_LOG="{{ onionspray_path }}/log/s3-sync.log"
+    SYNC_LOG="{{ onionspray_path }}/projects/{{ project.project_name }}/log/s3-sync.log"
 
     # AWS CLI configuration
     export AWS_ENDPOINT_URL="{{ s3_endpoint }}"
