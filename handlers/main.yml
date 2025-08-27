@@ -10,12 +10,14 @@
   ansible.builtin.file:
     path: "{{ onionspray_path }}/{{ item.project_name }}.conf"
     state: absent
+  no_log: true
   loop: "{{ onionspray_project_settings }}"
 
 - name: Remove Onionspray generated project directories
   ansible.builtin.file:
     path: "{{ onionspray_path }}/projects/{{ item.project_name }}/"
     state: absent
+  no_log: true
   loop: "{{ onionspray_project_settings }}"
 
 - name: Generate Onionspray configs
@@ -29,6 +31,7 @@
   become_method: "ansible.builtin.sudo"
   become_flags: "su -s /bin/bash - {{ onionspray_user }} /bin/bash -c"
   changed_when: true
+  no_log: true
   loop: "{{ onionspray_project_settings }}"
 
 - name: Reload systemctl daemon
