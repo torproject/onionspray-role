@@ -7,6 +7,7 @@ This role clones the [Onionspray][] repo and builds from source the necessary
 software ([OpenResty][] with [NGINX][]'s [http_substitutions_filter][] module,
 [Onionbalance][] and [Tor][]).
 
+[Ansible]: https://ansible.com
 [Onionspray]: https://onionservices.torproject.org/apps/web/onionspray/
 [Onion Service]: https://community.torproject.org/onion-services/
 [OpenResty]: https://openresty.org/
