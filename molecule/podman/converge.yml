@@ -72,9 +72,6 @@
     # Deploy logic for aperiodic restarts
     onionspray_aperiodic_restarts: true
 
-    # Test installing aws-cli from snap
-    onionspray_aws_cli_from_snap: false
-
   pre_tasks:
     - name: Run pre-tasks
       ansible.builtin.include_tasks: tasks/deps.yml
