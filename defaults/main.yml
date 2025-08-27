@@ -37,6 +37,11 @@ onionspray_path: "{{ onionspray_home }}/onionspray"
 
 # The revision of the repository to checkout. No default value: if not defined,
 # the role uses the latest revision of the main branch.
+#
+# This can be the literal string HEAD, a branch name, a tag name. It can also
+# be a SHA-1 hash, in which case refspec needs to be specified if the given
+# revision is not already available, as documented at
+# https://docs.ansible.com/ansible/latest/collections/ansible/builtin/git_module.html
 onionspray_repository_version: HEAD
 
 # The system platform to build Onionspray for.
@@ -391,7 +396,8 @@ onionspray_provider: 'onionspray'
 onionspray_project_settings: []
 
 #
-# Uploading secrets
+# Uploading keys and certificates from external locations,
+# such as a password manager
 #
 
 # Some keys/certs uploading scripts may rely on distinct "keyrings" to store
