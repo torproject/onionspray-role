@@ -343,6 +343,14 @@ onionspray_provider: 'onionspray'
 #
 # Defaults to false.
 #
+# #### `log_s3_check`
+#
+# If set to true, a playbook run will also check for existing S3 sync logs.
+#
+# Useful for testing that the S3 log uploads are working.
+#
+# Defaults to false.
+#
 # #### `nginx_*` and other proxy settings
 #
 # This role supports the following proxy-related settings from [Onionspray][]:

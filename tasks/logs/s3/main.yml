@@ -1,0 +1,17 @@
+---
+#
+# S3 log configuration
+#
+# Copyright (C) 2025 The Tor Project, Inc.
+# SPDX-License-Identifier: AGPL-3.0-or-later
+#
+
+- name: s3 | main | Installation
+  ansible.builtin.include_tasks: logs/s3/install.yml
+
+- name: s3 | main | Check existing logs
+  ansible.builtin.include_tasks: logs/s3/check.yml
+  loop: "{{ onionspray_project_settings }}"
+  loop_control:
+    loop_var: settings
+    label: settings.project_name
