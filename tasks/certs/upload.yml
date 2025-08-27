@@ -20,6 +20,7 @@
     #      {{ onionspray_path }}
     #      {{ onionspray_keyring }}
     #      {{ onionspray_secrets_manager }}
+    #  no_log: true
     #  loop: "{{ settings[mapping] }}"
     #  loop_control:
     #    loop_var : onionspray_site
@@ -37,6 +38,7 @@
     #    group : "{{ onionspray_user }}"
     #    state : touch
     #    mode  : '0600'
+    #  no_log: true
     #  loop_control:
     #    loop_var : onionspray_site
     #    label    : "{{ onionspray_site.onion_address }}"
@@ -53,6 +55,7 @@
     #    group : "{{ onionspray_user }}"
     #    state : touch
     #    mode  : '0600'
+    #  no_log: true
     #  loop_control:
     #    loop_var : onionspray_site
     #    label    : "{{ onionspray_site.onion_address }}"
@@ -74,6 +77,7 @@
       connection   : local
       become       : true
       become_user  : "{{ lookup('env', 'USER') }}"
+      no_log       : true
       loop         : "{{ settings[mapping] }}"
       loop_control :
         loop_var : onionspray_site

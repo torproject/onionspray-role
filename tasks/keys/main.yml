@@ -11,12 +11,14 @@
 
 - name: keys | main | Copy Onion Service keys
   ansible.builtin.include_tasks: keys/copy.yml
+  no_log: true
   loop: ['hardmaps', 'softmaps']
   loop_control:
     loop_var: mapping
 
 - name: keys | main | Upload Onion Service keys
   ansible.builtin.include_tasks: keys/upload.yml
+  no_log: true
   loop: ['hardmaps', 'softmaps']
   loop_control:
     loop_var: mapping
