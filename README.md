@@ -114,7 +114,6 @@ This role has many settings, all documented in the [defaults file][defaults].
 
 Below is an extended example highlighting some of the role features:
 
-
 ```yaml
 # Stick with a specific Onionspray version
 onionspray_repository_version: a0e43045fe135e1b3f5b96e075ed519e4359ab7f
@@ -179,7 +178,7 @@ onionspray_project_settings:
     tor_intro_dos_rate_per_sec   : '20000'
 
     # Custom settings, passed as-is to the Onionspray project configuration
-    project_custom_settings: |
+    custom_settings: |
       # block access to "forbidden" subdomain
       set block_err This subdomain is forbidden.
       set block_host_re ^forbidden\.
