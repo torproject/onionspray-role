@@ -74,7 +74,7 @@
     onionspray_aperiodic_restarts: true
 
     # Test installing aws-cli from snap
-    onionspray_aws_cli_from_snap: false
+    onionspray_aws_cli_from_snap: true
 
   pre_tasks:
     # Install the ACL package
