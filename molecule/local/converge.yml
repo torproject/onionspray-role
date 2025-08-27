@@ -51,7 +51,7 @@
         tor_intro_dos_defense        : '1'
         tor_intro_dos_burst_per_sec  : '20000'
         tor_intro_dos_rate_per_sec   : '20000'
-        project_custom_settings: |
+        custom_settings: |
           # block access to "forbidden" subdomain
           set block_err This subdomain is forbidden.
           set block_host_re ^forbidden\.

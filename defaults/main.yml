@@ -385,7 +385,7 @@ onionspray_provider: 'onionspray'
 # * `tor_max_streams`.
 # * `tor_max_streams_close_circuit`.
 #
-# #### `project_custom_settings`
+# #### `custom_settings`
 #
 # If additional settings are neded (those not explicitly supported by this role),
 # you can put them in this variable and they will be appended to the generated
