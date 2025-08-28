@@ -26,8 +26,8 @@ if supported.
 The remote host should have `git` installed prior to running the role. The
 other necessary packages are installed by the build process of Onionspray.
 
-Your Ansible controller should implement an [unprivileged user workaround][]
-such as installing the `setacl` tool in the remote host (available in Debian-like
+Your Ansible controller should also implement an [unprivileged user workaround][]
+such as installing the `setfacl` tool in the remote host (available in Debian-like
 systems through the [acl package][]); or using pipelining, which can be configured
 through the following addition to `ansible.cfg`:
 
@@ -36,8 +36,12 @@ through the following addition to `ansible.cfg`:
 pipelining=True
 ```
 
+This requirement is further discussed on ticket
+[tpo/onion-services/ansible/onionspray-role#2][].
+
 [unprivileged user workaround]: https://docs.ansible.com/ansible-core/2.18/playbook_guide/playbooks_privilege_escalation.html#risks-of-becoming-an-unprivileged-user
 [acl package]: https://tracker.debian.org/pkg/acl
+[tpo/onion-services/ansible/onionspray-role#2]: https://gitlab.torproject.org/tpo/onion-services/ansible/onionspray-role/-/issues/2
 
 ## Quick-start
 
