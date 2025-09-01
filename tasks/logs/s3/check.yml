@@ -8,7 +8,7 @@
 
 - name: s3 | check | Check the S3 sync logs
   when:
-    - settings.log_s3_check | default(false)
+    - onionspray_project.log_s3_check | default(false)
   block:
     #- name: logs | s3 | Find S3 sync logs
     #  ansible.builtin.find:
@@ -18,39 +18,39 @@
 
     - name: s3 | check | Check the latest S3 sync log
       ansible.builtin.stat:
-        path: "{{ onionspray_path }}/projects/{{ settings.project_name }}/log/s3-sync.log"
-      register: s3_sync_log_latest
+        path: "{{ onionspray_path }}/projects/{{ onionspray_project.name }}/log/s3-sync.log"
+      register: onionspray_s3_sync_log_latest
 
     #- name: s3 | check | Check if we have a latest S3 sync log
     #  ansible.builtin.debug:
-    #    var: s3_sync_log_latest
+    #    var: onionspray_s3_sync_log_latest
 
     - name: s3 | check | Display the S3 sync log modification time in UTC
       ansible.builtin.debug:
-        var: "'%Y-%m-%d %H:%M:%S' | strftime(s3_sync_log_latest.stat.mtime | string, utc=true)"
-      when: s3_sync_log_latest.stat is defined and s3_sync_log_latest.stat.mtime is defined
+        var: "'%Y-%m-%d %H:%M:%S' | strftime(onionspray_s3_sync_log_latest.stat.mtime | string, utc=true)"
+      when: onionspray_s3_sync_log_latest.stat is defined and onionspray_s3_sync_log_latest.stat.mtime is defined
 
-    # Trying to access s3_sync_log_latest.stat.* here throws an error:
+    # Trying to access onionspray_s3_sync_log_latest.stat.* here throws an error:
     #
     #   ansible.utils.unsafe_proxy.AnsibleUnsafeText object' has no attribute 'path
     #
-    # Maybe it's an Ansible bug, so avoiding any s3_sync_log_latest.stat key directly.
+    # Maybe it's an Ansible bug, so avoiding any onionspray_s3_sync_log_latest.stat key directly.
     #- name: s3 | check | Display info on the latest S3 sync log
     #  ansible.builtin.debug:
     #    msg:
     #      - "Size in bytes for the latest S3 sync log: {{ item.size | string }}"
     #      - "Creation time on the latest S3 sync log: {{ item.ctime | string }}"
     #      - "Modification time on the latest S3 sync log: {{ item.mtime | string }}"
-    #  with_items: "{{ s3_sync_log_latest.stat }}"
-    #  when: s3_sync_log_latest.failed == False and s3_sync_log_latest.stat.path is defined
+    #  with_items: "{{ onionspray_s3_sync_log_latest.stat }}"
+    #  when: onionspray_s3_sync_log_latest.failed == False and onionspray_s3_sync_log_latest.stat.path is defined
 
     - name: s3 | check | Get the last few lines of the latest S3 sync log
       ansible.builtin.command:
-        cmd: "/usr/bin/tail -n 5 {{ onionspray_path }}/projects/{{ settings.project_name }}/log/s3-sync.log"
+        cmd: "/usr/bin/tail -n 5 {{ onionspray_path }}/projects/{{ onionspray_project.name }}/log/s3-sync.log"
       when: >
-        s3_sync_log_latest.path is defined and
-        s3_sync_log_latest.stat.path == onionspray_path + '/log/s3-sync.log' and not
-        s3_sync_log_latest.failed
+        onionspray_s3_sync_log_latest.path is defined and
+        onionspray_s3_sync_log_latest.stat.path == onionspray_path + '/log/s3-sync.log' and not
+        onionspray_s3_sync_log_latest.failed
       register: s3_sync_log_lines
       changed_when: false
 

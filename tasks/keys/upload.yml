@@ -6,19 +6,20 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 #
 
-- name: "keys | upload | Upload Onion Service keys for {{ mapping }}"
+- name: "keys | upload | Upload Onion Service keys for {{ onionspray_project_mapping }}"
   tags:
     - keys
   when:
-    - settings[mapping] is defined
+    - onionspray_project[onionspray_project_mapping] is defined
   block:
-    #- name: Debug onionspray key uploader command line invocation
+    #- name: "Debug onionspray key uploader command line invocation for {{ onionspray_project_mapping }}"
     #  ansible.builtin.debug:
     #    msg: >
     #      {{ onionspray_key_uploader_script }} {{ onionspray_provider }} {{ inventory_hostname }}
-    #      {{ onionspray_project.name }} {{ onionspray_site.onion_address }} {{ onionspray_site.upstream_address }} {{ onionspray_user }}
+    #      {{ onionspray_project.name }} {{ onionspray_site.onion_address }} {{ onionspray_site.upstream_address }}
+    #      {{ onionspray_user }}
     #      {{ onionspray_path }}
-    #  loop         : "{{ onionspray_project[mapping] }}"
+    #  loop         : "{{ onionspray_project[onionspray_project_mapping] }}"
     #  loop_control :
     #    loop_var : onionspray_site
     #    label    : "{{ onionspray_site.onion_address }}"
@@ -26,9 +27,9 @@
     #    - onionspray_site.onion_address is defined
     #    - onionspray_site.keys_upload is defined
     #    - onionspray_site.keys_upload == true
-    #    - onionspray_key_uploader_script | length != 0 and mapping in settings
+    #    - onionspray_key_uploader_script | length != 0 and onionspray_project_mapping in onionspray_projects
 
-    #- name: Ensure the public key file existence and permissions
+    #- name: "Ensure the public key file existence and permissions for {{ onionspray_project_mapping }}"
     #  ansible.builtin.file:
     #    path  : "{{ onionspray_path }}/projects/{{ onionspray_project.name }}/{{ onionspray_site.onion_address }}-v3pub.key"
     #    owner : "{{ onionspray_user }}"
@@ -42,9 +43,9 @@
     #    - onionspray_site.onion_address is defined
     #    - onionspray_site.keys_upload is defined
     #    - onionspray_site.keys_upload == true
-    #    - onionspray_key_uploader_script | length != 0 and mapping in settings
+    #    - onionspray_key_uploader_script | length != 0 and onionspray_project_mapping in onionspray_projects
 
-    #- name: Ensure the private key file existence and permissions
+    #- name: "Ensure the private key file existence and permissions for {{ onionspray_project_mapping }}"
     #  ansible.builtin.file:
     #    path  : "{{ onionspray_path }}/projects/{{ onionspray_project.name }}/{{ onionspray_site.onion_address }}-v3sec.key"
     #    owner : "{{ onionspray_user }}"
@@ -58,13 +59,14 @@
     #    - onionspray_site.onion_address is defined
     #    - onionspray_site.keys_upload is defined
     #    - onionspray_site.keys_upload == true
-    #    - onionspray_key_uploader_script | length != 0 and mapping in settings
+    #    - onionspray_key_uploader_script | length != 0 and onionspray_project_mapping in onionspray_projects
 
-    - name: "keys | upload | Upload Onion Service keys for {{ mapping }}"
+    - name: "keys | upload | Upload Onion Service keys for {{ onionspray_project_mapping }}"
       ansible.builtin.command:
         cmd: >
           {{ onionspray_key_uploader_script }} {{ onionspray_provider }} {{ inventory_hostname }}
-          {{ onionspray_project.name }} {{ onionspray_site.onion_address }} {{ onionspray_site.upstream_address }} {{ onionspray_user }}
+          {{ onionspray_project.name }} {{ onionspray_site.onion_address }} {{ onionspray_site.upstream_address }}
+          {{ onionspray_user }}
           {{ onionspray_path }}
           {{ onionspray_keyring }}
           {{ onionspray_secrets_manager }}
@@ -72,15 +74,15 @@
       connection  : local
       become      : true
       become_user : "{{ lookup('env', 'USER') }}"
-      loop        : "{{ onionspray_project[mapping] }}"
+      loop        : "{{ onionspray_project[onionspray_project_mapping] }}"
       loop_control:
         loop_var : onionspray_site
-        label    : "{{ onionspray_site.onion_address }}"
+        #label   : "{{ onionspray_site.onion_address }}"
       when:
         - onionspray_site.onion_address is defined
         - onionspray_site.keys_upload is defined
         - onionspray_site.keys_upload
-        - onionspray_key_uploader_script | length != 0 and mapping in settings
+        - onionspray_key_uploader_script | length != 0 and onionspray_project_mapping in onionspray_projects
       notify : Restart Onionspray
 
       # This task always change something (even if only the mtime of a file)

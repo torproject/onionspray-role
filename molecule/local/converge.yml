@@ -17,12 +17,12 @@
   gather_facts: true
 
   vars:
-    onionspray_project_settings:
-      - project_name: "example1"
+    onionspray_projects:
+      - name: "example1"
         softmaps:
           - upstream_address: example.com
           - upstream_address: example.org
-      - project_name: "example2"
+      - name: "example2"
         hardmaps:
           # Bogus data for testing purposes
           - onion_address: yetkvkuqlr23sdzkf2mynt7aixfjzq6pjys2ffurr3hzpyfxrc7swpqd

@@ -155,18 +155,13 @@ onionspray_selfsigned_cert_state_or_province: The Internet
 # such as the secrets manager.
 onionspray_provider: 'onionspray'
 
-# A list of dictionaries, each dictionary representing a project (i.e. a
-# clearnet website that Onionspray will proxy).
-#
-# The supported fields per dictionary are listed below.
-#
-# ### `onionspray_project_settings`
+# Onionspray projects
 #
 # A list of dictionaries, each dictionary representing a project (i.e. a clearnet
 # website that Onionspray will proxy). The supported fields per dictionary are
 # listed below.
 #
-# #### `project_name`
+# #### `name`
 #
 # REQUIRED: the name of your Onionspray project, used to set the configuration
 # and settings filenames.
@@ -389,11 +384,11 @@ onionspray_provider: 'onionspray'
 #
 # If additional settings are neded (those not explicitly supported by this role),
 # you can put them in this variable and they will be appended to the generated
-# `PROJECT_NAME.conf` configuration file.
+# configuration file.
 #
 # Defaults to an empty string.
 #
-onionspray_project_settings: []
+onionspray_projects: []
 
 #
 # Uploading keys and certificates from external locations,

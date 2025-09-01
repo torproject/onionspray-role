@@ -36,11 +36,11 @@
     {{ onionspray_path }}/onionspray ob-reload -a
   endscript
 }
-{% for project in onionspray_project_settings %}
+{% for project in onionspray_projects %}
 {% if project.log_rotation | default(true) %}
 
-# Project logs for {{ project.project_name }}
-{{ onionspray_path }}/projects/{{ project.project_name }}/log/*.log {
+# Project logs for {{ project.name }}
+{{ onionspray_path }}/projects/{{ project.name }}/log/*.log {
   su {{ onionspray_user }} {{ onionspray_user }}
   create 644 {{ onionspray_user }} {{ onionspray_user }}
   {{ project.log_rotation_frequency | default('hourly') }}
@@ -59,7 +59,7 @@
     INCLUDE_PATTERN="nginx-access*.log-*.gz"
     BUCKET_NAME="{{ project.log_s3_bucket_name | default('') }}"
     DATE="$(date -u '+%Y-%m-%dT%H:%mZ')"
-    SYNC_LOG="{{ onionspray_path }}/projects/{{ project.project_name }}/log/s3-sync.log"
+    SYNC_LOG="{{ onionspray_path }}/projects/{{ project.name }}/log/s3-sync.log"
 
     # AWS CLI configuration
     export AWS_ENDPOINT_URL="{{ s3_endpoint }}"
@@ -94,8 +94,8 @@
     # Reload Onionspray
     #{{ onionspray_path }}/onionspray --local nxreload -a
     #{{ onionspray_path }}/onionspray --local torreload -a
-    {{ onionspray_path }}/onionspray --local nxreload {{ project.project_name }}
-    {{ onionspray_path }}/onionspray --local torreload {{ project.project_name }}
+    {{ onionspray_path }}/onionspray --local nxreload {{ project.name }}
+    {{ onionspray_path }}/onionspray --local torreload {{ project.name }}
   endscript
 }
 {% endif %}

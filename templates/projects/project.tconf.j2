@@ -1,5 +1,5 @@
 #
-# Onionspray configuration file for project {{ settings.project_name }}
+# Onionspray configuration file for project {{ onionspray_project.name }}
 #
 # Copyright (C) 2025 The Tor Project, Inc.
 # SPDX-License-Identifier: AGPL-3.0-or-later
@@ -12,8 +12,8 @@
 # General
 #
 
-{% if settings.project_name is defined %}
-set project {{ settings.project_name }}
+{% if onionspray_project.name is defined %}
+set project {{ onionspray_project.name }}
 {% endif %}
 
 #
@@ -28,95 +28,95 @@ set nginx_proxy_ssl_trusted_certificate {{ onionspray_ca_file }}
 # Proxy
 #
 
-{% if settings.x_from_onion_value is defined %}
-set x_from_onion_value {{ settings.x_from_onion_value }}
+{% if onionspray_project.x_from_onion_value is defined %}
+set x_from_onion_value {{ onionspray_project.x_from_onion_value }}
 {% endif %}
 
-{%- if settings.inject_headers_upstream is defined %}
-set inject_headers_upstream {{ settings.inject_headers_upstream }}
+{%- if onionspray_project.inject_headers_upstream is defined %}
+set inject_headers_upstream {{ onionspray_project.inject_headers_upstream }}
 {% endif %}
 
-{%- if settings.nginx_resolver is defined %}
-set nginx_resolver {{ settings.nginx_resolver }}
+{%- if onionspray_project.nginx_resolver is defined %}
+set nginx_resolver {{ onionspray_project.nginx_resolver }}
 {% endif %}
 
-{%- if settings.nginx_tmpfile_size is defined %}
-set nginx_tmpfile_size {{ settings.nginx_tmpfile_size }}
+{%- if onionspray_project.nginx_tmpfile_size is defined %}
+set nginx_tmpfile_size {{ onionspray_project.nginx_tmpfile_size }}
 {% endif %}
 
-{%- if settings.nginx_cache_seconds is defined %}
-set nginx_cache_seconds {{ settings.nginx_cache_seconds }}
+{%- if onionspray_project.nginx_cache_seconds is defined %}
+set nginx_cache_seconds {{ onionspray_project.nginx_cache_seconds }}
 {% endif %}
 
-{%- if settings.nginx_cache_size is defined %}
-set nginx_cache_size {{ settings.nginx_cache_size }}
+{%- if onionspray_project.nginx_cache_size is defined %}
+set nginx_cache_size {{ onionspray_project.nginx_cache_size }}
 {% endif %}
 
-{%- if settings.nginx_x_onion_circuit_id is defined %}
-set nginx_x_onion_circuit_id {{ settings.nginx_x_onion_circuit_id }}
+{%- if onionspray_project.nginx_x_onion_circuit_id is defined %}
+set nginx_x_onion_circuit_id {{ onionspray_project.nginx_x_onion_circuit_id }}
 {% endif %}
 
 #
 # Logging
 #
 
-{% if settings.log_separate is defined %}
-set log_separate {{ settings.log_separate }}
+{% if onionspray_project.log_separate is defined %}
+set log_separate {{ onionspray_project.log_separate }}
 {% endif %}
 
 #
 # Tor
 #
 
-{% if settings.tor_export_circuit_id is defined %}
-set tor_export_circuit_id {{ settings.tor_export_circuit_id }}
+{% if onionspray_project.tor_export_circuit_id is defined %}
+set tor_export_circuit_id {{ onionspray_project.tor_export_circuit_id }}
 {% endif %}
 
-{%- if settings.tor_intros_per_daemon is defined %}
-set tor_intros_per_daemon {{ settings.tor_intros_per_daemon }}
+{%- if onionspray_project.tor_intros_per_daemon is defined %}
+set tor_intros_per_daemon {{ onionspray_project.tor_intros_per_daemon }}
 {% endif %}
 
-{%- if settings.tor_single_onion is defined %}
-set tor_single_onion {{ settings.tor_single_onion }}
+{%- if onionspray_project.tor_single_onion is defined %}
+set tor_single_onion {{ onionspray_project.tor_single_onion }}
 {% endif %}
 
-{%- if settings.tor_pow_enabled is defined %}
-set tor_pow_enabled {{ settings.tor_pow_enabled }}
+{%- if onionspray_project.tor_pow_enabled is defined %}
+set tor_pow_enabled {{ onionspray_project.tor_pow_enabled }}
 {% endif %}
 
-{%- if settings.tor_pow_queue_rate is defined %}
-set tor_pow_queue_rate {{ settings.tor_pow_queue_rate }}
+{%- if onionspray_project.tor_pow_queue_rate is defined %}
+set tor_pow_queue_rate {{ onionspray_project.tor_pow_queue_rate }}
 {% endif %}
 
-{%- if settings.tor_pow_queue_burst is defined %}
-set tor_pow_queue_burst {{ settings.tor_pow_queue_burst }}
+{%- if onionspray_project.tor_pow_queue_burst is defined %}
+set tor_pow_queue_burst {{ onionspray_project.tor_pow_queue_burst }}
 {% endif %}
 
-{%- if settings.tor_intro_dos_defense is defined %}
-set tor_intro_dos_defense {{ settings.tor_intro_dos_defense }}
+{%- if onionspray_project.tor_intro_dos_defense is defined %}
+set tor_intro_dos_defense {{ onionspray_project.tor_intro_dos_defense }}
 {% endif %}
 
-{%- if settings.tor_intro_dos_burst_per_sec is defined %}
-set tor_intro_dos_burst_per_sec {{ settings.tor_intro_dos_burst_per_sec }}
+{%- if onionspray_project.tor_intro_dos_burst_per_sec is defined %}
+set tor_intro_dos_burst_per_sec {{ onionspray_project.tor_intro_dos_burst_per_sec }}
 {% endif %}
 
-{%- if settings.tor_intro_dos_rate_per_sec is defined %}
-set tor_intro_dos_rate_per_sec {{ settings.tor_intro_dos_rate_per_sec }}
+{%- if onionspray_project.tor_intro_dos_rate_per_sec is defined %}
+set tor_intro_dos_rate_per_sec {{ onionspray_project.tor_intro_dos_rate_per_sec }}
 {% endif %}
 
-{%- if settings.tor_max_streams is defined %}
-set tor_max_streams {{ settings.tor_max_streams }}
+{%- if onionspray_project.tor_max_streams is defined %}
+set tor_max_streams {{ onionspray_project.tor_max_streams }}
 {% endif %}
 
-{%- if settings.tor_max_streams_close_circuit is defined %}
-set tor_max_streams_close_circuit {{ settings.tor_max_streams_close_circuit }}
+{%- if onionspray_project.tor_max_streams_close_circuit is defined %}
+set tor_max_streams_close_circuit {{ onionspray_project.tor_max_streams_close_circuit }}
 {% endif %}
 
 #
 # Foreign maps
 #
 
-{% for foreignmap in settings.foreignmaps | default([]) %}
+{% for foreignmap in onionspray_project.foreignmaps | default([]) %}
 foreignmap {{ foreignmap.onion_address }} {{ foreignmap.upstream_address }}
 {% endfor %}
 
@@ -124,7 +124,7 @@ foreignmap {{ foreignmap.onion_address }} {{ foreignmap.upstream_address }}
 # Hardmaps
 #
 
-{% for hardmap in settings.hardmaps | default([]) %}
+{% for hardmap in onionspray_project.hardmaps | default([]) %}
 hardmap {{ hardmap.onion_address | default('%NEW_V3_ONION%') }} {{ hardmap.upstream_address }}
 {% endfor %}
 
@@ -132,7 +132,7 @@ hardmap {{ hardmap.onion_address | default('%NEW_V3_ONION%') }} {{ hardmap.upstr
 # Softmaps
 #
 
-{% for softmap in settings.softmaps | default([]) %}
+{% for softmap in onionspray_project.softmaps | default([]) %}
 softmap {{ softmap.onion_address | default('%NEW_V3_ONION%') }} {{ softmap.upstream_address }}
 {% endfor %}
 
@@ -140,4 +140,4 @@ softmap {{ softmap.onion_address | default('%NEW_V3_ONION%') }} {{ softmap.upstr
 # Other
 #
 
-{{ settings.custom_settings | default('') }}
+{{ onionspray_project.custom_settings | default('') }}

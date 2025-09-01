@@ -43,7 +43,7 @@
 
     - name: certs | base | Create the project certs folder
       ansible.builtin.file:
-        path    : "{{ onionspray_path }}/projects/{{ settings.project_name }}/ssl"
+        path    : "{{ onionspray_path }}/projects/{{ onionspray_project.name }}/ssl"
         owner   : "{{ onionspray_user }}"
         group   : "{{ onionspray_user }}"
         state   : directory
