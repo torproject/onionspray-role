@@ -13,5 +13,5 @@
   ansible.builtin.include_tasks: logs/s3/check.yml
   loop: "{{ onionspray_project_settings }}"
   loop_control:
-    loop_var: settings
-    label: settings.project_name
+    loop_var: onionspray_project_settings
+    label: onionspray_project_settings.project_name

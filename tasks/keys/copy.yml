@@ -6,13 +6,13 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 #
 
-- name: "keys | copy | Copy Onion Service keys for {{ mapping }}"
+- name: "keys | copy | Copy Onion Service keys for {{ onionspray_project_mapping }}"
   tags:
     - keys
   when:
-    - settings[mapping] is defined
+    - onionspray_project_settings[onionspray_project_mapping] is defined
   block:
-    - name: "keys | copy | Copy Onion v3 public key for {{ mapping }}"
+    - name: "keys | copy | Copy Onion v3 public key for {{ onionspray_project_mapping }}"
       ansible.builtin.copy:
         content: "{{ onionspray_site.public_key_base64 | b64decode }}"
         dest: "{{ onionspray_path }}/secrets/{{ onionspray_site.onion_address }}.v3pub.key"
@@ -20,7 +20,7 @@
         group: "{{ onionspray_user }}"
         mode: "600"
       no_log: true
-      loop: "{{ settings[mapping] }}"
+      loop: "{{ onionspray_project_settings[onionspray_project_mapping] }}"
       loop_control:
         loop_var: onionspray_site
         label: onionspray_site.onion_address
@@ -29,7 +29,7 @@
         - onionspray_site.secret_key_base64 is defined
         - onionspray_site.onion_address is defined
 
-    - name: "keys | copy | Copy Onion v3 secret key for {{ mapping }}"
+    - name: "keys | copy | Copy Onion v3 secret key for {{ onionspray_project_mapping }}"
       ansible.builtin.copy:
         content: "{{ onionspray_site.secret_key_base64 | b64decode }}"
         dest: "{{ onionspray_path }}/secrets/{{ onionspray_site.onion_address }}.v3sec.key"
@@ -37,7 +37,7 @@
         group: "{{ onionspray_user }}"
         mode: "600"
       no_log: true
-      loop: "{{ settings[mapping] }}"
+      loop: "{{ onionspray_project_settings[onionspray_project_mapping] }}"
       loop_control:
         loop_var: onionspray_site
         label: onionspray_site.onion_address
