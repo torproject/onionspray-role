@@ -20,8 +20,8 @@ set project {{ onionspray_project.name }}
 # Certificates
 #
 
-{% if onionspray_check_cert_with_ca_file %}
-set nginx_proxy_ssl_trusted_certificate {{ onionspray_ca_file }}
+{% if onionspray_project.check_cert_with_ca_file | default(true) %}
+set nginx_proxy_ssl_trusted_certificate {{ onionspray_project.ca_file | default('/etc/ssl/certs/ca-certificates.crt') }}
 {% endif %}
 
 #

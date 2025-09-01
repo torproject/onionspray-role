@@ -104,27 +104,8 @@ onionspray_use_crond: false
 onionspray_aperiodic_restarts: false
 
 #
-# Certificate handling
+# Certificate generation
 #
-
-# The path of a file containing one or more certificate authorities (CAs), that
-# will be used by Onionspray to validate the TLS certificates of the proxied
-# domains.
-#
-# By default, contains the path of the CA file managed by the Debian
-# `ca-certificates` package (`/etc/ssl/certs/ca-certificates.crt`).
-#
-# The role will abort if this file does not exist.
-#
-# If you wish to skip this verification (not recommended, as you expose your
-# Onionspray host to Machine-In-The-Middle attacks if you do so), you can
-# redefine the `onionspray_check_cert_with_ca_file` variable.
-onionspray_ca_file: /etc/ssl/certs/ca-certificates.crt
-
-# A variable controlling whether or not to check the TLS certificate of the
-# domain your Onionspray host is proxying, against a certificate authority
-# defined in the `onionspray_ca_file`.
-onionspray_check_cert_with_ca_file: true
 
 # Lifetime of the self-signed certificate generated for the .onion website, in days
 onionspray_selfsigned_cert_lifetime_days: 365
@@ -165,6 +146,29 @@ onionspray_provider: 'onionspray'
 #
 # REQUIRED: the name of your Onionspray project, used to set the configuration
 # and settings filenames.
+#
+# #### `ca_file`
+#
+# The path of a file containing one or more certificate authorities (CAs), that
+# will be used by Onionspray to validate the TLS certificates of the proxied
+# domains.
+#
+# By default, contains the path of the CA file managed by the Debian
+# `ca-certificates` package (`/etc/ssl/certs/ca-certificates.crt`).
+#
+# The role will abort if this file does not exist.
+#
+# If you wish to skip this verification (not recommended, as you expose your
+# Onionspray host to Machine-In-The-Middle attacks if you do so), you can
+# redefine the `onionspray_check_cert_with_ca_file` variable.
+#
+# ### `check_cert_with_ca_file`
+#
+# A variable controlling whether or not to check the TLS certificate of the
+# domain your Onionspray host is proxying, against a certificate authority
+# defined in the `onionspray_ca_file`.
+#
+# Default to true.
 #
 # #### `hardmaps` and `softmaps`
 #

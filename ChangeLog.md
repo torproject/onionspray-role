@@ -63,6 +63,8 @@ should update their configuration accordingly:
 
 * Variables `onionspray_project_settings` and `onionspray_keys` are now
   unified into `onionspray_projects`.
+* Variables `onionspray_ca_file` and `onionspray_check_cert_with_ca_file`
+  were integrated into `onionspray_projects`, as per-project settings.
 * Some variable names have been changed.
 
 New new format is fully documented in the [defaults file][defaults/main.yml],
