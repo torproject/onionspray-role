@@ -10,7 +10,7 @@
   tags:
     - keys
   when:
-    - onionspray_project_settings[onionspray_project_mapping] is defined
+    - onionspray_project[onionspray_project_mapping] is defined
   block:
     - name: "keys | copy | Copy Onion v3 public key for {{ onionspray_project_mapping }}"
       ansible.builtin.copy:
@@ -20,7 +20,7 @@
         group: "{{ onionspray_user }}"
         mode: "600"
       no_log: true
-      loop: "{{ onionspray_project_settings[onionspray_project_mapping] }}"
+      loop: "{{ onionspray_project[onionspray_project_mapping] }}"
       loop_control:
         loop_var: onionspray_site
         label: onionspray_site.onion_address
@@ -37,7 +37,7 @@
         group: "{{ onionspray_user }}"
         mode: "600"
       no_log: true
-      loop: "{{ onionspray_project_settings[onionspray_project_mapping] }}"
+      loop: "{{ onionspray_project[onionspray_project_mapping] }}"
       loop_control:
         loop_var: onionspray_site
         label: onionspray_site.onion_address

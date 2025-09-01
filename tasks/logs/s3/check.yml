@@ -8,7 +8,7 @@
 
 - name: s3 | check | Check the S3 sync logs
   when:
-    - onionspray_project_settings.log_s3_check | default(false)
+    - onionspray_project.log_s3_check | default(false)
   block:
     #- name: logs | s3 | Find S3 sync logs
     #  ansible.builtin.find:
@@ -18,7 +18,7 @@
 
     - name: s3 | check | Check the latest S3 sync log
       ansible.builtin.stat:
-        path: "{{ onionspray_path }}/projects/{{ onionspray_project_settings.project_name }}/log/s3-sync.log"
+        path: "{{ onionspray_path }}/projects/{{ onionspray_project.name }}/log/s3-sync.log"
       register: onionspray_s3_sync_log_latest
 
     #- name: s3 | check | Check if we have a latest S3 sync log
@@ -46,7 +46,7 @@
 
     - name: s3 | check | Get the last few lines of the latest S3 sync log
       ansible.builtin.command:
-        cmd: "/usr/bin/tail -n 5 {{ onionspray_path }}/projects/{{ onionspray_project_settings.project_name }}/log/s3-sync.log"
+        cmd: "/usr/bin/tail -n 5 {{ onionspray_path }}/projects/{{ onionspray_project.name }}/log/s3-sync.log"
       when: >
         onionspray_s3_sync_log_latest.path is defined and
         onionspray_s3_sync_log_latest.stat.path == onionspray_path + '/log/s3-sync.log' and not

@@ -6,10 +6,10 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 #
 
-- name: "projects | Generate project settings for {{ onionspray_project_settings.project_name }}"
+- name: "projects | Generate project settings for {{ onionspray_project.name }}"
   ansible.builtin.template:
     src: projects/project.tconf.j2
-    dest: "{{ onionspray_path }}/{{ onionspray_project_settings.project_name }}.tconf"
+    dest: "{{ onionspray_path }}/{{ onionspray_project.name }}.tconf"
     owner: "{{ onionspray_user }}"
     group: "{{ onionspray_user }}"
     mode: "600"

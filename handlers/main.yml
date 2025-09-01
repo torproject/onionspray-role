@@ -8,25 +8,25 @@
 
 - name: Remove Onionspray generated settings config files
   ansible.builtin.file:
-    path: "{{ onionspray_path }}/{{ onionspray_project_settings.project_name }}.conf"
+    path: "{{ onionspray_path }}/{{ onionspray_project.name }}.conf"
     state: absent
   no_log: true
-  loop: "{{ onionspray_project_settings }}"
+  loop: "{{ onionspray_projects }}"
   loop_control:
-    loop_var: onionspray_project_settings
+    loop_var: onionspray_project
 
 - name: Remove Onionspray generated project directories
   ansible.builtin.file:
-    path: "{{ onionspray_path }}/projects/{{ onionspray_project_settings.project_name }}/"
+    path: "{{ onionspray_path }}/projects/{{ onionspray_project.name }}/"
     state: absent
   no_log: true
-  loop: "{{ onionspray_project_settings }}"
+  loop: "{{ onionspray_projects }}"
   loop_control:
-    loop_var: onionspray_project_settings
+    loop_var: onionspray_project
 
 - name: Generate Onionspray configs
   ansible.builtin.command:
-    cmd: "{{ onionspray_path }}/onionspray config {{ onionspray_path }}/{{ onionspray_project_settings.project_name }}.tconf"
+    cmd: "{{ onionspray_path }}/onionspray config {{ onionspray_path }}/{{ onionspray_project.name }}.tconf"
   become: true
   become_user: "{{ onionspray_user }}"
   # Workaround allowing to run Git even if the shell is set to /sbin/nologin
@@ -36,9 +36,9 @@
   become_flags: "su -s /bin/bash - {{ onionspray_user }} /bin/bash -c"
   changed_when: true
   no_log: true
-  loop: "{{ onionspray_project_settings }}"
+  loop: "{{ onionspray_projects }}"
   loop_control:
-    loop_var: onionspray_project_settings
+    loop_var: onionspray_project
 
 - name: Reload systemctl daemon
   ansible.builtin.systemd:

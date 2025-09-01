@@ -57,7 +57,7 @@ example of a basic playbook:
 ```
 
 You can configure your project(s), i.e. the website(s) that Onionspray will
-handle, using the `onionspray_project_settings` variable, a list of
+handle, using the `onionspray_projects` variable, a list of
 dictionaries. You may also want to (re)define other values: check the
 [defaults][] for a complete list of variables and their usage.
 
@@ -67,8 +67,8 @@ As an example, you could have a minimal config at `host_vars/myhost.yml`,
 just telling which upstream website you want to have a proxy for:
 
 ```yaml
-onionspray_project_settings:
-  - project_name: "exampleorg"
+onionspray_projects:
+  - name: "exampleorg"
     # Onion Service proxying using Onionspray's hardmap config
     hardmaps:
       # Onion Service mapping to example.org
@@ -101,8 +101,8 @@ Finally, add the results in the variable definitions for your host, such as
 `host_vars/myhost.yml`:
 
 ```yaml
-onionspray_project_settings:
-  - project_name: "examplenet"
+onionspray_projects:
+  - name: "examplenet"
     # Onion Service proxying using Onionspray's hardmap config
     hardmaps:
       # Onion Service mapping to example.net
@@ -134,8 +134,8 @@ onionspray_provider: 'myprovider'
 onionspray_key_uploader_script : '../scripts/upload-keys-to-onionspray-instances'
 onionspray_cert_uploader_script: '../scripts/upload-certs-to-onionspray-instances'
 
-onionspray_project_settings:
-  - project_name: "example1"
+onionspray_projects:
+  - name: "example1"
     # Onion Service proxying using Onionspray's hardmap config
     hardmaps:
       # Onion Service mapping to example.null
@@ -193,7 +193,7 @@ onionspray_project_settings:
       set block_err This subdomain is forbidden.
       set block_host_re ^forbidden\.
 
-  - project_name: "example2"
+  - name: "example2"
     # Onion Service proxying using Onionspray's softmap config
     softmaps:
       # Onion Service mapping to example.org, using Onionbalance

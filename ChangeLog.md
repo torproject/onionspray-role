@@ -62,7 +62,7 @@ The configuration format has changed again, and operators wishing to upgrade
 should update their configuration accordingly:
 
 * Variables `onionspray_project_settings` and `onionspray_keys` are now
-  unified into the former.
+  unified into `onionspray_projects`.
 * Some variable names have been changed.
 
 New new format is fully documented in the [defaults file][defaults/main.yml],
@@ -78,8 +78,8 @@ onionspray_provider: 'myprovider'
 onionspray_key_uploader_script : '../scripts/upload-keys-to-onionspray-instances'
 onionspray_cert_uploader_script: '../scripts/upload-certs-to-onionspray-instances'
 
-onionspray_project_settings:
-  - project_name: "example1"
+onionspray_projects:
+  - name: "example1"
     # Onion Service proxying using Onionspray's hardmap config
     hardmaps:
       # Onion Service mapping to example.null
@@ -137,7 +137,7 @@ onionspray_project_settings:
       set block_err This subdomain is forbidden.
       set block_host_re ^forbidden\.
 
-  - project_name: "example2"
+  - name: "example2"
     # Onion Service proxying using Onionspray's softmap config
     softmaps:
       # Onion Service mapping to example.org, using Onionbalance
