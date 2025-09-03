@@ -39,6 +39,7 @@
     #    state : touch
     #    mode  : '0600'
     #  no_log: true
+    #  loop        : "{{ onionspray_project[onionspray_project_mapping] }}"
     #  loop_control:
     #    loop_var : onionspray_site
     #    label    : "{{ onionspray_site.onion_address }}"
@@ -56,6 +57,7 @@
     #    state : touch
     #    mode  : '0600'
     #  no_log: true
+    #  loop        : "{{ onionspray_project[onionspray_project_mapping] }}"
     #  loop_control:
     #    loop_var : onionspray_site
     #    label    : "{{ onionspray_site.onion_address }}"
