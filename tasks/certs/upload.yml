@@ -31,7 +31,7 @@
         - onionspray_site.onion_address is defined
         - onionspray_site.certificate_upload is defined
         - onionspray_site.certificate_upload == true
-        - onionspray_cert_uploader_script | length != 0 and onionspray_project_mapping in onionspray_projects
+        - onionspray_cert_uploader_script | length != 0
 
     #- name: "certs | upload | Ensure certificate file existence and permissions for {{ onionspray_project_mapping }}"
     #  ansible.builtin.file:
@@ -48,7 +48,7 @@
     #    - onionspray_site.onion_address is defined
     #    - onionspray_site.certificate_upload is defined
     #    - onionspray_site.certificate_upload == true
-    #    - onionspray_cert_uploader_script | length != 0 and onionspray_project_mapping in onionspray_projects
+    #    - onionspray_cert_uploader_script | length != 0
 
     #- name: "certs | upload | Ensure the TLS private key file existence and permissions for {{ onionspray_project_mapping }}"
     #  ansible.builtin.file:
@@ -65,7 +65,7 @@
     #    - onionspray_site.onion_address is defined
     #    - onionspray_site.certificate_upload is defined
     #    - onionspray_site.certificate_upload == true
-    #    - onionspray_cert_uploader_script | length != 0 and onionspray_project_mapping in onionspray_projects
+    #    - onionspray_cert_uploader_script | length != 0
 
     - name: "certs | upload | Upload Onion Service certs for {{ onionspray_project_mapping }}"
       ansible.builtin.command:
@@ -89,7 +89,7 @@
         - onionspray_site.onion_address is defined
         - onionspray_site.certificate_upload is defined
         - onionspray_site.certificate_upload
-        - onionspray_cert_uploader_script | length != 0 and onionspray_project_mapping in onionspray_projects
+        - onionspray_cert_uploader_script | length != 0
       notify : Restart Onionspray
 
       # This task always change something (even if only the mtime of a file)

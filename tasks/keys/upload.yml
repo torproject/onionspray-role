@@ -28,7 +28,7 @@
         - onionspray_site.onion_address is defined
         - onionspray_site.keys_upload is defined
         - onionspray_site.keys_upload == true
-        - onionspray_key_uploader_script | length != 0 and onionspray_project_mapping in onionspray_projects
+        - onionspray_key_uploader_script | length != 0
 
     #- name: "Ensure the public key file existence and permissions for {{ onionspray_project_mapping }}"
     #  ansible.builtin.file:
@@ -44,7 +44,7 @@
     #    - onionspray_site.onion_address is defined
     #    - onionspray_site.keys_upload is defined
     #    - onionspray_site.keys_upload == true
-    #    - onionspray_key_uploader_script | length != 0 and onionspray_project_mapping in onionspray_projects
+    #    - onionspray_key_uploader_script | length != 0
 
     #- name: "Ensure the private key file existence and permissions for {{ onionspray_project_mapping }}"
     #  ansible.builtin.file:
@@ -60,7 +60,7 @@
     #    - onionspray_site.onion_address is defined
     #    - onionspray_site.keys_upload is defined
     #    - onionspray_site.keys_upload == true
-    #    - onionspray_key_uploader_script | length != 0 and onionspray_project_mapping in onionspray_projects
+    #    - onionspray_key_uploader_script | length != 0
 
     - name: "keys | upload | Upload Onion Service keys for {{ onionspray_project_mapping }}"
       ansible.builtin.command:
@@ -83,7 +83,7 @@
         - onionspray_site.onion_address is defined
         - onionspray_site.keys_upload is defined
         - onionspray_site.keys_upload
-        - onionspray_key_uploader_script | length != 0 and onionspray_project_mapping in onionspray_projects
+        - onionspray_key_uploader_script | length != 0
       notify : Restart Onionspray
 
       # This task always change something (even if only the mtime of a file)
