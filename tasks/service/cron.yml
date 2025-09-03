@@ -10,7 +10,7 @@
 
 - name: service | cron | Configure Onionspray initialization cronjob
   ansible.builtin.template:
-    src   : "logs/cron.j2"
+    src   : "service/cron.j2"
     dest  : "/etc/cron.d/onionspray-service"
     owner : "root"
     group : "root"
