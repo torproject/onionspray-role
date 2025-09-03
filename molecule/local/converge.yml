@@ -25,7 +25,7 @@
       - name: "example2"
         hardmaps:
           # Bogus data for testing purposes
-          - onion_address: yetkvkuqlr23sdzkf2mynt7aixfjzq6pjys2ffurr3hzpyfxrc7swpqd
+          - onion_address: yetkvkuqlr23sdzkf2mynt7aixfjzq6pjys2ffurr3hzpyfxrc7swpqd.onion
             upstream_address: example.net
             public_key_base64: Ym9ndXMgZGF0YSBmb3IgdGVzdGluZyBwdXJwb3Nlcwo=
             secret_key_base64: Ym9ndXMgZGF0YSBmb3IgdGVzdGluZyBwdXJwb3Nlcwo=

@@ -152,7 +152,7 @@ onionspray_projects:
 
       # Onion Service mapping to example.net
       # HTTPS certificates are copied from Ansible
-      - onion_address: yetkvkuqlr23sdzkf2mynt7aixfjzq6pjys2ffurr3hzpyfxrc7swpqd
+      - onion_address: yetkvkuqlr23sdzkf2mynt7aixfjzq6pjys2ffurr3hzpyfxrc7swpqd.onion
         upstream_address: example.net
         public_key_base64: BASE64_ENCODED_ONION_SERVICE_PUBLIC_KEY
         secret_key_base64: BASE64_ENCODED_ONION_SERVICE_SECRET_KEY_ENCRYPTED_WITH_ANSIBLE_VAULT
@@ -160,13 +160,13 @@ onionspray_projects:
           TLS_CERTIFICATE
         tls_secret_key: |
           TLS_SECRET_KEY_ENCRYPTED_WITH_ANSIBLE_VAULT
-        onion_address: yetkvkuqlr23sdzkf2mynt7aixfjzq6pjys2ffurr3hzpyfxrc7swpqd
 
       # Onion Service mapping to example.io
       # HTTPS certificates are uploaded using an external script
-      - onion_address: exmp3cho5nxislcjefyovvsqd36g23ouofdjtiiypv4cs3ahhpyonxyd
+      - onion_address: exmp3cho5nxislcjefyovvsqd36g23ouofdjtiiypv4cs3ahhpyonxyd.onion
         upstream_address: example.io
         certificate_upload: true
+        keys_upload: true
 
     # Log settings
     log_separate: '1'

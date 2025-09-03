@@ -231,21 +231,6 @@ onionspray_provider: 'onionspray'
 # This variable is optional. If unset, Onionspray will generate and use a
 # random Onion Services key pair.
 #
-# #### `foreignmaps`
-#
-# The `foreignmaps` variable is used to store onion-to-site mappings that exist
-# outside of this particular configuration file, eg: for some other sites.
-#
-# Each entry should use the following fields.
-#
-# ##### `upstream_address`
-#
-# The clearnet domain name to which Onionspray will proxy requests.
-#
-# ##### `onion_address`
-#
-# The Onion Service address for the foreign map.
-#
 # ##### `tls_certificate`
 #
 # The PEM-encoded TLS certificate for the Onion Service.
@@ -268,6 +253,21 @@ onionspray_provider: 'onionspray'
 # This variable is optional. If unset, Onionspray will generate and use a
 # self-signed certificate.
 #
+# #### `foreignmaps`
+#
+# The `foreignmaps` variable is used to store onion-to-site mappings that exist
+# outside of this particular configuration file, eg: for some other sites.
+#
+# Each entry should use the following fields.
+#
+# ##### `upstream_address`
+#
+# The clearnet domain name to which Onionspray will proxy requests.
+#
+# ##### `onion_address`
+#
+# The Onion Service address for the foreign map.
+#
 # #### `log_separate`
 #
 # Se to true in order to have per-domain NGINX log files.
@@ -283,14 +283,20 @@ onionspray_provider: 'onionspray'
 #
 # Log rotation frequency, as per logrotate(8).
 #
+# Defaults to "hourly".
+#
 # #### `log_rotations`
 #
 # The number of log rotations, as per logrotate(8).
+#
+# Defaults to 1344.
 #
 # #### `log_s3_upload`
 #
 # Set to true so logs are uploaded to S3 buckets, for long-term storage
 # before logs gets rotated.
+#
+# Defaults to false.
 #
 # #### `log_s3_endpoint`
 #
