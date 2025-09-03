@@ -25,12 +25,12 @@
       loop: "{{ onionspray_project[onionspray_project_mapping] }}"
       loop_control:
         loop_var : onionspray_site
-        label    : "{{ onionspray_site.onion_address }}"
+        #label   : "{{ onionspray_site.onion_address }}"
       when:
         - onionspray_debug
         - onionspray_site.onion_address is defined
         - onionspray_site.certificate_upload is defined
-        - onionspray_site.certificate_upload == true
+        - onionspray_site.certificate_upload
         - onionspray_cert_uploader_script | length != 0
 
     #- name: "certs | upload | Ensure certificate file existence and permissions for {{ onionspray_project_mapping }}"
