@@ -12,25 +12,26 @@
   when:
     - onionspray_project[onionspray_project_mapping] is defined
   block:
-    #- name: "certs | upload | Debug onionspray cert uploader command line invocation for {{ onionspray_project_mapping }}"
-    #  ansible.builtin.debug:
-    #    msg: >
-    #      {{ onionspray_cert_uploader_script }} {{ onionspray_provider }} {{ inventory_hostname }}
-    #      {{ onionspray_project.name }} {{ onionspray_site.onion_address }}
-    #      {{ onionspray_site.upstream }} {{ onionspray_user }}
-    #      {{ onionspray_path }}
-    #      {{ onionspray_keyring }}
-    #      {{ onionspray_secrets_manager }}
-    #  no_log: true
-    #  loop: "{{ onionspray_project[onionspray_project_mapping] }}"
-    #  loop_control:
-    #    loop_var : onionspray_site
-    #    label    : "{{ onionspray_site.onion_address }}"
-    #  when:
-    #    - onionspray_site.onion_address is defined
-    #    - onionspray_site.certificate_upload is defined
-    #    - onionspray_site.certificate_upload == true
-    #    - onionspray_cert_uploader_script | length != 0 and onionspray_project_mapping in onionspray_projects
+    - name: "certs | upload | Debug onionspray cert uploader command line invocation for {{ onionspray_project_mapping }}"
+      ansible.builtin.debug:
+        msg: >
+          {{ onionspray_cert_uploader_script }} {{ onionspray_provider }} {{ inventory_hostname }}
+          {{ onionspray_project.name }} {{ onionspray_site.onion_address }}
+          {{ onionspray_site.upstream }} {{ onionspray_user }}
+          {{ onionspray_path }}
+          {{ onionspray_keyring }}
+          {{ onionspray_secrets_manager }}
+      no_log: true
+      loop: "{{ onionspray_project[onionspray_project_mapping] }}"
+      loop_control:
+        loop_var : onionspray_site
+        label    : "{{ onionspray_site.onion_address }}"
+      when:
+        - onionspray_debug
+        - onionspray_site.onion_address is defined
+        - onionspray_site.certificate_upload is defined
+        - onionspray_site.certificate_upload == true
+        - onionspray_cert_uploader_script | length != 0 and onionspray_project_mapping in onionspray_projects
 
     #- name: "certs | upload | Ensure certificate file existence and permissions for {{ onionspray_project_mapping }}"
     #  ansible.builtin.file:

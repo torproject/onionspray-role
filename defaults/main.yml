@@ -453,3 +453,10 @@ onionspray_main_log_rotation_rotations: 52
 #
 # Leaving it to false will use the aws-cli shipped by the distribution.
 onionspray_aws_cli_from_snap: false
+
+#
+# Debugging
+#
+
+# Set to true in order to turn on basic debugging features
+onionspray_debug: false
