@@ -21,6 +21,7 @@
           set -o pipefail
           {{ onionspray_path }}/opt/{{ onionspray_deps_script }} | \
             tee {{ onionspray_path }}/log/deps-{{ ansible_date_time.epoch }}.log
+        executable: /bin/bash
       become: true
       changed_when: true
       when:
