@@ -43,6 +43,7 @@
           set -o pipefail
           {{ onionspray_path }}/opt/{{ onionspray_compile_script }} | \
             tee {{ onionspray_path }}/log/compile-{{ ansible_date_time.epoch }}.log
+        executable: /bin/bash
       become: true
       become_user: "{{ onionspray_user }}"
       # Workaround allowing to run Git even if the shell is set to /sbin/nologin
