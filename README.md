@@ -145,8 +145,8 @@ onionspray_repository_version: a0e43045fe135e1b3f5b96e075ed519e4359ab7f
 # Uploading keys and certificates from external locations,
 # such as a password manager
 onionspray_provider: 'myprovider'
-onionspray_key_uploader_script : '../scripts/upload-keys-to-onionspray-instances'
-onionspray_cert_uploader_script: '../scripts/upload-certs-to-onionspray-instances'
+onionspray_key_uploader_script : 'roles/onionspray/scripts/upload-keys-to-onionspray-instances'
+onionspray_cert_uploader_script: 'roles/onionspray/scripts/upload-certs-to-onionspray-instances'
 
 onionspray_projects:
   - name: "example1"

@@ -414,11 +414,25 @@ onionspray_keyring: 'onionspray'
 onionspray_secrets_manager: 'keyringer'
 
 # The external script to upload Onion Service keys
+#
 # A sample script is provided at scripts/upload-keys-to-onionspray-instances
+#
+# Examples, depending on your playbook structure:
+#
+#   onionspray_key_uploader_script: '../scripts/upload-keys-to-onionspray-instances'
+#   onionspray_key_uploader_script: 'roles/onionspray/scripts/upload-keys-to-onionspray-instances'
+#
 #onionspray_key_uploader_script:
 
 # The external script to upload Onion Service TLS certificates
+#
 # A sample script is provided at scripts/upload-certs-to-onionspray-instances
+#
+# Examples, depending on your playbook structure:
+#
+#   onionspray_cert_uploader_script: '../scripts/upload-certs-to-onionspray-instances'
+#   onionspray_cert_uploader_script: 'roles/onionspray/scripts/upload-certs-to-onionspray-instances'
+#
 #onionspray_cert_uploader_script:
 
 #
