@@ -12,27 +12,6 @@
   when:
     - onionspray_project[onionspray_project_mapping] is defined
   block:
-    - name: "keys | upload | Debug onionspray key uploader command line invocation for {{ onionspray_project_mapping }}"
-      ansible.builtin.debug:
-        msg: >
-          {{ onionspray_key_uploader_script }} {{ onionspray_provider }} {{ inventory_hostname }}
-          {{ onionspray_project.name }}
-          {{ onionspray_site.onion_address | truncate(56, True, '') }}
-          {{ onionspray_site.upstream_address }}
-          {{ onionspray_user }}
-          {{ onionspray_path }}
-      no_log: true
-      loop         : "{{ onionspray_project[onionspray_project_mapping] }}"
-      loop_control :
-        loop_var : onionspray_site
-        #label   : "{{ onionspray_site.onion_address }}"
-      when:
-        - onionspray_debug
-        - onionspray_site.onion_address is defined
-        - onionspray_site.keys_upload is defined
-        - onionspray_site.keys_upload
-        - onionspray_key_uploader_script | length != 0
-
     #- name: "Ensure the public key file existence and permissions for {{ onionspray_project_mapping }}"
     #  ansible.builtin.file:
     #    path  : "{{ onionspray_path }}/projects/{{ onionspray_project.name }}/{{ onionspray_site.onion_address | truncate(56, True, '') }}-v3pub.key"
