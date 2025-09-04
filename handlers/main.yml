@@ -24,12 +24,6 @@
   loop_control:
     loop_var: onionspray_project
 
-# Generate project configurations
-#
-# This ensures each project has a corresponding .conf
-#
-# It's effective only once: onionspray will ignore
-# the .tconf if a .conf already exists.
 - name: Generate Onionspray configs
   ansible.builtin.command:
     cmd: "{{ onionspray_path }}/onionspray config {{ onionspray_project.name }}.tconf"
@@ -44,30 +38,6 @@
   loop: "{{ onionspray_projects }}"
   loop_control:
     loop_var: onionspray_project
-
-  # For simplicity, assume it always changes things, even if that's not the case
-  changed_when: true
-
-# Configure a project
-#
-# This refreshes the configuration for an existing project.
-#
-# I can run multiple times safely.
-- name: Configure Onionspray projects
-  ansible.builtin.command:
-    cmd: "{{ onionspray_path }}/onionspray config {{ onionspray_project.name }}.conf"
-  become: true
-  become_user: "{{ onionspray_user }}"
-  # Workaround allowing to run Git even if the shell is set to /sbin/nologin
-  # Discussed at https://stackoverflow.com/questions/50512402/can-ansible-use-sudo-su-if-the-sudo-user-is-not-allowed-to-run-arbitrary-scr
-  # Alternative: https://docs.ansible.com/ansible/latest/collections/community/general/sudosu_become.html
-  become_method: "ansible.builtin.sudo"
-  become_flags: "su -s /bin/bash - {{ onionspray_user }} /bin/bash -c"
-  no_log: true
-  loop: "{{ onionspray_projects }}"
-  loop_control:
-    loop_var: onionspray_project
-    label: "{{ onionspray_project.name }}"
 
   # For simplicity, assume it always changes things, even if that's not the case
   changed_when: true

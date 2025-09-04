@@ -18,5 +18,4 @@
     # The following is commented as might remove existing logs
     #- Remove Onionspray generated project directories
     - Generate Onionspray configs
-    - Configure Onionspray projects
     - Restart Onionspray
