@@ -45,7 +45,8 @@ set -e
 export LC_ALL="C"
 
 # The SSH command
-SSH="ssh ${ONIONSPRAY_USER}@${HOST}"
+SSH="ssh -o ControlMaster=auto -o ControlPath=~/.ssh/onionspray-${PROVIDER}-%r@%h:%p -o ControlPersist=5s"
+SSH="$SSH ${ONIONSPRAY_USER}@${HOST}"
 
 # The shortened address as used by Onionspray
 #ONION_SHORT="$(echo ${ONION} | sed -e 's|^\([a-Z0-9]\{20\}\).*$|\1|')"
