@@ -43,7 +43,7 @@ This requirement is further discussed on ticket
 [acl package]: https://tracker.debian.org/pkg/acl
 [tpo/onion-services/ansible/onionspray-role#2]: https://gitlab.torproject.org/tpo/onion-services/ansible/onionspray-role/-/issues/2
 
-## Quick-start
+## Quick start
 
 Assuming you have a host named `myhost` on which you can run
 `ansible-playbook`, and you cloned this role in a `roles` directory, this is an
@@ -76,6 +76,20 @@ onionspray_projects:
       # HTTPS certificates are generated and self-signed by Onionspray
       - upstream_address: example.org
 ```
+
+## Using a persistent .onion address
+
+The quick start example from the previous section showcases the simplest
+configuration, but won't ensure a permanent .onion address to be used
+all the time.
+
+In fact, if you don't specify a .onion address, this Ansible Role will
+make Onionspray to generate a new address every time the configuration
+changes.
+
+To prevent that, either update the Ansible configuration with the generate
+address or, even better, use a pre-generate address from the outset, as
+explained in the next section.
 
 ## Using a pre-generated .onion address
 
