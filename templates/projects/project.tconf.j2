@@ -117,7 +117,7 @@ set tor_max_streams_close_circuit {{ onionspray_project.tor_max_streams_close_ci
 #
 
 {% for foreignmap in onionspray_project.foreignmaps | default([]) %}
-foreignmap {{ foreignmap.onion_address }} {{ foreignmap.upstream_address }}
+foreignmap {{ foreignmap.onion_address | truncate(56, True, '') }} {{ foreignmap.upstream_address }}
 {% endfor %}
 
 #
@@ -125,7 +125,7 @@ foreignmap {{ foreignmap.onion_address }} {{ foreignmap.upstream_address }}
 #
 
 {% for hardmap in onionspray_project.hardmaps | default([]) %}
-hardmap {{ hardmap.onion_address | default('%NEW_V3_ONION%') }} {{ hardmap.upstream_address }}
+hardmap {{ hardmap.onion_address | default('%NEW_V3_ONION%') | truncate(56, True, '') }} {{ hardmap.upstream_address }}
 {% endfor %}
 
 #
@@ -133,7 +133,7 @@ hardmap {{ hardmap.onion_address | default('%NEW_V3_ONION%') }} {{ hardmap.upstr
 #
 
 {% for softmap in onionspray_project.softmaps | default([]) %}
-softmap {{ softmap.onion_address | default('%NEW_V3_ONION%') }} {{ softmap.upstream_address }}
+softmap {{ softmap.onion_address | default('%NEW_V3_ONION%') | truncate(56, True, '') }} {{ softmap.upstream_address }}
 {% endfor %}
 
 #
