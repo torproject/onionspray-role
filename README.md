@@ -121,7 +121,7 @@ onionspray_projects:
     hardmaps:
       # Onion Service mapping to example.net
       # HTTPS certificates are copied from Ansible
-      - onion_address: yetkvkuqlr23sdzkf2mynt7aixfjzq6pjys2ffurr3hzpyfxrc7swpqd
+      - onion_address: yetkvkuqlr23sdzkf2mynt7aixfjzq6pjys2ffurr3hzpyfxrc7swpqd.onion
         upstream_address: example.net
         public_key_base64: BASE64_ENCODED_ONION_SERVICE_PUBLIC_KEY
         secret_key_base64: BASE64_ENCODED_ONION_SERVICE_SECRET_KEY_ENCRYPTED_WITH_ANSIBLE_VAULT
