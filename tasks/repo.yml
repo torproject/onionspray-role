@@ -8,6 +8,10 @@
 
 - name: repo | Onionspray repository management
   block:
+    - name: repo | Install git
+      ansible.builtin.package:
+        name: git
+
     # Note that Git is able to clone to an empty folder, so there's no harm
     # in creating this folder in the first run when the repository is still not
     # cloned.
