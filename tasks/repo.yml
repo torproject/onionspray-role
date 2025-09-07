@@ -52,6 +52,7 @@
         version: "{{ onionspray_repository_version }}"
       become: true
       become_user: "{{ onionspray_user }}"
+      register: onionspray_git_repo_state
       # Workaround allowing to run Git even if the shell is set to /sbin/nologin
       # Discussed at https://stackoverflow.com/questions/50512402/can-ansible-use-sudo-su-if-the-sudo-user-is-not-allowed-to-run-arbitrary-scr
       # Alternative: https://docs.ansible.com/ansible/latest/collections/community/general/sudosu_become.html
