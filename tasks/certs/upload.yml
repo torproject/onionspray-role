@@ -16,7 +16,7 @@
     #  ansible.builtin.file:
     #    path  : "{{ onionspray_path }}/projects/{{ onionspray_project.name }}/ssl/{{ onionspray_site.onion_address|truncate(20, True, '') }}-v3.cert"
     #    owner : "{{ onionspray_user }}"
-    #    group : "{{ onionspray_user }}"
+    #    group : "{{ onionspray_group }}"
     #    state : touch
     #    mode  : '0600'
     #  no_log: true
@@ -33,7 +33,7 @@
     #  ansible.builtin.file:
     #    path  : "{{ onionspray_path }}/projects/{{ onionspray_project.name }}/ssl/{{ onionspray_site.onion_address|truncate(20, True, '') }}-v3.pem"
     #    owner : "{{ onionspray_user }}"
-    #    group : "{{ onionspray_user }}"
+    #    group : "{{ onionspray_group }}"
     #    state : touch
     #    mode  : '0600'
     #  no_log: true

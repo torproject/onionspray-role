@@ -10,13 +10,14 @@
   block:
     - name: user | Create the group
       ansible.builtin.group:
-        name: "{{ onionspray_user }}"
+        name   : "{{ onionspray_group }}"
+        system : true
 
     - name: user | Create the user
       ansible.builtin.user:
         name          : "{{ onionspray_user }}"
         append        : true
-        group         : "{{ onionspray_user }}"
+        group         : "{{ onionspray_group }}"
         groups        : "{{ onionspray_groups }}"
         create_home   : false
         home          : "{{ onionspray_home }}"
@@ -29,7 +30,7 @@
       ansible.builtin.file:
         path    : "{{ onionspray_home }}"
         owner   : "{{ onionspray_user }}"
-        group   : "{{ onionspray_user }}"
+        group   : "{{ onionspray_group }}"
         state   : directory
         mode    : '0750'
         recurse : false

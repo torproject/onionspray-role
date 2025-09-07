@@ -15,5 +15,5 @@
         path: "{{ onionspray_path }}/secrets/"
         state: directory
         owner: "{{ onionspray_user }}"
-        group: "{{ onionspray_user }}"
+        group: "{{ onionspray_group }}"
         mode: "700"

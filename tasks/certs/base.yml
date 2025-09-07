@@ -30,11 +30,11 @@
 
     - name: certs | base | Generate self-signed certificate configuration
       ansible.builtin.template:
-        src: certs/onionspray-certs.conf.j2
-        dest: "{{ onionspray_path }}/onionspray-certs.conf"
-        owner: "{{ onionspray_user }}"
-        group: "{{ onionspray_user }}"
-        mode: "644"
+        src   : certs/onionspray-certs.conf.j2
+        dest  : "{{ onionspray_path }}/onionspray-certs.conf"
+        owner : "{{ onionspray_user }}"
+        group : "{{ onionspray_group }}"
+        mode  : "644"
       #notify:
       #  - Remove Onionspray generated settings config files
       #  - Remove Onionspray generated project directories
@@ -45,7 +45,7 @@
       ansible.builtin.file:
         path    : "{{ onionspray_path }}/projects/{{ onionspray_project.name }}/ssl"
         owner   : "{{ onionspray_user }}"
-        group   : "{{ onionspray_user }}"
+        group   : "{{ onionspray_group }}"
         state   : directory
         mode    : '0700'
         recurse : false

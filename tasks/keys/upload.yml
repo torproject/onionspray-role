@@ -16,7 +16,7 @@
     #  ansible.builtin.file:
     #    path  : "{{ onionspray_path }}/projects/{{ onionspray_project.name }}/{{ onionspray_site.onion_address | truncate(56, True, '') }}-v3pub.key"
     #    owner : "{{ onionspray_user }}"
-    #    group : "{{ onionspray_user }}"
+    #    group : "{{ onionspray_group }}"
     #    state : touch
     #    mode  : '0600'
     #  no_log: true
@@ -34,7 +34,7 @@
     #  ansible.builtin.file:
     #    path  : "{{ onionspray_path }}/projects/{{ onionspray_project.name }}/{{ onionspray_site.onion_address | truncate(56, True, '') }}-v3sec.key"
     #    owner : "{{ onionspray_user }}"
-    #    group : "{{ onionspray_user }}"
+    #    group : "{{ onionspray_group }}"
     #    state : touch
     #    mode  : '0600'
     #  no_log: true

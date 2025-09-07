@@ -11,7 +11,7 @@
     src: projects/project.tconf.j2
     dest: "{{ onionspray_path }}/{{ onionspray_project.name }}.tconf"
     owner: "{{ onionspray_user }}"
-    group: "{{ onionspray_user }}"
+    group: "{{ onionspray_group }}"
     mode: "600"
   notify:
     - Remove Onionspray generated settings config files

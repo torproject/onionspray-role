@@ -28,6 +28,6 @@
         src   : "logs/logrotate.j2"
         dest  : "{{ onionspray_path }}/onionspray-logs.conf"
         owner : "{{ onionspray_user }}"
-        group : "{{ onionspray_user }}"
+        group : "{{ onionspray_group }}"
         mode  : '0644'
         force : true

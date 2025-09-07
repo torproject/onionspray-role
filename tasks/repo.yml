@@ -19,7 +19,7 @@
       ansible.builtin.file:
         path    : "{{ onionspray_path }}"
         owner   : "{{ onionspray_user }}"
-        group   : "{{ onionspray_user }}"
+        group   : "{{ onionspray_group }}"
         state   : directory
         mode    : '0750'
         recurse : false

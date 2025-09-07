@@ -17,7 +17,7 @@
         content: "{{ onionspray_site.public_key_base64 | b64decode }}"
         dest: "{{ onionspray_path }}/secrets/{{ onionspray_site.onion_address | truncate(56, True, '') }}.v3pub.key"
         owner: "{{ onionspray_user }}"
-        group: "{{ onionspray_user }}"
+        group: "{{ onionspray_group }}"
         mode: "600"
       no_log: true
       loop: "{{ onionspray_project[onionspray_project_mapping] }}"
@@ -34,7 +34,7 @@
         content: "{{ onionspray_site.secret_key_base64 | b64decode }}"
         dest: "{{ onionspray_path }}/secrets/{{ onionspray_site.onion_address | truncate(56, True, '') }}.v3sec.key"
         owner: "{{ onionspray_user }}"
-        group: "{{ onionspray_user }}"
+        group: "{{ onionspray_group }}"
         mode: "600"
       no_log: true
       loop: "{{ onionspray_project[onionspray_project_mapping] }}"
