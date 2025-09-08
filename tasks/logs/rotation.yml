@@ -23,10 +23,18 @@
         mode  : '0644'
         force : true
 
+    # This old logrotate configuration was set as an attempt to centralize
+    # things in the Onionspray folder, but logrotate does not play well with
+    # that.
+    - name: logs | rotation | Remove deprecated log rotation
+      ansible.builtin.file:
+        path: "{{ onionspray_path }}/onionspray-logs.conf"
+        state: absent
+
     - name: logs | rotation | Configure log rotation
       ansible.builtin.template:
         src   : "logs/logrotate.j2"
-        dest  : "{{ onionspray_path }}/onionspray-logs.conf"
+        dest  : "/etc/logrotate.d/onionspray"
         owner : "{{ onionspray_user }}"
         group : "{{ onionspray_group }}"
         mode  : '0644'
