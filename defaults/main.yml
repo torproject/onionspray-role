@@ -10,9 +10,11 @@
 # Onionspray installation
 #
 
-# System user that runs Onionspray, will be created. A group of the same name
-# is automatically created
+# System user that runs Onionspray, will be created.
 onionspray_user: onionspray
+
+# System group of the Onionspray system user, will be created if it doesn't exist.
+onionspray_group: "{{ onionspray_user }}"
 
 # List of supplementary groups which the Onionspray user should also be a member of
 onionspray_groups: []

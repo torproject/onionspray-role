@@ -2,7 +2,7 @@
 #
 # Projects configuration
 #
-# Copyright (C) 2024 The Tor Project, Inc.
+# Copyright (C) 2025 The Tor Project, Inc.
 # SPDX-License-Identifier: AGPL-3.0-or-later
 #
 
@@ -11,7 +11,7 @@
     src: projects/project.tconf.j2
     dest: "{{ onionspray_path }}/{{ onionspray_project.name }}.tconf"
     owner: "{{ onionspray_user }}"
-    group: "{{ onionspray_user }}"
+    group: "{{ onionspray_group }}"
     mode: "600"
   notify:
     - Remove Onionspray generated settings config files
