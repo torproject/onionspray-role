@@ -35,7 +35,7 @@
       ansible.builtin.template:
         src   : "logs/logrotate.j2"
         dest  : "/etc/logrotate.d/onionspray"
-        owner : "{{ onionspray_user }}"
-        group : "{{ onionspray_group }}"
+        owner : "root"
+        group : "root"
         mode  : '0644'
         force : true
