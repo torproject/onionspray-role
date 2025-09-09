@@ -52,7 +52,7 @@
   lastaction
     {% if project.log_s3_upload is defined and project.log_s3_upload -%}
     {% set ec2_endpoint = project.log_s3_upload_ec2_api | default('http://169.254.169.254/latest/') -%}
-    {% set s3_endpoint = project.log_s3_endpoint | default('https://s3.amazonaws.com') -%}
+    {% set s3_endpoint = project.log_s3_endpoint | default('') -%}
     {% set s3_uri = project.log_s3_uri | default("s3://$BUCKET_NAME/" ~ ansible_facts.nodename ~ "/") -%}
     # Run once after all files are rotated
     ROTATED_DIR="$(dirname "$1")"
@@ -76,17 +76,17 @@
 
     # Ensure the S3 sync log exists
     touch $SYNC_LOG
-    chown {{ onionspray_user }}: $SYNC_LOG
+    chown {{ onionspray_user }}:{{ onionspray_group }} $SYNC_LOG
 
     {% if onionspray_aws_cli_from_snap -%}
     # Sync logs to S3 bucket using the official Snap package
-    /snap/bin/aws s3 sync "$ROTATED_DIR/" "{{ s3_uri }}" --exclude "*" --include "$INCLUDE_PATTERN" 2>&1 >> $SYNC_LOG
+    /snap/bin/aws s3 sync "$ROTATED_DIR/" "{{ s3_uri }}" --exclude "*" --include "$INCLUDE_PATTERN" 2>&1 | tee -a $SYNC_LOG
     {%+ else -%}
     # Sync logs to S3 bucket
-    #/usr/bin/aws s3 sync "$ROTATED_DIR/" "s3://$BUCKET_NAME/$INSTANCE_ID/" --exclude "*" --include "$INCLUDE_PATTERN" 2>&1 >> $SYNC_LOG
+    #/usr/bin/aws s3 sync "$ROTATED_DIR/" "s3://$BUCKET_NAME/$INSTANCE_ID/" --exclude "*" --include "$INCLUDE_PATTERN" 2>&1 | tee -a $SYNC_LOG
 
     # Sync logs to S3 bucket, silent version
-    /usr/bin/aws s3 sync "$ROTATED_DIR/" "{{ s3_uri }}" --exclude "*" --include "$INCLUDE_PATTERN" --quiet 2>&1 >> $SYNC_LOG
+    /usr/bin/aws s3 sync "$ROTATED_DIR/" "{{ s3_uri }}" --exclude "*" --include "$INCLUDE_PATTERN" --quiet 2>&1 | tee -a $SYNC_LOG
     {% endif -%}
     {%- endif %}
 

@@ -304,9 +304,12 @@ onionspray_provider: 'onionspray'
 #
 # The S3 service endpoint.
 #
-# Defaults to https://s3.amazonaws.com
+# Defaults to an empty string.
 #
 # Example: https://play.min.io:9000
+#
+# Details at
+# https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-endpoints.html
 #
 # #### `log_s3_upload_ec2_api`
 #
