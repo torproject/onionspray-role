@@ -80,13 +80,13 @@
 
     {% if onionspray_aws_cli_from_snap -%}
     # Sync logs to S3 bucket using the official Snap package
-    /snap/bin/aws s3 sync "$ROTATED_DIR/" "{{ s3_uri }}" --exclude "*" --include "$INCLUDE_PATTERN" >> $SYNC_LOG
+    /snap/bin/aws s3 sync "$ROTATED_DIR/" "{{ s3_uri }}" --exclude "*" --include "$INCLUDE_PATTERN" 2>&1 >> $SYNC_LOG
     {%+ else -%}
     # Sync logs to S3 bucket
-    #/usr/bin/aws s3 sync "$ROTATED_DIR/" "s3://$BUCKET_NAME/$INSTANCE_ID/" --exclude "*" --include "$INCLUDE_PATTERN" >> $SYNC_LOG
+    #/usr/bin/aws s3 sync "$ROTATED_DIR/" "s3://$BUCKET_NAME/$INSTANCE_ID/" --exclude "*" --include "$INCLUDE_PATTERN" 2>&1 >> $SYNC_LOG
 
     # Sync logs to S3 bucket, silent version
-    /usr/bin/aws s3 sync "$ROTATED_DIR/" "{{ s3_uri }}" --exclude "*" --include "$INCLUDE_PATTERN" --quiet
+    /usr/bin/aws s3 sync "$ROTATED_DIR/" "{{ s3_uri }}" --exclude "*" --include "$INCLUDE_PATTERN" --quiet 2>&1 >> $SYNC_LOG
     {% endif -%}
     {%- endif %}
 
