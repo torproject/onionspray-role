@@ -20,7 +20,7 @@
         cmd: |
           set -o pipefail
           {{ onionspray_path }}/opt/{{ onionspray_deps_script }} | \
-            tee {{ onionspray_path }}/log/deps-{{ ansible_date_time.epoch }}.log
+            tee -a {{ onionspray_path }}/log/deps.log
         executable: /bin/bash
       become: true
       changed_when: true
@@ -43,7 +43,7 @@
         cmd: |
           set -o pipefail
           {{ onionspray_path }}/opt/{{ onionspray_compile_script }} | \
-            tee {{ onionspray_path }}/log/compile-{{ ansible_date_time.epoch }}.log
+            tee -a {{ onionspray_path }}/log/compile.log
         executable: /bin/bash
       become: true
       become_user: "{{ onionspray_user }}"
