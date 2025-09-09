@@ -70,9 +70,9 @@
     {% if project.log_s3_ec2 | default(false) +%}
     # Fetch S3 params from AWS EC2 API
     # https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instancedata-data-retrieval.html
-    export TOKEN=`/usr/bin/curl --silent --request PUT "{{ ec2_endpoint }}/api/token" --header "X-aws-ec2-metadata-token-ttl-seconds: 60"`
-    export AWS_REGION=`/usr/bin/curl --silent --header "X-aws-ec2-metadata-token: $TOKEN" "{{ ec2_endpoint }}/dynamic/instance-identity/document" | grep region | cut -d\" -f4`
-    export INSTANCE_ID=`/usr/bin/curl --silent --header "X-aws-ec2-metadata-token: $TOKEN" "{{ ec2_endpoint }}/dynamic/instance-identity/document" | grep instanceId | cut -d\" -f4`
+    export TOKEN=`/usr/bin/curl --silent --request PUT "{{ ec2_endpoint.rstrip('/') }}/api/token" --header "X-aws-ec2-metadata-token-ttl-seconds: 60"`
+    export AWS_REGION=`/usr/bin/curl --silent --header "X-aws-ec2-metadata-token: $TOKEN" "{{ ec2_endpoint.rstrip('/') }}/dynamic/instance-identity/document" | grep region | cut -d\" -f4`
+    export INSTANCE_ID=`/usr/bin/curl --silent --header "X-aws-ec2-metadata-token: $TOKEN" "{{ ec2_endpoint.rstrip('/') }}/dynamic/instance-identity/document" | grep instanceId | cut -d\" -f4`
     {% endif %}
 
     # Ensure the S3 sync log exists
