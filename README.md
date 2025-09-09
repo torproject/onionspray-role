@@ -23,10 +23,7 @@ if supported.
 
 ## Requirements
 
-The remote host should have `git` installed prior to running the role. The
-other necessary packages are installed by the build process of Onionspray.
-
-Your Ansible controller should also implement an [unprivileged user workaround][]
+Your Ansible controller should implement an [unprivileged user workaround][]
 such as installing the `setfacl` tool in the remote host (available in Debian-like
 systems through the [acl package][]); or using pipelining, which can be configured
 through the following addition to `ansible.cfg`:

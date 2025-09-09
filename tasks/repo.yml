@@ -8,6 +8,10 @@
 
 - name: repo | Onionspray repository management
   block:
+    - name: repo | Install git
+      ansible.builtin.package:
+        name: git
+
     # Note that Git is able to clone to an empty folder, so there's no harm
     # in creating this folder in the first run when the repository is still not
     # cloned.
@@ -24,23 +28,6 @@
         mode    : '0750'
         recurse : false
 
-    #- name: repo | Check if Onionspray repository has already been cloned
-    #  ansible.builtin.stat:
-    #    dest: "{{ onionspray_path }}/.git"
-    #  register: _onionspray_local_repo
-
-    #- name: repo | Get local Onionspray revision if a custom revision is specified
-    #  ansible.builtin.command:
-    #    cmd: "git rev-parse HEAD"
-    #    chdir: "{{ onionspray_path }}"
-    #  become: true
-    #  become_user: "{{ onionspray_user }}"
-    #  register: _onionspray_get_repo_revision
-    #  changed_when: false
-    #  when:
-    #    - _onionspray_local_repo.stat.exists
-    #    - onionspray_repository_version is defined
-
     - name: repo | Manage the Onionpspray Git repository
       ansible.builtin.git:
         repo: "{{ onionspray_repo }}"
@@ -48,6 +35,7 @@
         version: "{{ onionspray_repository_version }}"
       become: true
       become_user: "{{ onionspray_user }}"
+      register: onionspray_git_repo_state
       # Workaround allowing to run Git even if the shell is set to /sbin/nologin
       # Discussed at https://stackoverflow.com/questions/50512402/can-ansible-use-sudo-su-if-the-sudo-user-is-not-allowed-to-run-arbitrary-scr
       # Alternative: https://docs.ansible.com/ansible/latest/collections/community/general/sudosu_become.html

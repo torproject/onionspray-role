@@ -37,6 +37,7 @@
         path: "{{ onionspray_build_lock_file | default('{{ onionspray_path }}/onionspray-already-built.lock') }}"
         state: absent
 
+    # A rebuild is prompted if the upstream Onionspray repo cloned has changed
     - name: build | Build Onionspray
       ansible.builtin.shell:
         cmd: |
@@ -53,4 +54,4 @@
       become_flags: "su -s /bin/bash - {{ onionspray_user }} /bin/bash -c"
       changed_when: true
       when:
-        - not onionspray_check_has_been_built.stat.exists
+        - onionspray_git_repo_state.before != onionspray_git_repo_state.after
