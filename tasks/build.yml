@@ -54,4 +54,4 @@
       become_flags: "su -s /bin/bash - {{ onionspray_user }} /bin/bash -c"
       changed_when: true
       when:
-        - not onionspray_check_has_been_built.stat.exists or onionspray_git_repo_state.before != onionspray_git_repo_state.after
+        - onionspray_git_repo_state.before != onionspray_git_repo_state.after
