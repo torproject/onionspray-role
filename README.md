@@ -232,7 +232,7 @@ section.
 
 Additionally, custom HTTPS keys and certificates can be provided, either by:
 
-1. Declaring then as encrypted role variables.
+1. Declaring then as variables, as documented in the [defaults][] file.
 2. Uploading then directly in the Onionspray instance with an external script.
 
 In Tor, all requests are encrypted by the protocol. The URL itself is the
@@ -259,7 +259,7 @@ operation, as long as [ACME for Onions][] is not implemented.
 ## Variables
 
 This role can be customized in many ways through variables, which are described
-in length at the [defaults file](defaults/main.yml).
+in length in the [defaults file][defaults].
 
 ## Contributing
 
