@@ -12,8 +12,8 @@
 
 # Main logs
 {{ onionspray_path }}/log/*.log {
-  su {{ onionspray_user }} {{ onionspray_user }}
-  create 644 {{ onionspray_user }} {{ onionspray_user }}
+  su {{ onionspray_user }} {{ onionspray_group }}
+  create 644 {{ onionspray_user }} {{ onionspray_group }}
   {{ onionspray_main_log_rotation_frequency }}
   dateext
   rotate {{ onionspray_main_log_rotation_rotations }}
@@ -24,8 +24,8 @@
 
 # Onionbalance logs
 {{ onionspray_path }}/onionbalance/*.log {
-  su {{ onionspray_user }} {{ onionspray_user }}
-  create 644 {{ onionspray_user }} {{ onionspray_user }}
+  su {{ onionspray_user }} {{ onionspray_group }}
+  create 644 {{ onionspray_user }} {{ onionspray_group }}
   {{ onionspray_main_log_rotation_frequency }}
   dateext
   rotate {{ onionspray_main_log_rotation_rotations }}
@@ -41,8 +41,8 @@
 
 # Project logs for {{ project.name }}
 {{ onionspray_path }}/projects/{{ project.name }}/log/*.log {
-  su {{ onionspray_user }} {{ onionspray_user }}
-  create 644 {{ onionspray_user }} {{ onionspray_user }}
+  su {{ onionspray_user }} {{ onionspray_group }}
+  create 644 {{ onionspray_user }} {{ onionspray_group }}
   {{ project.log_rotation_frequency | default('hourly') }}
   dateext
   rotate {{ project.log_rotations | default('1344') }}
