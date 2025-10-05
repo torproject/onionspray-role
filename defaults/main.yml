@@ -21,11 +21,8 @@ onionspray_groups: []
 
 # The login shell for the Onionspray user
 #
-# Change this to allow the Onionspray user to login, useful when one wants to be able
-# to issue commands directly to Onionspray.
-#
-# By default, no login is allowed
-onionspray_shell: "/sbin/nologin"
+# Useful to block login of the onionspray user for example, by setting it to "/sbin/nologin"
+#onionspray_shell:
 
 # The home directory of the user running Onionspray
 onionspray_home: "/home/{{ onionspray_user }}"
