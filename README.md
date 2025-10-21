@@ -227,8 +227,8 @@ onionspray_projects:
 ## Certificate handling
 
 This role uses [Onionspray][]'s self-signed HTTPS certificate generation script
-by default. The script parameters can be customized as documented in the variables
-section.
+by default. The script parameters can be customized as documented in the
+variables section and [on the Onionspray documentation][onionspray-certs.conf].
 
 Additionally, custom HTTPS keys and certificates can be provided, either by:
 
@@ -246,15 +246,25 @@ display HTTPS warnings if using a self-signed certificate with an Onion
 service, though this may change in the future.
 
 Should you want to get a valid HTTPS certificate, both [HARICA][harica-onion]
-(normal certificate, $10/year) and [Digicert][digicert-onion] (expensive, EV
-certificate) provide them. Let's Encrypt and other providers using the ACME
-protocol (i.e. automation possible through `certbot` for example) still do not
-support these certificates. Using these valid certificates is hence a manual
-operation, as long as [ACME for Onions][] is not implemented.
+(normal certificate) and [Digicert][digicert-onion] (expensive, EV certificate)
+provide them. Let's Encrypt and other providers using the ACME protocol (i.e.
+automation possible through `certbot` for example) still do not support these
+certificates. Using these valid certificates is hence a manual operation, as
+long as [ACME for Onions][] is not implemented.
 
+Further reading:
+
+* [Certificates for Onion Services][onion-certificates]: a broader and
+  introductory discussion on the topic.
+* [HTTPS Certificates for Onionspray][onionspray-certificates]: specific
+  guide for handling certificates on Onionspray.
+
+[onionspray-certs.conf]: https://onionservices.torproject.org/apps/web/onionspray/guides/certificates/#configuration
 [harica-onion]: https://blog.torproject.org/tls-certificate-for-onion-site
-[digicert-onio]: https://www.digicert.com/blog/onion-officially-recognized-special-use-domain/
+[digicert-onion]: https://www.digicert.com/blog/onion-officially-recognized-special-use-domain/
 [ACME for Onions]: https://acmeforonions.org/
+[onionspray-certificates]: https://onionservices.torproject.org/apps/web/onionspray/guides/certificates/
+[onion-certificates]: https://onionservices.torproject.org/apps/base/certificates/
 
 ## Variables
 
