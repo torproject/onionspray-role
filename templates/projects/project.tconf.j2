@@ -125,7 +125,11 @@ foreignmap {{ foreignmap.onion_address | truncate(56, True, '') }} {{ foreignmap
 #
 
 {% for hardmap in onionspray_project.hardmaps | default([]) %}
+{% if hardmap.vanity_filter is defined %}
+hardmap %NEW_V3_VANITY_ONION_{{ hardmap.vanity_filter }}% {{ hardmap.upstream_address }}
+{% else %}
 hardmap {{ hardmap.onion_address | default('%NEW_V3_ONION%') | truncate(56, True, '') }} {{ hardmap.upstream_address }}
+{% endif %}
 {% endfor %}
 
 #
@@ -133,7 +137,11 @@ hardmap {{ hardmap.onion_address | default('%NEW_V3_ONION%') | truncate(56, True
 #
 
 {% for softmap in onionspray_project.softmaps | default([]) %}
+{% if hardmap.vanity_filter is defined %}
+softmap %NEW_V3_VANITY_ONION_{{ hardmap.vanity_filter }}% {{ softmap.upstream_address }}
+{% else %}
 softmap {{ softmap.onion_address | default('%NEW_V3_ONION%') | truncate(56, True, '') }} {{ softmap.upstream_address }}
+{% endif %}
 {% endfor %}
 
 #

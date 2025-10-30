@@ -181,6 +181,17 @@ onionspray_provider: 'onionspray'
 #
 # REQUIRED: the clearnet domain name to which Onionspray will proxy requests.
 #
+# ##### `vanity_filter`
+#
+# This sets the vanity address filter when generating a new key.
+#
+# Whatever base32-valid string you set will be used as the beginning of the
+# generated .onion address.
+#
+# Details at https://onionservices.torproject.org/apps/web/onionspray/guides/vanity/
+#
+# This parameter conflicts with `onion_address`.
+#
 # ##### `onion_address`
 #
 # The custom `.onion` v3 address to use, dependent on the public/secret keys
@@ -188,6 +199,8 @@ onionspray_provider: 'onionspray'
 # this field and the corresponding `public_key_base64`/`secret_key_base64`, a new
 # keypair will be generated in the next Ansible run, and so the `.onion` address
 # used by Onionspray will change.
+#
+# This parameter conflicts with `vanity_filter`.
 #
 # ##### `public_key_base64`
 #

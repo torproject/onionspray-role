@@ -20,9 +20,12 @@
           - upstream_address: example.org
       - name: "example2"
         hardmaps:
+          - upstream_address: example.net
+            vanity_filter: exa
+
           # Bogus data for testing purposes
           - onion_address: yetkvkuqlr23sdzkf2mynt7aixfjzq6pjys2ffurr3hzpyfxrc7swpqd
-            upstream_address: example.net
+            upstream_address: example.invalid
             public_key_base64: Ym9ndXMgZGF0YSBmb3IgdGVzdGluZyBwdXJwb3Nlcwo=
             secret_key_base64: Ym9ndXMgZGF0YSBmb3IgdGVzdGluZyBwdXJwb3Nlcwo=
             tls_certificate: |
@@ -31,7 +34,7 @@
               TLS_SECRET_KEY_ENCRYPTED_WITH_ANSIBLE_VAULT
         foreingmaps:
           - onion_address: exaymhwjhgdopeebkv5p3lmb5vu2mmvcc7krpgwx6ngf4uvob2whkcqd.onion
-            upstream_address: example.info
+            upstream_address: example.com
         log_separate                 : '1'
         nginx_resolver               : '127.0.0.53 ipv6=off'
         nginx_cache_seconds          : '60'
