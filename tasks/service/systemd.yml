@@ -16,11 +16,8 @@
     cmd: "{{ onionspray_path }}/onionspray script"
   become: true
   become_user: "{{ onionspray_user }}"
-  # Workaround allowing to run Git even if the shell is set to /sbin/nologin
-  # Discussed at https://stackoverflow.com/questions/50512402/can-ansible-use-sudo-su-if-the-sudo-user-is-not-allowed-to-run-arbitrary-scr
-  # Alternative: https://docs.ansible.com/ansible/latest/collections/community/general/sudosu_become.html
-  #become_method: "ansible.builtin.sudo"
-  #become_flags: "su -s /bin/bash - {{ onionspray_user }} /bin/bash -c"
+  become_method: "{{ onionspray_become_method | default(omit, true) }}"
+  become_flags: "{{ onionspray_become_flags | default(omit, true) }}"
   changed_when: true
   when: not _onionspray_init_script.stat.exists
 
