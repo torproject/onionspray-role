@@ -21,11 +21,8 @@ onionspray_groups: []
 
 # The login shell for the Onionspray user
 #
-# Change this to allow the Onionspray user to login, useful when one wants to be able
-# to issue commands directly to Onionspray.
-#
-# By default, no login is allowed
-onionspray_shell: "/sbin/nologin"
+# Useful to block login of the onionspray user for example, by setting it to "/sbin/nologin"
+onionspray_shell:
 
 # The home directory of the user running Onionspray
 onionspray_home: "/home/{{ onionspray_user }}"
@@ -187,14 +184,10 @@ onionspray_provider: 'onionspray'
 # ##### `onion_address`
 #
 # The custom `.onion` v3 address to use, dependent on the public/secret keys
-# used. The corresponding public/secret keys, using the same `onion_address` value,
-# should be defined in the `onionspray_keys` variable to use this field.
-#
-# If this field and the public/secret keys in the `onionspray_keys` variable are
-# not defined, a new keypair will be generated. Keep in mind that if you modify
-# the project configuration without defining this field, a new keypair will be
-# generated in the next Ansible run, and so the `.onion` address used by
-# Onionspray will change.
+# used. Keep in mind that if modifying the project configuration without defining
+# this field and the corresponding `public_key_base64`/`secret_key_base64`, a new
+# keypair will be generated in the next Ansible run, and so the `.onion` address
+# used by Onionspray will change.
 #
 # ##### `public_key_base64`
 #
@@ -205,7 +198,7 @@ onionspray_provider: 'onionspray'
 #
 # If unset, Onionspray will generate and use a random Onion Services key pair.
 #
-# The Base64-encoded key can be produced directly from a generate public key,
+# The Base64-encoded key can be produced directly from a generated public key,
 # with
 #
 #     cat hs_ed25519_public_key | base64
@@ -216,18 +209,18 @@ onionspray_provider: 'onionspray'
 #
 # This field is only required if a public key is defined through `public_key_base64`.
 #
-# It's recommended that this variable to be also encrypted using [Ansible Vault][].
+# It's recommended to encrypt this variable using [Ansible Vault][].
 #
 # [Ansible Vault]: https://docs.ansible.com/ansible/latest/vault_guide/vault.html
 #
 # The Base64-encoded and then encrypted key can be produced directly from a
-# generate public key, with
+# generated private key, with
 #
 #     cat hs_ed25519_secret_key | base64 | ansible-vault encrypt_string
 #
 # #### `keys_upload`
 #
-# Setting this parameter to `true` makes Onionspray to upload the Onion Service
+# Setting this parameter to `true` makes Onionspray upload the Onion Service
 # keys using an external script.
 #
 # This variable is optional. If unset, Onionspray will generate and use a
@@ -242,14 +235,15 @@ onionspray_provider: 'onionspray'
 #
 # #### `tls_secret_key`
 #
-# The PEM-encoded and then Ansible Vault-encrypted secret key for the Onion
-# Service.
+# The PEM-encoded TLS secret key for the Onion Service.
+#
+# It's recommended to encrypt this variable using [Ansible Vault][].
 #
 # Required only if `tls_certificate` is used.
 #
 # #### `certificate_upload`
 #
-# Setting this parameter to `true` makes Onionspray to upload the TLS keys
+# Setting this parameter to `true` makes Onionspray upload the TLS keys
 # and certificates using an external script.
 #
 # This variable is optional. If unset, Onionspray will generate and use a
