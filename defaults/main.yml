@@ -22,7 +22,7 @@ onionspray_groups: []
 # The login shell for the Onionspray user
 #
 # Useful to block login of the onionspray user for example, by setting it to "/sbin/nologin"
-#onionspray_shell:
+onionspray_shell:
 
 # The home directory of the user running Onionspray
 onionspray_home: "/home/{{ onionspray_user }}"

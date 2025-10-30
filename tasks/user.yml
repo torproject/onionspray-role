@@ -24,7 +24,7 @@
         password_lock : true
         system        : true
         comment       : Onionspray user
-        shell         : "{{ onionspray_shell | default(omit) }}"
+        shell         : "{{ onionspray_shell | default(omit, true) }}"
 
     - name: user | Create the onionspray home folder
       ansible.builtin.file:
