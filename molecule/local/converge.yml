@@ -37,8 +37,8 @@
             tls_secret_key: |
               TLS_SECRET_KEY_ENCRYPTED_WITH_ANSIBLE_VAULT
         foreingmaps:
-          - onion_address: exaymhwjhgdopeebkv5p3lmb5vu2mmvcc7krpgwx6ngf4uvob2whkcqd.onion
-            upstream_address: example.com
+          - onion_address: 2gzyxa5ihm7nsggfxnu52rck2vv4rvmdlkiu3zzui5du4xyclen53wid.onion
+            upstream_address: torproject.org
         log_separate                 : '1'
         nginx_resolver               : '127.0.0.53 ipv6=off'
         nginx_cache_seconds          : '60'

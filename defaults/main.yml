@@ -21,8 +21,36 @@ onionspray_groups: []
 
 # The login shell for the Onionspray user
 #
-# Useful to block login of the onionspray user for example, by setting it to "/sbin/nologin"
+# Useful to block login of the onionspray user for example, by setting it to
+# "/sbin/nologin".
+#
+# When doing so, consider also to configure onionspray_become_method and
+# onionspray_become_flags.
+#
 onionspray_shell:
+
+# Set the become method used when Ansible needs to switch to {{ onionspray_user }}
+#
+# Example:
+#
+#   onionspray_become_method: "ansible.builtin.sudo"
+#
+onionspray_become_method:
+
+# The become_flags used when Ansible needs to switch to {{ onionspray_user }}
+#
+# This allows for workarounds in situations like onioonspray_shell is set to /sbin/nologin.
+#
+# Discussed at https://gitlab.torproject.org/tpo/onion-services/ansible/onionspray-role/-/issues/2
+#              https://stackoverflow.com/questions/50512402/can-ansible-use-sudo-su-if-the-sudo-user-is-not-allowed-to-run-arbitrary-scr
+#
+# Alternative: https://docs.ansible.com/ansible/latest/collections/community/general/sudosu_become.html
+#
+# Example:
+#
+#   onionspray_become_flags: "su -s /bin/bash - {{ onionspray_user }} /bin/bash -c"
+#
+onionspray_become_flags:
 
 # The home directory of the user running Onionspray
 onionspray_home: "/home/{{ onionspray_user }}"
