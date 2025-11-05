@@ -21,6 +21,14 @@ build is then done by the `opt/build-DISTRO.sh` script inside the Onionspray
 repo, executed by this role, depending on the distribution of your server and
 if supported.
 
+## HOWTO
+
+For a detailed walk-through explaining the whole stack and how to set it up,
+check the blog post [Deploy a Tor onion service with Onionspray and Ansible -
+zoug.fr][blog-post].
+
+[blog-post]: https://zoug.fr/deploy-tor-onion-service-onionspray-ansible/
+
 ## Requirements
 
 Depending on the configuration chosen, the Ansible controller may need to
