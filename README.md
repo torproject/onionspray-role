@@ -52,6 +52,19 @@ This potential requirement is further discussed on ticket
 [acl package]: https://tracker.debian.org/pkg/acl
 [tpo/onion-services/ansible/onionspray-role#2]: https://gitlab.torproject.org/tpo/onion-services/ansible/onionspray-role/-/issues/2
 
+## Installation
+
+This role can be installed directly through [Ansible Galaxy][]:
+
+    ansible-galaxy role install torproject.onionspray
+
+It's also possible to clone it directly from the [upstream repository][].
+A [GitHub mirror][] is also provided.
+
+[Ansible Galaxy]: https://galaxy.ansible.com
+[upstream repository]: https://gitlab.torproject.org/tpo/onion-services/ansible/onionspray-role
+[GitHub mirror]: https://github.com/torproject/onionspray-role/
+
 ## Quick start
 
 Assuming you have a host named `myhost` on which you can run
